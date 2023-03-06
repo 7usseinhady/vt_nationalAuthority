@@ -1,0 +1,32 @@
+﻿@{
+    Layout = "~/Views/Shared/InsuranceEmployeeLayout.cshtml";
+    <title>العمليات</title>
+
+    var screen = "";
+    string[] path = HttpContext.Current.Request.Url.AbsolutePath.Split('/');
+    screen = path[2];
+}
+
+<div>
+
+    @if (screen == "vProcessRequest") // طلبات العمليات
+    {
+        @Html.Hidden("screenName", "../Process/vProcessRequest")
+    }
+    else if (screen == "vExpireProcess") // العمليات الموشكه على الانتهاء
+    {
+        @Html.Hidden("screenName", "../ExpireProcess/vExpireProcess")
+    }
+    else if (screen == "vContractorIndex") // عمليات المقاولين
+    {
+        @Html.Hidden("screenName", "../Contractor/vContractorIndex")
+    }
+    else if (screen == "vProcessShowIndex") // عمليات موظف التأمينات
+    {
+        @Html.Hidden("screenName", "../Process/vProcessShowIndex")
+    }
+
+    @{Html.RenderAction("_vpProcessIndexShow", "Process", new { areas = Request.QueryString["areas"] == null ? null : Request.QueryString["areas"], Offices = Request.QueryString["Offices"] == null ? null : Request.QueryString["Offices"], cd =Request.QueryString["cd"]});}
+</div>
+
+@Html.Raw(TempData["msg"])

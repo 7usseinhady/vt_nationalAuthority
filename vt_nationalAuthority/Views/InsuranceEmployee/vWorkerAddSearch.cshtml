@@ -1,0 +1,14 @@
+﻿@{
+    Layout = "~/Views/Shared/InsuranceEmployeeLayout.cshtml";
+}
+<style>
+    @@media (min-width: 992px) {
+        .mrgPagging {
+            margin-right: 37% !important;
+        }
+    }
+</style>
+
+<div>
+    @{Html.RenderAction("_vpWorkersIndex", "Workers");}
+</div>

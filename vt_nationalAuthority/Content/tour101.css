@@ -1,0 +1,26 @@
+﻿.popover-title101 {
+           background: linear-gradient(to right, #6dd5ed, #2193b0);
+    color: white;
+    font-size: 20px;
+    border-top-right-radius: 17px;
+    border-top-left-radius: 17px;
+    font-weight: bold;
+}
+.popover101{
+        /*top: 1002px;
+    left: 1161px;*/
+ border-radius: 17px;
+    width: max-content;
+}
+/*.popover.top > .arrow {
+  
+        margin-left: 30px;
+    border-bottom-width: 0;
+    border-top-color: #999999;
+    border-top-color: rgba(0, 0, 0, 0.25);
+    bottom: -11px;
+}*/
+.popover.top > #add {
+    left: 50%;
+    margin-left: 29px;
+}

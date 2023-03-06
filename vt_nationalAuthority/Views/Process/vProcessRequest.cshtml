@@ -1,0 +1,44 @@
+﻿@{
+    Layout = "~/Views/Shared/InsuranceEmployeeLayout.cshtml";
+    <title>طلبات العمليات</title>
+
+    var screen = "";
+    string[] path = HttpContext.Current.Request.Url.AbsolutePath.Split('/');
+    screen = path[2];
+}
+<div>
+    @if (screen == "vProcessRequest") // طلبات العمليات
+    {
+        @Html.Hidden("screenName", "../Process/vProcessRequest")
+    }
+    else if (screen == "vExpireProcess") // العمليات الموشكه على الانتهاء
+    {
+        @Html.Hidden("screenName", "../ExpireProcess/vExpireProcess")
+    }
+    else if (screen == "vContractorIndex") // عمليات المقاولين
+    {
+        @Html.Hidden("screenName", "../Contractor/vContractorIndex")
+    }
+    else if (screen == "vProcessShowIndex") // عمليات موظف التأمينات
+    {
+        @Html.Hidden("screenName", "../Process/vProcessShowIndex")
+    }
+
+    @if (TempData["areas"] != null && TempData["Offices"] != null)
+    {
+        Html.RenderAction("_vpProcessIndexShow", "Process", new { areas = TempData["areas"], Offices = TempData["Offices"] });
+    }
+    else if (TempData["areas"] != null)
+    {
+        Html.RenderAction("_vpProcessIndexShow", "Process", new { areas = TempData["areas"] });
+    }
+    else if (Request.QueryString["Offices"] != null)
+    {
+        Html.RenderAction("_vpProcessIndexShow", "Process", new { Offices = TempData["Offices"] });
+    }
+    else
+    {
+        Html.RenderAction("_vpProcessIndexShow", "Process");
+    }
+</div>
+@Html.Raw(TempData["msg"])

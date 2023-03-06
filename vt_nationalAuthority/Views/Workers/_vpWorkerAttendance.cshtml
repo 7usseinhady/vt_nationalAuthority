@@ -1,0 +1,52 @@
+﻿@using PagedList.Mvc;
+@model PagedList.PagedList<DataAccessLayer.Models.workerAttendanceModel>
+@{
+    var iCount = 1;
+    var screen = "";
+    string[] path = HttpContext.Current.Request.Url.AbsolutePath.Split('/');
+    screen = path[2];
+}
+<div class="row justify-content-center">
+    <div class="scroll-max grid_box_shadow">
+      @if (Model != null)
+      {
+        @* table *@
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col" class="color_main102 hidCol">#</th>
+                    <th scope="col" class="color_main102">اسم العامل</th>
+                    <th scope="col" class="color_main102">المهنه</th>
+                    <th scope="col" class="color_main102">درجة المهاره</th>
+                    <th scope="col" class="color_main102">مدفوع الاجر</th>
+                </tr>
+            </thead>
+            <tbody>
+                  @{iCount = 1; }
+                  @foreach (var item in Model)
+                  {
+                    <tr>
+                        <th scope="row" class="color_main102">@iCount</th>
+                        <td class="color_main103">@item.sWorkerName</td>
+                        <td class="color_main103"> @item.sCareerName</td>
+                        <td class="color_main103">@item.sSkillDegreeName</td>
+                        <td class="color_main103">مدفوع</td>
+                        
+                    </tr>
+                      iCount++;
+                  }
+            </tbody>
+        </table>
+
+        @* pagination *@
+        @*<div style="height:40px;" class="mb-5">
+            <h5 style="text-align:center;color:#306fc2"> صفحة <strong style="color:#CA2553"> @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)</strong> من <strong>@Model.PageCount </strong> </h5>
+            <div style="text-align:center">
+                <div class="pagination">
+                    @Html.PagedListPager(Model, inPage => Url.Action("vAttendanceIndex", "attendance", new { inPage }))
+                </div>
+            </div>
+        </div>*@
+      }
+    </div>
+</div>

@@ -1,0 +1,37 @@
+﻿@*@{
+    var Model = new List<int> { 0, 1, 2, 3, 4, 5 };
+}
+@helper GetTreeView(List<Model> fun, int parentID)
+{
+
+foreach (var i in fun.Where(a => a.parent_function_code.Equals(parentID)))
+{
+    <li>
+        @{var child = fun.Where(a => a.parent_function_code.Equals(i.function_code)).Count();}
+        @if (child > 0)
+        {
+            <span class="collapseTree collapsible">&nbsp;</span>
+        }
+        else
+        {
+            <span style="width:15px; display:inline-block">&nbsp;</span>
+        }
+        @if (i.groups_permissions.Where(x => x.function_code == i.function_code && x.group_code == int.Parse(Request.QueryString["group_code"])).Count() > 0)
+        {
+            <input type="checkbox" class='chk' onclick="ckBoxClicked(this);" value="@i.function_code" checked id="checks" /><h4 style="display:inline-block;margin-right:3px;color:@i.tree_colors.color_name" class='text-primary'> @i.function_name</h4>
+        }
+        else
+        {
+            <input type="checkbox" class='chk' onclick="ckBoxClicked(this);" value="@i.function_code" /><h4 style="display:inline-block;margin-right:3px;color:@i.tree_colors.color_name" class='text-primary'> @i.function_name</h4>
+        }
+        @if (child > 0)
+        {
+            <ul id="@i.function_name">
+                @_Page_App_Start_Treeview_cshtml.GetTreeView(fun, i.function_code)
+            </ul>
+        }
+    </li>
+ }
+}*@
+
+

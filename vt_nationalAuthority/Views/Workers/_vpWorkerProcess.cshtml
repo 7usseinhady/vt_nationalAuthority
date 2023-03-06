@@ -1,0 +1,74 @@
+﻿@using PagedList.Mvc;
+@model PagedList.PagedList<DataAccessLayer.Models.processModel>
+
+@{
+    var screen = "";
+    string[] path = HttpContext.Current.Request.Url.AbsolutePath.Split('/');
+    screen = path[2];
+    int iCount = 1;
+    var totalPage = TempData["totalPages"].ToString();
+    var pageSize = Convert.ToInt32(generalVariables.PageSize);
+}
+<div class="mt-2 dr-rtl grid_box_shadow mb-2 row justify-content-center">
+    <div class="text-center scroll-max">
+        @if (Model == null)
+        {
+            <h1 id="tblSearchNotFound">
+                <strong>@generalVariables.WorkerProcessNotFound</strong>
+            </h1>
+        }
+        else if (Model.Count == 0)
+        {
+            <h1 id="tblSearchNotFound">
+                <strong>@generalVariables.WorkerProcessNotFound</strong>
+            </h1>
+        }
+        else if (Model.Count > 0 && Model != null)
+        {
+            <table class="table" id="tbWorkersProcess">
+                <thead>
+                    <tr>
+                        <th scope="col" class="color_main102 hidCol">#</th>
+                        <th scope="col" class="color_main102">اسم العمليه</th>
+                        <th scope="col" class="color_main102">نوع العمليه</th>
+                        <th scope="col" class="color_main102">موقع العمليه</th>
+                        <th scope="col" class="color_main102">تاريخ بدء العمليه</th>
+                        <th scope="col" class="color_main102">تاريخ انتهاء العمليه</th>
+                        <th scope="col" class="color_main102">جهة الاسناد</th>
+                        <th scope="col" class="color_main102">المقاول الرئيسي</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{iCount = 1; }
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <th scope="row" class="color_main102">@iCount</th>
+                            <td class="color_main103">@(String.IsNullOrEmpty(item.sProcessName) ? "----" : item.sProcessName ) </td>
+                            <td class="color_main103">@item.sProcessTypeName</td>
+                            <td class="color_main103">@(String.IsNullOrEmpty(item.sProcessSite) ? "----" : item.sProcessSite )</td>
+                            <td class="color_main103">@item.sDateStartProcess</td>
+                            <td class="color_main103">@(item.sDateEndProcess == null ? "لم تنتهى بعد" : item.sDateEndProcess.ToString())</td>
+                            <td class="color_main103">@item.sReferneceSideName</td>
+                            <td class="color_main103">@item.sContractorName</td>
+                        </tr>
+                        iCount++;
+                    }
+                </tbody>
+            </table>
+        }
+        <div style="height: 30px;" id="masterPaged">
+            <div id="paged" class="justify-content-lg-center pagination mt-3">
+                <div class="pagination-container">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function ()
+    {
+        var msg = null;
+        PaggingTemplate(@totalPage, 1, 'GetPageData', "'../Workers/GetWorkersProcess'", msg, '#tbWorkersProcess',@Convert.ToInt32(generalVariables.PageSize));
+    })
+</script>

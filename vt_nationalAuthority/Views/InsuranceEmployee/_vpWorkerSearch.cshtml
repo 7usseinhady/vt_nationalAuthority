@@ -1,0 +1,34 @@
+﻿@{
+    var screen = "";
+    string[] path = HttpContext.Current.Request.Url.AbsolutePath.Split('/');
+    screen = path[2];
+}
+@using (Html.BeginForm("_vpWorkerSearch", "InsuranceEmployee", FormMethod.Post))
+{
+    @Html.Hidden("screen", screen);
+    <div class="divStyle">
+        <div class="align-self-end col-lg-3 col-md-12 col-sm-12" style="text-align: justify;">
+            <div style="display:inline-block;" class="align-bottom">
+                @Html.CheckBox("main", false, new { @class = "option-input-child checkbox" })
+            </div>
+            <label class="color_main102 font-weight-bold ml-2" for="mainCont">المقاول الرئيسى</label>
+        </div>`
+        <div class="col-lg-6 col-md-12 col-sm-12" style="text-align: justify;">
+            <span class="color_main102 font-weight-bold ml-2">المقاول من باطن</span>
+            <div>
+                @Html.ListBox("sub", ViewBag.subCont as SelectList, new { @class = "form-control selectpicker boorderDDL", @data_live_search = "true" })
+            </div>
+        </div>
+
+        <div class="col-sm-12 my-1 text-left mt-3 col-lg-2 col-md-4 col-sm-12 align-self-end text-right">
+            <button type="submit" onclick="loaderOpen();" class="btn btnsStyle btn-outline-info font-weight-bold"> <i class="fas fa-search"> بحث</i></button>
+        </div>
+
+    </div>
+}
+
+<script>
+    $(function () {
+        $('.selectpicker').selectpicker();
+    });
+</script>

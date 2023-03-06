@@ -1,0 +1,50 @@
+﻿<div class="modal-body" id="attendanceMonthModelBody">
+    <div id="divAttendanceMonth">
+        <div class="displayDivs row" id="calenderContent" data-screen="periodMonth">
+
+            @* year / years ( 2020 / 2020-230 ) *@
+            <div class="row" style="text-align:center;display:block;width:100%;">
+                <div id="divYearAfter" style="display:inline-flex;"><button type="button" class="btn yearAfter" style="border:none;" onclick="changeYear(-1)">❮❮</button></div>
+                <div style="display:inline-flex;"><button type="button" class="btn color_main102" id="btnYears" onclick="changeYear(10)" style="border: none;font-size: 40px;font-weight: 600;font-family: cursive;">@DateTime.Now.Year</button></div>
+                <div id="divYearBefore" style="display:inline-flex;"><button type="button" class="btn yearBefore" style="border:none;" onclick="changeYear(1)">❯❯</button></div>
+            </div>
+
+            @* months *@
+            <div id="divTwelveMonth" style="text-align: center;display:block;width:100%;">
+            </div>
+
+            @* days *@
+            <div id="divDaysMonth" style="text-align: center;display:block;width:100%;">
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div id="divSeperate" class="mb-3"></div>
+
+<div id="divAttendanceMonthDays" class="modal-body" style="display:none;">
+    <div class="row" style="z-index: 1;position: inherit;">
+        <button id="closeFooter" class="close color_main102" onclick="openDivUp('#divAttendanceMonthDays')" style="position: absolute;left: 20px;">X</button>
+    </div>
+    @* iFrame *@
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="displayDaysForWorker">
+        @{ Html.RenderAction("_vpWorkerDays", "previousPeriod");}
+    </div>
+</div>
+
+
+<link href="~/Content/animate.css" rel="stylesheet" />
+<link href="~/Content/attendance/attendance.css" rel="stylesheet" />
+<script src="~/Scripts/attendance/attendance.js"></script>
+
+<style>
+    .currentDay,.currentMonth {
+        border: 2px solid #2193b0;
+        color: #2193b0;
+    }
+
+    .day > .active:hover , .divMonthYear > .active:hover {
+        color: white;
+    }
+</style>

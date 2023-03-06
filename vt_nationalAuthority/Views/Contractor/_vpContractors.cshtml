@@ -1,0 +1,428 @@
+﻿@using PagedList.Mvc;
+@model PagedList.PagedList<DataAccessLayer.Models.processSubContractorModel>
+@{
+    var screen = "";
+    var controler = "";
+    string[] path = HttpContext.Current.Request.Url.AbsolutePath.Split('/');
+    screen = path[2];
+    controler = path[1];
+    var iCount = 1;
+
+    List<DataAccessLayer.CheckModuleUserPermisiom_Result> x = TempData["checkLevel4"] as List<DataAccessLayer.CheckModuleUserPermisiom_Result>;
+    if (x != null)
+    {
+        Session["checkLevel4"] = x.ToList();
+    }
+    else if (Session["checkLevel4"] != null)
+    {
+        x = Session["checkLevel4"] as List<DataAccessLayer.CheckModuleUserPermisiom_Result>;
+    }
+    var totalPage = TempData["totalPages"].ToString();
+    var pageSize = Convert.ToInt32(generalVariables.PageSize);
+}
+<div class="mt-2 dr-rtl mx-3 mb-3">
+    @if (screen == "vContractorIndex" || screen == "vProcessShowIndex" @*|| screen == "_vpContractors"*@ )
+    {
+        if (TempData["screen"] == null)
+        {
+            <div class="grid_box_shadow">
+                @{Html.RenderAction("_vpContractorData", "Contractor"); }
+            </div>
+                        }
+                    }
+    <div class="row justify-content-center">
+        <div class="text-center animate-bottom grid_box_shadow mt-2 mb-5 scroll-max" id="myDiv" style="margin-top: 15px !important;">
+            @if (Model == null)
+            {
+                <h1 id="tblSearchNotFound">
+                    <strong>@generalVariables.ContractorsNotFound</strong>
+                </h1>
+            }
+            else if (Model.Count == 0)
+            {
+                <h1 id="tblSearchNotFound">
+                    <strong>@generalVariables.ContractorsNotFound</strong>
+                </h1>
+            }
+            @if (Model.Count > 0 && Model != null)
+            {
+                if (screen == "_vpContractors")
+                {
+                    <table class="table" id="tbContractors">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="color_main102">#</th>
+                                <th scope="col" class="color_main102">اسم المقاول</th>
+                                <th scope="col" class="color_main102">الرقم التامينى</th>
+                                <th scope="col" class="color_main102">رقم المقاول بالعمليه</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{iCount = 1; }
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <th scope="row" class="color_main102">@((Convert.ToInt32(Model.PageNumber) * Convert.ToInt32(generalVariables.PageSize)) - (Convert.ToInt32(generalVariables.PageSize) - iCount) )</th>
+                                    <td class="color_main103">@item.sContractorName</td>
+                                    <td class="color_main103">@item.iContractorNationalNumber</td>
+                                    <td class="color_main103">@item.sContractorProcessNumber</td>
+                                </tr>
+                                iCount++;
+
+                            }
+                        </tbody>
+                    </table>
+                                }
+                                else
+                                {
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" class="color_main102">#</th>
+                                                <th scope="col" class="color_main102">اسم المقاول</th>
+                                                <th scope="col" class="color_main102">الرقم التامينى</th>
+                                                <th scope="col" class="color_main102">رقم المقاول بالعمليه</th>
+                                                @if (screen == "vpContractorsShow")
+                                                {
+                                                    if (x.Count > 0)
+                                                    {
+                                                        <th scope="col" class="color_main102"><i class="fas fa-cog"></i></th>
+                                                    }
+                                                }
+                                                else if (TempData["screen"] == null || screen != "vProcessRequest")
+                                                {
+                                                    if (screen != "_vpContractors")
+                                                    {
+                                                        <th scope="col" class="color_main102"><i class="fas fa-cog"></i></th>
+                                                    }
+                                                }
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @{iCount = 1; }
+                                            @foreach (var item in Model)
+                                            {
+                                                // مقاول رئيسي
+                                                if (item.bnContractorType == true && screen == "vpContractorsShow")
+                                                {
+                                                    <tr class="text-danger">
+                                                        <th scope="row" class="color_main102">@((Convert.ToInt32(Model.PageNumber) * Convert.ToInt32(generalVariables.PageSize)) - (Convert.ToInt32(generalVariables.PageSize) - iCount) )</th>
+                                                        <td>@item.sContractorName</td>
+                                                        <td>@item.iContractorNationalNumber</td>
+                                                        <td>@item.sContractorProcessNumber</td>
+                                                        @if (TempData["screen"] == null || screen == "vpContractorsShow")
+                                                        {
+                                                            // الموظف
+                                                            if (screen == "vpContractorsShow" && x.Count > 0)
+                                                            {
+                                                                <td>
+                                                                    <div class="color_main103 d-sm-show101 ">
+                                                                        <div class="dropdown-j  color_main102">
+                                                                            <i class="fas fa-ellipsis-v "></i>
+                                                                            <div class="dropdown-content-j" style="min-width: auto;">
+                                                                                <div class="row text-left">
+                                                                                    <div class="col-12">
+                                                                                        @foreach (var code in x)
+                                                                                        {
+                                                                                            if (code.functionCode == 43)
+                                                                                            {
+                                                                                                @*المهام المسنده اليه*@
+                                                                                                <button type="button" name="submitType" value="Search" class="btn btn-outline-secondary font-weight-bold" data-toggle="modal" data-target="#sharedModal"
+                                                                                                        onclick="openModel('#titleSharedModal', `المهام المسنده اليه: @item.sContractorName`, '#btnSearchContractor', ' المهام المسنده اليه', 'far fa-list-alt', 'btn btnsStyle btn-outline-secondary ml-3 font-weight-bold', '_vpMissionContractor', 'ID=@item.iProcessSubContractorCode', '#sharedModalBody')">
+                                                                                                    <i class="far fa-list-alt"></i> المهام المسنده اليه
+                                                                                                </button>
+                                                                                            }
+                                                                                        }
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            }
+                                                            else if (screen != "vpContractorsShow") // المقاول
+                                                            {
+                                                                <td>
+                                                                    <div class="color_main103 d-sm-show101 ">
+                                                                        <div class="dropdown-j  color_main102">
+                                                                            <i class="fas fa-ellipsis-v "></i>
+                                                                            <div class="dropdown-content-j" style="min-width: auto;">
+                                                                                <div class="row text-left">
+                                                                                    <div class="col-12">
+                                                                                        @if (screen == "vContractorIndex" || screen == "vReferenceSideIndex")
+                                                                                        {
+                                                                                            //تعديل
+                                                                                            <button type="button" name="submitType" value="@item.iProcessSubContractorCode"
+                                                                                                    class="btn btn-sm btn-outline-warning font-weight-bold"
+                                                                                                    onclick="openModel('#titleSharedModal', `تعديل مقاول من الباطن : @item.sContractorName`, '#btnAddEditContractors', ' تعديل مقاول من الباطن', 'fas fa-edit font-weight-bold', 'btn btn-outline-warning font-weight-bold', '_vpContractors', 'ID=@item.iProcessSubContractorCode', '#sharedModalBody')"
+                                                                                                    data-toggle="modal" data-target="#sharedModal">
+                                                                                                <i class="fas fa-edit"></i> تعديل
+                                                                                            </button>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            // المهام المسنده اليه
+                                                                                            <button type="button" name="submitType" value="Search" class="btn btn-outline-secondary font-weight-bold" data-toggle="modal" data-target="#sharedModal"
+                                                                                                    onclick="openModel('#titleSharedModal', `المهام المسنده اليه : @item.sContractorName`, '#btnSearchContractor', ' المهام المسنده اليه', 'far fa-list-alt', 'btn btnsStyle btn-outline-secondary ml-3 font-weight-bold', '_vpMissionContractor', 'ID=@item.iProcessSubContractorCode', '#sharedModalBody')">
+                                                                                                <i class="far fa-list-alt"></i> المهام المسنده اليه
+                                                                                            </button>
+
+
+                                                                                            // تعديل
+                                                                                            <button type="button" name="submitType" value="@item.iProcessSubContractorCode"
+                                                                                                    class="btn btn-sm btn-outline-warning font-weight-bold"
+                                                                                                    onclick="openModel('#titleSharedModal', `تعديل مقاول من الباطن : @item.sContractorName`, '#btnAddEditContractors', ' تعديل مقاول من الباطن', 'fas fa-edit font-weight-bold', 'btn btn-outline-warning font-weight-bold', '_vpContractorData', 'ID=@item.iProcessSubContractorCode', '#sharedModalBody')"
+                                                                                                    data-toggle="modal" data-target="#sharedModal">
+                                                                                                <i class="fas fa-edit"></i> تعديل
+                                                                                            </button>
+                                                                                            // حذف
+                                                                                            <a href="#" data-toggle="tooltip" data-placement="bottom" class="btn btn-sm btn-outline-danger font-weight-bold"
+                                                                                               onclick="return sAlertDel(this,'هل تريد حذف المقاول ؟', 'حذف  المقاول من الباطن', 'إلغاء الحذف','Contractor','_vpDeleteSearchContractor',@(item.iProcessSubContractorCode));"><i class="fas fa-trash-alt"></i> حذف</a>
+                                                                                        }
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            }
+                                                        }
+                                                    </tr>
+                                                }
+                                                //مقاولين من الباطن
+                                                else if (item.bnContractorType == false)
+                                                {
+                                                    <tr>
+                                                        <th scope="row" class="color_main102">@((Convert.ToInt32(Model.PageNumber) * Convert.ToInt32(generalVariables.PageSize)) - (Convert.ToInt32(generalVariables.PageSize) - iCount) )</th>
+                                                        <td class="color_main103">@item.sContractorName</td>
+                                                        <td class="color_main103">@item.iContractorNationalNumber</td>
+                                                        <td class="color_main103">@item.sContractorProcessNumber</td>
+                                                        @if (TempData["screen"] == null || screen == "vpContractorsShow")
+                                                        {
+                                                            if (screen != "_vpContractors")
+                                                            {
+                                                                // الموظف
+                                                                if (screen == "vpContractorsShow" && x.Count > 0)
+                                                                {
+                                                                    <td class="color_main103  ">
+                                                                        <div class="color_main103 d-sm-show101 ">
+                                                                            <div class="dropdown-j  color_main102">
+                                                                                <i class="fas fa-ellipsis-v "></i>
+                                                                                <div class="dropdown-content-j" style="min-width: auto;">
+                                                                                    <div class="row text-left">
+                                                                                        <div class="col-12">
+                                                                                            @foreach (var code in x)
+                                                                                            {
+                                                                                                if (code.functionCode == 43)
+                                                                                                {
+                                                                                                    //المهام المسنده اليه
+                                                                                                    <button type="button" name="submitType" value="Search" class="btn btn-sm btn-outline-secondary font-weight-bold" data-toggle="modal" data-target="#sharedModal"
+                                                                                                            onclick="openModel('#titleSharedModal', `المهام المسنده اليه : @item.sContractorName`, '#btnSearchContractor', ' المهام المسنده اليه', 'far fa-list-alt', 'btn btnsStyle btn-outline-secondary ml-3 font-weight-bold', '_vpMissionContractor', 'ID=@item.iProcessSubContractorCode', '#sharedModalBody')">
+                                                                                                        <i class="far fa-list-alt"></i> المهام المسنده اليه
+                                                                                                    </button>
+                                                                                                }
+                                                                                                @*قبول المقاول من باطن*@
+                                                                                            else if (code.functionCode == 81 && item.bSubContractorAccept.ToString() != "True" && item.bnContractorType == false)
+                                                                                            {
+                                                                                                <a href="#" data-toggle="tooltip" data-placement="bottom" class="btn btn-sm btn-outline-success font-weight-bold btnsStyle"
+                                                                                                   onclick="return sAlertAccept(this,'هل تريد الموافقة على هذا المقاول ؟', 'الموافقة', 'ليس بعد','InsuranceEmployee','_vpAcceptSubContractor','inPage=@Request.QueryString["inPage"]&processCode=@item.iProcessCode&subContAccept=@item.iProcessSubContractorCode&areas=@Request.QueryString["areas"]&Offices=@Request.QueryString["Offices"]');"><i class="fas fa-check"></i> قبول المقاول</a>
+                                                                                                }
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                }
+                                                                else if (screen != "vpContractorsShow")
+                                                                {
+                                                                    <td class="color_main103  ">
+                                                                        <div class="color_main103 d-sm-show101 ">
+                                                                            <div class="dropdown-j  color_main102">
+                                                                                <i class="fas fa-ellipsis-v "></i>
+                                                                                <div class="dropdown-content-j" style="min-width: auto;">
+                                                                                    <div class="row text-left">
+                                                                                        <div class="col-12">
+                                                                                            @if ((screen == "vContractorIndex" || screen == "vReferenceSideIndex") && Session["procStopActive"] == null)
+                                                                                            {
+                                                                                                //تعديل
+                                                                                                if (item.bSubContractorAccept.ToString() != "True" && item.bnContractorType.ToString() == "False" && item.inUserInsertCode.ToString() == Session["uc"].ToString())
+                                                                                                {
+                                                                                                    <button type="button" name="submitType" value="@item.iProcessSubContractorCode"
+                                                                                                            class="btn btn-sm btn-outline-warning font-weight-bold"
+                                                                                                            onclick="openModel('#titleSharedModal', `تعديل مقاول من الباطن : @item.sContractorName`, '#btnAddEditContractors', ' تعديل مقاول من الباطن', 'fas fa-edit font-weight-bold', 'btn btn-outline-warning font-weight-bold', '_vpContractors', 'ID=@item.iProcessSubContractorCode', '#sharedModalBody')"
+                                                                                                            data-toggle="modal" data-target="#sharedModal">
+                                                                                                        <i class="fas fa-edit"></i>  تعديل
+                                                                                                    </button>
+                                                                                                }
+                                                                                            }
+                                                                                            else
+                                                                                            {
+                                                                                                <button type="button" name="submitType" value="Search" class="btn btn-sm btn-outline-secondary font-weight-bold" data-toggle="modal" data-target="#sharedModal"
+                                                                                                        onclick="openModel('#titleSharedModal', `المهام المسنده اليه : @item.sContractorName`, '#btnSearchContractor', ' المهام المسنده اليه', 'far fa-list-alt', 'btn btnsStyle btn-outline-secondary ml-3 font-weight-bold', '_vpMissionContractor', 'ID=@item.iProcessSubContractorCode', '#sharedModalBody')">
+                                                                                                    <i class="far fa-list-alt"></i> المهام المسنده اليه
+                                                                                                </button>
+
+                                                                                                if (Session["procStopActive"] == null)
+                                                                                                {
+                                                                                                    if (item.bSubContractorAccept.ToString() != "True" && item.bnContractorType.ToString() == "False" && item.inUserInsertCode.ToString() == Session["uc"].ToString())
+                                                                                                    {
+                                                                                                        <button type="button" name="submitType" value="@item.iProcessSubContractorCode"
+                                                                                                                class="btn btn-sm btn-outline-warning font-weight-bold"
+                                                                                                                onclick="openModel('#titleSharedModal', `تعديل مقاول من الباطن : @item.sContractorName`, '#btnAddEditContractors', ' تعديل مقاول من الباطن', 'fas fa-edit font-weight-bold', 'btn btn-outline-warning font-weight-bold', '_vpContractorData', 'ID=@item.iProcessSubContractorCode', '#sharedModalBody')"
+                                                                                                                data-toggle="modal" data-target="#sharedModal">
+                                                                                                            <i class="fas fa-edit"></i>  تعديل
+                                                                                                        </button>
+                                                                                                        <a href="#" data-toggle="tooltip" data-placement="bottom" class="btn btn-sm btn-outline-danger font-weight-bold"
+                                                                                                           onclick="return sAlertDel(this,'هل تريد حذف المقاول ؟', 'حذف  المقاول من الباطن', 'إلغاء الحذف','Contractor','_vpDeleteSearchContractor','IDDelete=@(item.iProcessSubContractorCode) ');"><i class="fas fa-trash-alt"></i> حذف</a>
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                }
+                                                            }
+                                                        }
+                                                    </tr>
+                                                }
+                                                iCount++;
+                                            }
+                                        </tbody>
+                                    </table>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <table class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col" class="color_main102">#</th>
+                                                            <th scope="col" class="color_main102">اسم المقاول</th>
+                                                            <th scope="col" class="color_main102">الرقم التامينى</th>
+                                                            <th scope="col" class="color_main102">رقم المقاول بالعمليه</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                    </table>
+                                                }
+
+            @* pagination *@
+            @if (screen == "vContractorShow")
+            {
+                <div id="divPagination">
+                    <h5 style="text-align:center;color:#306fc2"> صفحة <strong style="color:#CA2553"> @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)</strong> من <strong>@Model.PageCount </strong> </h5>
+                    <div style="text-align:center">
+                        <div class="justify-content-lg-center pagination">
+                            @Html.PagedListPager(Model, inPage => Url.Action("vContractorShow", new { inPage, processID = Convert.ToInt32(Request.QueryString["processID"].ToString()) }))
+                        </div>
+                    </div>
+                </div>
+            }
+            else if (screen == "vpContractorsShow")
+            {
+                <div id="divPagination">
+                    <h5 style="text-align:center;color:#306fc2"> صفحة <strong style="color:#CA2553"> @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)</strong> من <strong>@Model.PageCount </strong> </h5>
+                    <div style="text-align:center">
+                        <div class="justify-content-lg-center pagination">
+                            @Html.PagedListPager(Model, inPage => Url.Action("vpContractorsShow", "InsuranceEmployee", new { inPage, ProcessId = Request.QueryString["ProcessId"], Cont = Request.QueryString["Cont"] == null ? null : Request.QueryString["Cont"], cd4 = Request.QueryString["cd4"] }))
+                        </div>
+                    </div>
+                </div>
+            }
+            else if (screen == "_vpContractors") //pagging in model
+            {
+                <div style="height: 30px;" id="masterPaged">
+                    <div id="paged" class="justify-content-lg-center pagination mt-3">
+                        <div class="pagination-container">
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        @if (screen == "vProcessRequest")
+        {
+            <div class="text-left w-100 mt-3">
+                <button type="button" name="submitType" value="Search" class="btn btn-outline-primary font-weight-bold" data-toggle="modal" data-target="#sharedModal"
+                        onclick="openModel('#titleSharedModal', 'بحث عن مقاول من الباطن', '#btnSearchContractor', ' بحث', 'fas fa-search', 'btn btnsStyle btn-outline-primary ml-3 font-weight-bold', '_vpSearchContractor', '', '#sharedModalBody')">
+                    <i class="fas fa-search"></i> بحث
+                </button>
+            </div>
+        }
+        else if (screen == "vContractorShow")
+        {
+            <div class="text-right w-100 mt-3">
+
+                @*@if (x.Count > 0)
+                    {
+                        foreach (var code in x)
+                        {
+                            if (code.functionCode == 75)
+                            {
+                                //اضافة مقاولين من الباطن
+                                <button type="button" name="submitType" value="1"
+                                        class="btn btn-outline-info font-weight-bold btnsStyle"
+                                        onclick="openModel('#titleSharedModal', 'اضافة مقاولين من الباطن', '#btnAddEditContractors', ' اضافه مقاولين من الباطن', 'fas fa-plus font-weight-bold', 'btn btn-outline-info font-weight-bold', '_vpContractorData', 'processID=1', '#sharedModalBody')"
+                                        data-toggle="modal" data-target="#sharedModal">
+                                    <i class="fas fa-plus"></i>  اضافة مقاولين من الباطن
+                                </button>
+                            }
+
+                        }
+                    }*@
+
+                @* بحث *@
+                <button type="button" name="submitType" value="Search" class="btn btn-outline-primary font-weight-bold" data-toggle="modal" data-target="#sharedModal"
+                        onclick="openModel('#titleSharedModal', 'بحث عن مقاول من الباطن', '#btnSearchContractor', ' بحث', 'fas fa-search', 'btn btnsStyle btn-outline-primary ml-3 font-weight-bold', '_vpSearchContractor', 'screen=vContractorShow', '#sharedModalBody')">
+                    <i class="fas fa-search"></i> بحث
+                </button>
+
+                @*الغاء البحث*@
+                <a class="btn btn-default font-weight-bold " href="@Url.Action("vpCancelSearch", "Contractor", new { ProcessId = Request.QueryString["ProcessId"], Act =screen,Contr= controler })">الغاء البحث <span class="glyphicon"></span></a>
+
+                @if (Session["procStopActive"] == null)
+                {
+                @*اضافة مقاولين من الباطن*@
+                <button type="button" name="submitType" value="1"
+                        class="btn btn-outline-info font-weight-bold btnsStyle"
+                        onclick="openModel('#titleSharedModal', 'اضافة مقاولين من الباطن', '#btnAddEditContractors', ' اضافه مقاولين من الباطن', 'fas fa-plus font-weight-bold', 'btn btn-outline-info font-weight-bold', '_vpContractorData', 'processID=1', '#sharedModalBody')"
+                        data-toggle="modal" data-target="#sharedModal">
+                    <i class="fas fa-plus"></i>  اضافة مقاولين من الباطن
+                </button>
+                }
+
+            </div>
+        }
+        // شاشه المقاولين في العمليات >> تفاصيل العمليه >> المقاولين
+        else if (screen == "vpContractorsShow")
+        {
+            <div class="text-right w-100 mt-3">
+                <button type="button" name="submitType" value="Search" class="btn btn-outline-primary font-weight-bold" data-toggle="modal" data-target="#sharedModal"
+                        onclick="openModel___ss('#titleSharedModal', 'بحث عن مقاول من الباطن', '#btnSearchContractor', ' بحث', 'fas fa-search', 'btn btnsStyle btn-outline-primary ml-3 font-weight-bold', '../Contractor/_vpSearchContractor', '?screen=vpContractorsShow', '#sharedModalBody')">
+                    <i class="fas fa-search"></i> بحث
+                </button>
+
+                @*الغاء البحث*@
+                <a class="btn btn-default font-weight-bold " href="@Url.Action("vpCancelSearch", "Contractor", new { ProcessId = Request.QueryString["ProcessId"], Act =screen,Contr= controler })">الغاء البحث <span class="glyphicon"></span></a>
+
+            </div>
+            <div class="text-left border-top mt-1">
+                <span class="fa fa-circle mt-2 mx-2" style="color:red;font-size: small;"> مقــــاول رئيســــــــــي </span>
+                <span class="fa fa-circle mx-2" style="color:black;font-size: small;"> مقاول من الباطن </span>
+            </div>
+        }
+
+        @Html.Raw(TempData["msg"])
+    </div>
+</div>
+<script>
+    $(document).ready(function ()
+    {
+        var msg = null;
+        PaggingTemplate(@totalPage, 1, 'GetPageData', "'../Contractor/GetContractorData'", msg, '#tbContractors',@Convert.ToInt32(generalVariables.PageSize));
+    })
+</script>

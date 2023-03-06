@@ -1,0 +1,64 @@
+﻿@model DataAccessLayer.Requests.referenceSideContractorRequest
+@{
+    var screen = "";
+    string[] path = HttpContext.Current.Request.Url.AbsolutePath.Split('/');
+    screen = path[2];
+    Layout = "~/Views/Shared/_partialLayout.cshtml";
+}
+@using (Html.BeginForm("_vpRefSideContAdd", "Users", FormMethod.Post))
+{
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="mt-2 dr-rtl grid_box_shadow mx-3 mb-1 ">
+        <div class="row text-right">
+
+            @*  اسم جهه الاسناد - المقاول *@
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-4">
+                    اسم جهه الاسناد - المقاول
+                </span>
+                <div>
+                    @Html.TextBoxFor(modal => modal.OModel.sReferenceSideContractorName, "", new { @class = "form-control borderText arNumSign",required = "required" })
+                </div>
+                <div>
+                    @Html.ValidationMessageFor(model => model.OModel.sReferenceSideContractorName, "", new { @class = "d-flex justify-content-center" })
+                </div>
+            </div>
+
+            @*  الرقم التأمينى *@
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-4">
+                    الرقم التأمينى
+                </span>
+                <div>
+                    @Html.TextBoxFor(modal => modal.OModel.sReferanceSideContractorNum, "", new { @class = "form-control borderText number", data_toggle = "tooltip", title = "ارقام فقط", data_placement = "bottom", required = "required" })
+                </div>
+                <div>
+                    @Html.ValidationMessageFor(model => model.OModel.sReferanceSideContractorNum, "", new { @class = "d-flex justify-content-center" })
+                </div>
+            </div>
+
+            @*  الكيان القانونى *@
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-4">
+                    الكيان القانونى
+                </span>
+                <div>
+                    @Html.DropDownListFor(modal => modal.OModel.legalEntityCode, ViewBag.legalEntity as SelectList, new { @class = "form-control borderDDL selectpicker", required = "required", @data_live_search = "true" })
+                </div>
+            </div>
+
+            @* فعال *@
+            <div class="col-lg-3 col-md-12 col-sm-12 col-12 my-1 mt-3 align-self-end">
+                @Html.CheckBoxFor(model => model.OModel.bnIsActive, new { @class = "option-input-child checkbox", id = "bIsActive",@checked= "checked" })
+                <label class="color_main102 font-weight-bold ml-2" for="Active">فعال</label>
+            </div>
+
+            @* اضافة / تعديل جهه اسناد - مقاول *@
+            <div class="col-lg-6 col-md-6 align-self-end col-sm-12 my-1 text-left">
+                <button type="submit" id="btnAddRefSideCont" class=""><i class=""></i></button>
+            </div>
+
+        </div>
+    </div>
+}

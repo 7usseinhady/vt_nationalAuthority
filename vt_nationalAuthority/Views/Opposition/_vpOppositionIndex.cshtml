@@ -1,0 +1,89 @@
+﻿@model DataAccessLayer.Requests.processRequest
+@*<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>*@
+@{
+    var screen = "";
+    string[] path = HttpContext.Current.Request.Url.AbsolutePath.Split('/');
+    screen = path[2];
+    Layout = "~/Views/Shared/_partialLayout.cshtml";
+}
+@using (Html.BeginForm("_vpSave", "Opposition", FormMethod.Post, new { @id = "formIndexOpposition", onsubmit = "return validateMyForm(event);" }))
+{
+    @Html.Hidden("action", TempData["screen"] == null ? "vContractorIndex" : TempData["screen"].ToString())
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="mt-4 dr-rtl grid_box_shadow mx-3 mb-5">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="align-bottom text-right">
+                @if (TempData["type"] == null)
+                {
+                    @Html.RadioButton("Status", "Oppos", new { @class = "option-input-child checkbox", id = "Oppos" })
+                    <label class="color_main102 font-weight-bold ml-2" for="Status">اعتراض</label>
+
+                    @Html.RadioButton("Status", "Free", new { @class = "option-input-child checkbox", id = "Free" })
+                    <label class="color_main102 font-weight-bold ml-2" for="Status">اعفاء</label>
+                }
+                else if (Convert.ToInt32(TempData["type"].ToString()) == 1)
+                {
+                    @Html.RadioButton("Status", "Oppos", new { @class = "   option-input-child checkbox", @checked = true, id = "Oppos" })
+                    <label class="color_main102 font-weight-bold ml-2" for="Status">اعتراض</label>
+
+                    @Html.RadioButton("Status", "Free", new { @class = "option-input-child checkbox" })
+                    <label class="color_main102 font-weight-bold ml-2" for="Status">اعفاء</label>
+                }
+                else
+                {
+                    @Html.RadioButton("Status", "Oppos", new { @class = "   option-input-child checkbox", id = "Oppos" })
+                    <label class="color_main102 font-weight-bold ml-2 text" for="Status">اعتراض</label>
+
+                    @Html.RadioButton("Status", "Free", new { @class = "option-input-child checkbox", @checked = true, id = "Free" })
+                    <label class="color_main102 font-weight-bold ml-2" for="Status">اعفاء</label>
+                }
+            </div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 mt-3">
+            <div style="text-align:center">
+                <span id="SpanReason" class="color_main102 font-weight-bold ml-2 text-center">السبب</span>
+            </div>
+            <div class="input-group">
+                @Html.TextAreaFor(model => model.oprocessOppositionModel.sProcessOppositionReason, new { @class = "form-control boorderText arNumSign", id = "OppReason", required = "required" })
+            </div>
+            <div class="col-12">
+                @Html.ValidationMessageFor(model => model.oprocessOppositionModel.sProcessOppositionReason, "", new { @class = "d-flex justify-content-center" })
+            </div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12  mt-3">
+            <div style="text-align:center">
+                <span id="spanNotes" class="color_main102 font-weight-bold ml-2">الملاحظات</span>
+            </div>
+            <div class="input-group">
+                @Html.TextAreaFor(model => model.oprocessOppositionModel.sProcessOppositionNotes, new { @class = "form-control boorderText arNumSign", data_toggle = "tooltip", title = "الملاحظات", data_placement = "bottom" })
+            </div>
+        </div>
+        <div class="text-left mt-3 w-100" style="z-index: 5000000; margin-right: -4%">
+            @if (TempData["screen"] == null)
+            {
+                <button type="submit" id="btnOpposition" onclick="loaderOpen();" class="btn btnsStyle btn-outline-info  font-weight-bold"><i class=""></i></button>
+            }
+        </div>
+    </div>
+}
+@*<script src="~/Scripts/jquery/jquery-3.3.1.js"></script>
+<script src="~/Scripts/light.js"></script>*@
+<script type="text/javascript">
+    function validateMyForm(event) {
+        var Oppos = $("#Oppos").prop('checked');
+        var Free = $("#Free").prop('checked');
+        if (Oppos == false && Free == false) {
+            sAlert('عفوا يجب اختيار الحاله اعتراض / اعفاء ', 2);
+            //event.preventDefault();
+            //return false;
+        }
+
+        else if ($('#OppReason').val() == '') {
+            sAlert('برجاء ادخال السبب ', 2);
+            //event.preventDefault();
+            //return false;
+        }
+    }
+</script>

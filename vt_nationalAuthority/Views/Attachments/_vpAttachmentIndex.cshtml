@@ -1,0 +1,208 @@
+﻿@using System.Data;
+@{
+    <title>مرفقات العملية</title>
+    DataTable packageFiles = TempData["dataTable"] as DataTable;
+
+    string[] path = HttpContext.Current.Request.Url.AbsolutePath.Split('/');
+    var iCount = 1;
+
+    List<DataAccessLayer.CheckModuleUserPermisiom_Result> x = TempData["checkLevel4"] as List<DataAccessLayer.CheckModuleUserPermisiom_Result>;
+    if (x != null)
+    {
+        Session["checkLevel4"] = x.ToList();
+    }
+    else if (Session["checkLevel4"] != null)
+    {
+        x = Session["checkLevel4"] as List<DataAccessLayer.CheckModuleUserPermisiom_Result>;
+    }
+}
+<div class="dr-rtl mb-3 row justify-content-center">
+    @if (packageFiles != null)
+    {
+        if (packageFiles.Rows.Count > 0)
+        {
+            <div class="text-center scroll-max grid_box_shadow" style="margin: 15px !important;margin-bottom: 58px !important;">
+                <table class="table">
+                    @* thead *@
+                    <thead>
+                        <tr>
+                            <th scope="col" class="color_main102">#</th>
+                            <th class="color_main102">اسم المرفق</th>
+                            <th class="color_main102">نوع المرفق</th>
+                            <th class="color_main102">تاريخ الرفع</th>
+                            @if (Session["officeCode"] == null) // مقاول
+                            {
+                                <th scope="col" class="color_main102"><i class="fas fa-cog"></i></th>
+                            }
+                            else if (x != null) // موظف تأمينات
+                            {
+                                <th class="color_main102">المقاول / جهه الاسناد</th>
+                                if (x.Count() > 0 && (x.Where(y => y.functionCode == 56 || y.functionCode == 57 || y.functionCode == 58).ToList().Count() > 0))
+                                {
+                                    <th scope="col" class="color_main102"><i class="fas fa-cog"></i></th>
+                                }
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (DataRow row in packageFiles.Rows)
+                    {
+                            <tr>
+                                <th scope="row" class="color_main102">@iCount</th>
+                                <td class="color_main103">@row["docuName"]</td>
+                                <td class="color_main103">@row["attachmentTypeName"]</td>
+                                <td class="color_main103">@row["doc_create_time"]</td>
+                                @if (Session["officeCode"] == null)
+                                {
+                                    // مقاول
+                                    <td class="color_main103">
+                                        <div class="color_main103">
+                                            <div class="dropdown-j color_main102">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                                <div class="dropdown-content-j" style="min-width: auto;">
+                                                    <div class="row text-left">
+                                                        <div class="col-12">
+
+                                                            @if (Session["uc"].ToString() == row["uc"].ToString() && Session["procStopActive"] == null)
+                                                            {
+                                                                @* تعديل  *@
+                                                                <button type="button" name="submitType"
+                                                                        class="btn btn-sm btn-outline-warning font-weight-bold"
+                                                                        onclick="openModel___s('#titleSharedModal', `تعديل المرفق : @row["docuName"]`, '#btnAttachmentSearchOrEdit', ' تعديل المرفق', 'far fa-edit', 'btn btnsStyle btn-outline-warning ml-3 font-weight-bold', '../Attachments/_vpAttachmentSearchOrEdit', `uc=@row["uc"]&attachTypeCode=@row["attachmentTypeCode"]&docName=@row["docuName"]`, '#sharedModalBody')"
+                                                                        data-toggle="modal" data-target="#sharedModal">
+                                                                    <i class="far fa-edit"></i>  تعديل
+                                                                </button>
+
+                                                                @* حذف مرفق *@
+                                                                <button type="button" class="btn btn-sm btn-outline-danger font-weight-bold" id="attachmentDelete" onclick="return sAlertDelFolder(this, 'هل تريد حذف هذا الملف بما يحتويه من مرفقات ؟', 'حذف الملف', 'إلغاء الحذف', 'Attachments', 'vDeleteFolder', 'Processes/@Session["processCode"]/pAttachments',`@row["docuFullName"]`,'');"><i class="far fa-trash-alt"></i> حذف </button>
+                                                            }
+
+                                                            @* المرفقات *@
+                                                            <button type="button" name="submitType"
+                                                                    class="btn btn-sm btn-outline-primary font-weight-bold"
+                                                                    onclick="openModel___s('#titleSharedSepratedModal', `المرفقات العامة : @row["docuName"] `, '', 'المرفقات العامة', 'fas fa-plus', 'btn btnsStyle btn-outline-info ml-3 font-weight-bold', '../Attachments/_vpAttachmentSearchFiles', `nFolder=Processes/@Session["processCode"]/pAttachments/@row["docuFullName"],actionName=@path[2],controllerName=@path[1]`, '#sharedSepratedModalBody')"
+                                                                    data-toggle="modal" data-target="#sharedSepratedModal">
+                                                                <i class="fa fa-paperclip"></i>  المرفقات
+                                                            </button>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                }
+                                else if (x != null) // موظف تأمينات
+                                {
+                                    <td class="color_main103">@row["contractorBy"]</td>
+                                    <td class="color_main103">
+                                        <div class="color_main103">
+                                            <div class="dropdown-j color_main102">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                                <div class="dropdown-content-j" style="min-width: auto;">
+                                                    <div class="row text-left">
+                                                        <div class="col-12">
+                                                            @foreach (var code in x)
+                                                            {
+                                                                if (Session["uc"].ToString() == row["uc"].ToString() && Session["procStopActive"] == null)
+                                                                {
+                                                                    if (code.functionCode == 56)
+                                                                    {
+                                                                        @* تعديل  *@
+                                                                        <button type="button" name="submitType"
+                                                                                class="btn btn-sm btn-outline-warning font-weight-bold"
+                                                                                onclick="openModel___s('#titleSharedModal', `تعديل المرفق : @row["docuName"]`, '#btnAttachmentSearchOrEdit', ' تعديل المرفق', 'far fa-edit', 'btn btnsStyle btn-outline-warning ml-3 font-weight-bold', '../Attachments/_vpAttachmentSearchOrEdit', `uc=@row["uc"]&attachTypeCode=@row["attachmentTypeCode"]&docName=@row["docuName"]`, '#sharedModalBody')"
+                                                                                data-toggle="modal" data-target="#sharedModal">
+                                                                            <i class="far fa-edit"></i>  تعديل
+                                                                        </button>
+                                                                    }
+
+                                                                    if (code.functionCode == 57)
+                                                                    {
+                                                                        @* حذف مرفق *@
+                                                                        <button type="button" class="btn btn-sm btn-outline-danger font-weight-bold" id="attachmentDelete" onclick="return sAlertDelFolder(this, 'هل تريد حذف هذا الملف بما يحتويه من مرفقات ؟', 'حذف الملف', 'إلغاء الحذف', 'Attachments', 'vDeleteFolder', `Processes/@Session["processCode"]/pAttachments','@row["docuFullName"]`,'');"><i class="far fa-trash-alt"></i> حذف </button>
+                                                                    }
+                                                                }
+
+                                                                if (code.functionCode == 58)
+                                                                {
+                                                                    @* المرفقات *@
+                                                                    <button type="button" name="submitType"
+                                                                            class="btn btn-sm btn-outline-primary font-weight-bold"
+                                                                            onclick="openModel___s('#titleSharedSepratedModal', `المرفقات العامة : @row["docuName"] `, '', 'المرفقات العامة', 'fas fa-plus', 'btn btnsStyle btn-outline-info ml-3 font-weight-bold', '../Attachments/_vpAttachmentSearchFiles', `nFolder=Processes/@Session["processCode"]/pAttachments/@row["docuFullName"],actionName=@path[2],controllerName=@path[1]`, '#sharedSepratedModalBody')"
+                                                                            data-toggle="modal" data-target="#sharedSepratedModal">
+                                                                        <i class="fa fa-paperclip"></i>  المرفقات
+                                                                    </button>
+                                                                }
+                                                            }
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                }
+                            </tr>
+
+                            iCount++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <h1 id="title" style="text-align: center; font-size: 50px !important; color: rgb(220, 234, 234); margin-top: 80px;">
+                <strong>@generalVariables.AttachmentsNotFound</strong>
+            </h1>
+        }
+    }
+    else
+    {
+        <h1 id="title" style="text-align: center; font-size: 50px !important; color: rgb(220, 234, 234); margin-top: 80px;">
+            <strong>@generalVariables.AttachmentsNotFound</strong>
+        </h1>
+    }
+    @* اضافه / بحث *@
+    <div class="text-right fixed_btn bg-white w-100">
+
+        @* بحث *@
+        <button type="button"
+                class="btn btn-outline-primary font-weight-bold"
+                onclick="openModel___s('#titleSharedModal', 'بحث ', '#btnAttachmentSearchOrEdit', ' بحث', 'fas fa-search', 'btn btnsStyle btn-outline-primary ml-3 font-weight-bold', '../Attachments/_vpAttachmentSearchOrEdit', '', '#sharedModalBody')"
+                data-toggle="modal" data-target="#sharedModal">
+            <i class="fas fa-search"></i>  بحث
+        </button>
+
+        @* الغاء البحث *@
+        <a class="btn btn-default font-weight-bold " href="@Url.Action("_vpSearchCancel", "Attachments" )">الغاء البحث <span class="glyphicon"></span></a>
+
+        @if (x != null)
+        {
+            foreach (var code in x)
+            {
+                if (code.functionCode == 54)
+                {
+                    @* اضافة مرفق *@
+                    <button type="button" name="submitType" data-toggle="modal" data-target="#sharedModal"
+                            class="btn btn-outline-primary font-weight-bold"
+                            onclick="openAttachmentSearchOrAdd('#titleSharedModal','اضافة مرفق',this,'../Attachments/_vpAttachmentAdd','Processes,@Session["processCode"],pAttachments','actionName=@path[2]&controllerName=@path[1]&screenType=1&screenCode=@Session["processCode"]','#sharedModalBody')">
+                        <i class="fa fa-paperclip"></i>  اضافة مرفق
+                    </button>
+                }
+            }
+        }
+        @if (Session["officeCode"] == null ) // مرفقات العمليه للمقاول
+        {
+            @* اضافة مرفق *@
+            <button type="button" name="submitType" data-toggle="modal" data-target="#sharedModal"
+                    class="btn btn-outline-primary font-weight-bold"
+                    onclick="openAttachmentSearchOrAdd('#titleSharedModal','اضافة مرفق',this,'../Attachments/_vpAttachmentAdd','Processes,@Session["processCode"],pAttachments','actionName=@path[2]&controllerName=@path[1]&screenType=1&screenCode=@Session["processCode"]','#sharedModalBody')">
+                <i class="fa fa-paperclip"></i>  اضافة مرفق
+            </button>
+        }
+    </div>
+</div>
+
+@Html.Raw(TempData["msg"])

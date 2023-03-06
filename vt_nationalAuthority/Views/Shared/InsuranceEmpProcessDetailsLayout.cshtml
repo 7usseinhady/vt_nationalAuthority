@@ -1,0 +1,32 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@* تفاصيل العمليه*@
+<div class="mt-4 dr-rtl grid_box_shadow mx-3 mb-3 ">
+    @{Html.RenderAction("_vpProcessDetails", "Process");}
+</div>
+
+@* البحث عند موظف التأمينات *@
+<div class="mt-4 dr-rtl grid_box_shadow mx-3 mb-3 ">
+    @{Html.RenderAction("_vpWorkerSearch", "InsuranceEmployee");}
+</div>
+
+<ul id="navBar" class="nav justify-content-start mt-4 dr-rtl">
+    <li class="nav-item tabs_box_shadow ">
+        <a class="nav-link color_main102 font-weight-bold" href=@Url.Action("vContractorsIndex", "Contractor")>المقاولين</a>
+    </li>
+    <li class="nav-item tabs_box_shadow cursor Links">
+        <a class="nav-link active color_main102 font-weight-bold" href=@Url.Action("vWorkersIndex", "Workers")>العمال</a>
+    </li>
+    <li class="nav-item tabs_box_shadow">
+        <a class="nav-link color_main102 font-weight-bold" href="@Url.Action("vExtractsShow", "Extracts", new { cp = true})">المستخلصات</a>
+    </li>
+    <li class="nav-item tabs_box_shadow">
+        <a class="nav-link color_main102 font-weight-bold" href="@Url.Action("vAttachmentsIndex", "Attachments",new { cp = true,cd4 =20})">المرفقات</a>
+    </li>
+</ul>
+
+<div class="dr-rtl grid_box_shadow mx-3 mb-3">
+    @RenderBody()
+</div>

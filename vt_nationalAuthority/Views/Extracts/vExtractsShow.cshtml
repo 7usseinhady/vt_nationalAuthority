@@ -1,0 +1,7 @@
+﻿@{
+    Layout = TempData["Layout"].ToString();
+    <title>مستخلصات العملية</title>
+}
+<div>
+    @{Html.RenderAction("_vpExtractsIndex", "Extracts");}
+</div>

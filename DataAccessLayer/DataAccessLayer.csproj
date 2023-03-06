@@ -1,0 +1,576 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{82533F9D-11CB-46C2-8C8B-FEFD98AB40F7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DataAccessLayer</RootNamespace>
+    <AssemblyName>DataAccessLayer</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Abstracts\ModelBase.cs" />
+    <Compile Include="Abstracts\RequestBase.cs" />
+    <Compile Include="apiUser.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="apiUserRequest.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="area.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="attachment.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="attachmentType.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="balanceTybe.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="card.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="cardsRequest.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="cardsRequestWorker.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="cardsStatu.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="cardWorkerStopActive.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="career.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="center.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CheckModuleUserPermisiom_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="checkWorkerAttendance_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="companyCardRequest.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CompanyCard_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="contractor.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="documentType.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="extractProcess.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="extractType.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="function.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetAllAreas_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetAreaOffice_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetAttendance_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetCardsRequest_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetCardWorkerStopActive_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetContractorRefrence_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetEmployeeNotificationProcessStop_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetEmployeeNotificationProcess_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetGroup_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetMissionSubContractor_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetNotifications_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetOfficeInsurance_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetOneWork_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetProcessDetails_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetSubContractors_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetUsersSearch_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetWorkerAttendance_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetWorkerAttendInsurance_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetWorkerCardInformation_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetWorkerCardsNumbers_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetWorkerDetails_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetWorkerInformation_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetWorkerProcess_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetWorkersCardRequest_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetWorkers_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="goverment.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="group.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="groupAreaOfficeSetting.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="groupPermission.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="groupUser.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="legalEntity.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="manPower.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="medicalInsurance.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="medicalStatu.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="migrehab.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="missionSubContractor.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AreaModel.cs" />
+    <Compile Include="Models\CardsRequestModel.cs" />
+    <Compile Include="Models\CardWorkerStopActiveModel.cs" />
+    <Compile Include="Models\CheckSession.cs" />
+    <Compile Include="Models\DataDrob.cs" />
+    <Compile Include="Models\AttachmentTypeModel.cs" />
+    <Compile Include="Models\FunctionModel.cs" />
+    <Compile Include="Models\GroupModel.cs" />
+    <Compile Include="Models\GroupUserModel.cs" />
+    <Compile Include="Models\ManPowerModel.cs" />
+    <Compile Include="Models\MedicalInsuranceModel.cs" />
+    <Compile Include="Models\MissionSubContractorModel.cs" />
+    <Compile Include="Models\mobileModel.cs" />
+    <Compile Include="Models\PermissionAreaOfficeModel.cs" />
+    <Compile Include="Models\ProcessModel.cs" />
+    <Compile Include="Models\ProcessNotesModel.cs" />
+    <Compile Include="Models\ProcessOppositionModel.cs" />
+    <Compile Include="Models\ProcessSiteModel.cs" />
+    <Compile Include="Models\ExtractsModel.cs" />
+    <Compile Include="Models\ProcessStopModel.cs" />
+    <Compile Include="Models\ProcessSubContractorModel.cs" />
+    <Compile Include="Models\ProcessUserLettersSiteModel.cs" />
+    <Compile Include="Models\ProcessUsersModel.cs" />
+    <Compile Include="Models\ReferenceSideContractorModel.cs" />
+    <Compile Include="Models\DocumentTypeModel.cs" />
+    <Compile Include="Models\GeneralMethods.cs" />
+    <Compile Include="Models\OfficeInsuranceModel.cs" />
+    <Compile Include="Models\UserModel.cs" />
+    <Compile Include="Models\WorkerAttendanceModel.cs" />
+    <Compile Include="Models\WorkerContactModel.cs" />
+    <Compile Include="Models\WorkerInjuriesModel.cs" />
+    <Compile Include="Models\WorkerModel.cs" />
+    <Compile Include="module.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="officeInsurance.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="oppositionType.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="orascomWorker.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="orascomWorkers2.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="orascomWorkers3.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="permissionAreaOffice.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="process.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="processNote.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="processOpposition.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="processSite.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="processStop.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="processSubContractor.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="processType.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="processUser.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="processUserLettersSite.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="referenceSideContractor.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Requests\AreaOfficeRequest.cs" />
+    <Compile Include="Requests\AttachmentTypeRequest.cs" />
+    <Compile Include="Requests\CardsRequestsRequest.cs" />
+    <Compile Include="Requests\DocumentTypeRequest.cs" />
+    <Compile Include="Requests\GroupRequest.cs" />
+    <Compile Include="Requests\ProcessRequest.cs" />
+    <Compile Include="Requests\ExtractsRequest.cs" />
+    <Compile Include="Requests\ProcessStopRequest.cs" />
+    <Compile Include="Requests\ProcessUsersRequest.cs" />
+    <Compile Include="Requests\ReferenceSideContractorRequest.cs" />
+    <Compile Include="Requests\UserRequest.cs" />
+    <Compile Include="Requests\WorkerInjuriesRequest.cs" />
+    <Compile Include="Requests\WorkerRequest.cs" />
+    <Compile Include="screenType.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="skillDegree.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="smsReturn.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spAllAreas_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spAPIWorkers_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="specialProcess.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spGetAllContractorsAndRefSide_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spGetAllContractorsAndRefSide_Result1.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spGetAreasContractor_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spGetAttachmentFolderData_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spGetCenterByGovernment_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spGetContractorProcesses_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spGetContractorsInProcess_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spGetContractorUserData_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spGetDocumentTypesWithSpecialCodes_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spGetExpireProcesses_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spGetGoverments_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spGetMainProcessByPNumAndWcodeAndDateInjury_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spGetMainProcessData_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spGetMainWorkerData_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spGetMissionOfExtracts_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spGetNotesProcess_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spGetOfficeProcess_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spGetOfficesContractor_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spGetPermissionAreaOffice_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spGetPreviousPtocessStop_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spGetProcessDataForAttachment_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spGetProcessesRefSideCont_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spGetProcessTypes_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spGetProcessUser_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spGetProcess_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spGetPtocessStop_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spGetRefSideContractorsLegal_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spGetRefSideContractors_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spGetRequestProcess_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spGetSpecialExtract_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spGetUserDetails_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spGetUsersNotInProcess_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spGetUsersOffice_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spGetVillagebyCenter_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spGetWorkerHaveInsuranceNumbers_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spGetWorkerInjuries_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spWorkerAttendanceApp_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spWorkerAttendance_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="statusCoverWSDL.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="statusFirstAttendMonthWSDL.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="stopStatu.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysdiagram.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="treeColor.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="user.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="userType.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UTILfn_Split_Result.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="village.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vt_authorityInsurance.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>vt_authorityInsurance.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vt_authorityInsurance.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vt_authorityInsurance.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>vt_authorityInsurance.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="worker.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="workerAttendance.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="workerAttendanceInsurance.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="workerContact.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="workerDetail.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="workerInjury.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="workerOfficeInsurance.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="workerPeriod.cs">
+      <DependentUpon>vt_authorityInsurance.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config" />
+    <None Include="packages.config" />
+    <EntityDeploy Include="vt_authorityInsurance.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>vt_authorityInsurance.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="vt_authorityInsurance.edmx.diagram">
+      <DependentUpon>vt_authorityInsurance.edmx</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="vt_authorityInsurance.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>vt_authorityInsurance.edmx</DependentUpon>
+      <LastGenOutput>vt_authorityInsurance.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="vt_authorityInsurance.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>vt_authorityInsurance.edmx</DependentUpon>
+      <LastGenOutput>vt_authorityInsurance.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\apiWSDLs\apiWSDLs.csproj">
+      <Project>{255e2c46-48e0-457f-9f4f-2710149d511f}</Project>
+      <Name>apiWSDLs</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

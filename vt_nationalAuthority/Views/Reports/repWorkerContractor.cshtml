@@ -1,0 +1,108 @@
+﻿@{
+    Layout = "~/Views/Shared/ReportsLayout.cshtml";
+}
+
+<html>
+<head>
+    <title>  بيان بتفاصيل عمال التحضير</title>
+</head>
+<body>
+
+    <div class="mt-3 dr-rtl grid_box_shadow mx-3 mb-2 row" style="margin-top: 10px !important;">
+        <div class="col-lg-4 col-md-6 col-sm-12 mt-2 text-right">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">بيان بتفاصيل عمال التحضير </span>
+        </div>
+    </div>
+
+    <div class="row text-right mt-3 dr-rtl mx-3 mb-2 grid_box_shadow">
+
+        <div class="col-lg-3 col-md-3 col-sm-12 mt-2">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">نتيجة الويزدل في التحضير</span>
+            <div>
+                @Html.ListBox("statusAttend", ViewBag.statusAttend as SelectList, new { @class = "form-control borderDDL selectpicker", title = "--  الكل --", id = "statusAttend", @data_live_search = "true" })
+            </div>
+        </div>
+
+        @* رقم العمليه *@
+        <div class="col-lg-2 col-md-2 col-sm-12">
+            <span class="color_main102 font-weight-bold ml-2  mx-3">رقم العمليه</span>
+            <div>
+                @Html.TextBox("processNum", "", new { @class = "form-control boorderText", id = "processNum", data_toggle = "tooltip", title = " ارقام فقط", data_placement = "bottom" })
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-12 col-12">
+            <span class="color_main102 font-weight-bold ml-2 mx-4">
+                المقاوليـــــن
+            </span>
+            <div>
+                @Html.ListBox("ContractotName", ViewBag.repCont as SelectList, new { @class = "form-control borderDDL selectpicker", title = "--  الكل --", id = "ContractotName", @data_live_search = "true"})
+            </div>
+        </div>
+
+        @*تاريخ  من *@
+        <div class="col-lg-2 col-md-2 col-sm-12">
+            <span class="color_main102 font-weight-bold ml-2 mx-3"> من تاريخ </span>
+            <div>
+                @Html.TextBox("DateStartProcess", "", new { @class = "form-control boorderText date", id = "DateStartProcess", autoComplete = "off" })
+            </div>
+        </div>
+
+        @* تاريخ الى  *@
+        <div class="col-lg-2 col-md-2 col-sm-12">
+            <span class="color_main102 font-weight-bold ml-2 mx-3"> الى تاريخ </span>
+            <div>
+                @Html.TextBox("DateEndProcess", "", new { @class = "form-control boorderText date", id = "DateEndProcess", autoComplete = "off" })
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-lg-2 col-md-2 col-sm-12 align-self-end">
+            <button id="btnShow" type="button" style="margin-right: 3px;" value="submit" onclick="callReport()" class="btn btnsStyle btn-outline-primary searchBtnWork font-weight-bold" data-toggle="tooltip" title="عرض" data-placement="bottom">عرض التقرير <span class="glyphicon glyphicon-search"></span></button>
+        </div>
+    </div>
+
+    <script>
+
+        function callReport() {
+            @*  المقاول الرئيسي *@
+            var ContractotName = $('#ContractotName').val();
+            if (ContractotName == '')
+                ContractotName = '-1'
+
+           @* رقم العمليه *@
+            var processNum = $('#processNum').val();
+            if (processNum == '')
+                processNum = '-1'
+            //نتيجة الويزدل في الحضور
+            var statusAttend = $('#statusAttend').val();
+            if (statusAttend == '')
+                statusAttend = '-1'
+
+            @*تاريخ  من *@
+            var DateStartProcess = $('#DateStartProcess').val();
+
+            @* تاريخ الى  *@
+            var DateEndProcess = $('#DateEndProcess').val();
+
+
+            if (DateStartProcess == '' && DateEndProcess == '') {
+                DateStartProcess = '1800-01-01';
+                DateEndProcess = '2100-01-01';
+            } else if (DateStartProcess != '' && DateEndProcess != ''){ }
+            else if (DateStartProcess != '') {
+                DateEndProcess = DateStartProcess;
+            }
+            else if (DateEndProcess != '') {
+                DateStartProcess = DateEndProcess;
+            }
+
+            if (new Date(DateStartProcess) > new Date(DateEndProcess))
+                sAlert('"عفوا , لابد من جعل "من تاريخ" اقل من او يساوى "الى تاريخ".  ', 2);
+            else
+                window.open("/Reports/callReport?reportName=repWorkersContractor&contractors=" + ContractotName + "&dateFrom=" + DateStartProcess + "&dateTo=" + DateEndProcess + "&processNumber=" + processNum + "&statusAttendance=" + statusAttend,
+                'popup_window', 'scrollbars=yes,resizable=yes,status=no,location=no,toolbar=no,menubar=no,width=0,height=0,left=-1000,top=-1000');
+        }
+
+    </script>
+
+</body>
+</html>

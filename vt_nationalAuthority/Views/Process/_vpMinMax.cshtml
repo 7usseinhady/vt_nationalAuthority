@@ -1,0 +1,70 @@
+﻿@model DataAccessLayer.Requests.processRequest
+@{
+    Layout = "~/Views/Shared/_partialLayout.cshtml";
+}
+
+@using (Html.BeginForm("_vpSaveMinMax", "Process", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.Hidden("areas", Request.QueryString["areas"])
+    @Html.Hidden("Offices", Request.QueryString["Offices"])
+    @Html.HiddenFor(model => model.OModel.iProcessCode)
+
+    <div class="grid_box_shadow">
+        <div class="divStyle">
+            <div class="col-lg-6 col-md-12 col-sm-12 mt-2 text-center">
+                <span class="color_main102 font-weight-bold ml-2">الحد الادنى للعمال</span>
+                <div>
+                    @Html.TextBoxFor(model => model.OModel.iMinNumber, new { @class = "form-control boorderText number",id= "minNum", data_toggle = "tooltip", title = "ارقام فقط", data_placement = "bottom", required = "required" })
+                    @Html.ValidationMessageFor(model => model.OModel.iMinNumber, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-12 col-sm-12 mt-2 text-center">
+                <span class="color_main102 font-weight-bold ml-2">الحد الاقصى للعمال</span>
+                <div>
+                    @Html.TextBoxFor(model => model.OModel.iMaxNumber, new { @class = "form-control boorderText number", id = "maxNum", data_toggle = "tooltip", title = "ارقام فقط", data_placement = "bottom", required = "required" })
+                    @Html.ValidationMessageFor(model => model.OModel.iMaxNumber, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        @if (Session["procStopActive"] == null)
+        {
+            <div class="text-left w-100 my-1 mt-4">
+                <button type="submit" id="btnSaveMinMaxProcess" onclick="loaderOpen();" class="btn btn-sm btn-outline-success font-weight-bold btnsStyle"><i class="fas fa-plus font-weight-bold"></i> تسجيل الحد الادنى - الاقصى </button>
+            </div>
+        }
+    </div>
+}
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $('#btnSaveMinMaxProcess').click(function (event) {
+
+            loaderClose();
+            var min = $('#minNum').val();
+            var max = $('#maxNum').val();
+
+            if (min == '' && max == '') {
+                sAlert(' عفوا , يجب إدخال الحد الادنى والحد الاقصى.  ', 2);
+            }
+            else if (min == '') {
+                sAlert('عفوا , يجب إدخال الحد الادنى.', 2);
+            }
+            else if (max == '') {
+                sAlert('عفوا , يجب إدخال الحد الاقصي.', 2);
+            }
+            else if (Number(min) > Number(max)) {
+                event.preventDefault();
+                sAlert('عفوا , يجب إدخال الحد الادنى اصغر من الحد الاقصي.', 2);
+            }
+            else if (min <= 0 || max <= 0)
+            {
+                event.preventDefault();
+                sAlert('عفوا , يجب إدخال الارقام اكبر من صفر.', 2);
+            }
+            else { }
+        });
+    });
+</script>

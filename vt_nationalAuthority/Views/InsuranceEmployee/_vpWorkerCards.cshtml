@@ -1,0 +1,77 @@
+﻿@model Tuple<DataAccessLayer.GetWorkerCardsNumbers_Result, List<DataAccessLayer.GetWorkerCardsNumbers_Result>>
+@{
+    int iCount = 1;
+    Layout = null;
+}
+@using (Html.BeginForm("_vpWorkerCards", "InsuranceEmployee", FormMethod.Post))
+{
+    <div class="mt-3 dr-rtl grid_box_shadow mx-3 mb-2 row">
+        <div class="col-lg-6 col-md-6 col-sm-12 text-right">
+            <span class="color_main102 font-weight-bold ml-2">اسم طلبيه الكروت</span>
+            <div>
+                @Html.EditorFor(model => model.Item1.cardsRequestName, new { htmlAttributes = new { @class = "form-control borderText reset", id = "cardsRequestName" } })
+            </div>
+        </div>
+        @*<div class="mt-4">
+                <button type="submit" id="btnSearchCards" class="btn btnsStyle btn-outline-info  font-weight-bold"><i class=""></i></button>
+            </div>*@
+    </div>
+}
+
+<div class="row justify-content-center">
+    <div class="text-center grid_box_shadow scroll-max mt-3">
+        @if (Model == null)
+        {
+            <h1 id="tblSearchNotFound">
+                <strong>@generalVariables.WorkerCardsNotFound</strong>
+            </h1>
+        }
+        else if (Model.Item2.Count == 0)
+        {
+            <h1 id="tblSearchNotFound">
+                <strong>@generalVariables.WorkerCardsNotFound</strong>
+            </h1>
+        }
+        else if (Model.Item2.Count > 0 && Model != null)
+        {
+            <div id="divLoad">
+                <table class="table" id="tblCardsWorkers">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="color_main102">#</th>
+                            <td class="color_main103" style="FONT-WEIGHT: BOLD!important">اسم طلبيه الكروت</td>
+                            <td class="color_main103" style="FONT-WEIGHT: BOLD!important">رقم الكارت</td>
+                            <td class="color_main103" style="FONT-WEIGHT: BOLD!important">حالة الكارت</td>
+                            <td class="color_main103" style="FONT-WEIGHT: BOLD!important">مهنة العامل</td>
+                            <td class="color_main103" style="FONT-WEIGHT: BOLD!important">درجة مهاره </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{iCount = 1; }
+                        @foreach (var item in Model.Item2)
+                        {
+                            <tr>
+                                <th scope="row" class="color_main102">@iCount</th>
+                                <td class="color_main103">@item.cardsRequestName</td>
+                                <td class="color_main103">@item.cardNumber</td>
+                                <td class="color_main103">@item.isActive</td>
+                                <td class="color_main103">@item.careerName</td>
+                                <td class="color_main103">@item.skillDegreeName</td>
+                            </tr>
+                            iCount++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+                            }
+    </div>
+</div>
+
+<script>
+    $("#cardsRequestName").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#tblCardsWorkers tbody tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
+</script>

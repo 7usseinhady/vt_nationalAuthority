@@ -1,0 +1,224 @@
+﻿
+@using (Html.BeginForm("_vpUserSearch", "Users", FormMethod.Post, new { @id = "formIndex" }))
+{
+    <div class="row grid_box_shadow text-right">
+        @* اسم المستخدم بالكامل *@
+        <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">اسم المستخدم بالكامل</span>
+            <div>
+                @Html.TextBox("txtFUName", "", new { @class = "form-control boorderText arNumSign", data_toggle = "tooltip", title = "حروف عربيه فقط", data_placement = "bottom" })
+            </div>
+        </div>
+        @* اسم المستخدم *@
+        <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">اسم المستخدم</span>
+            <div>
+                @Html.TextBox("txtUName", "", new { @class = "form-control boorderText arNumSign", data_toggle = "tooltip", title = "حروف عربيه فقط", data_placement = "bottom" })
+            </div>
+        </div>
+        @* نوع المستخدم *@
+        <div class="col-lg-12 col-md-12 col-sm-12 col-12 my-1">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">نوع المستخدم</span>
+            <div>
+                @Html.DropDownList("ddlTU", ViewBag.SearchUsersTypes as SelectList, new { @class = "form-control boorderText borderDDL", @id = "ddlTU", onchange = "getUserType();" })
+            </div>
+        </div>
+        @* الكيان القانونى*@@* الرقم التامينى *@@** الاسم لجهة *@
+        <div id="divRefSideCont" class="col-12" style="display:none;">
+            @* الكيان القانونى *@
+            <div class="col-lg-3 col-md-3 col-sm-12 mt-3">
+                <span class="color_main102 font-weight-bold ml-2 mx-3 ">الكيان القانونى</span>
+                <div>
+                    @Html.DropDownList("legalEntity", ViewBag.legalEntity as SelectList, " -- اختر -- ", new { @class = "form-control borderDDL selectpicker", id = "legalEntity", @data_live_search = "true" })
+                </div>
+            </div>
+            @*   الرقم التامينى *@
+            <div class="col-lg-3 col-md-3 col-sm-12 mt-3">
+                <span class="color_main102 font-weight-bold ml-2 mx-3 "> الرقم التأمينى </span>
+                <div>
+                    @Html.TextBox("insNum", "", new { @class = "form-control boorderText number", id = "insNum", data_toggle = "tooltip", title = "ارقام فقط", data_placement = "bottom" })
+                </div>
+            </div>
+            @* الاسم *@
+            <div class="col-lg-6 col-md-6 col-sm-12 mt-2">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">الاسم</span>
+                <div class="d-inline-flex mt-1 w-100">
+                    @Html.TextBox("txtCont", "", new { @class = "form-control boorderText arNum", id = "txtCont" })
+                </div>
+            </div>
+        </div>
+        @* منطقه *@@* مكتب *@
+        <div class="col-lg-12 col-md-12 col-sm-12 my-1" id="divAreaS" style="display:none;">
+            @* منطقه *@
+            <div class="col-lg-6 col-md-6 col-sm-12">
+                <span class="color_main102 font-weight-bold ml-2 mx-3" id="spFilterUserTypeS"> منطقه</span>
+                <div>
+                    @Html.ListBox("ddlUsTy", ViewBag.FilterUserTypeList as List<SelectListItem>, new { @class = "form-control selectpicker", @id = "ddlUsTy", @data_live_search = "true", onchange = "FilterArea();" })
+                </div>
+            </div>
+
+            @* مكتب *@
+            <div class="col-lg-6 col-md-6 col-sm-12">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">مكتب</span>
+                <div>
+                    @Html.DropDownList("ddlOff", ViewBag.OFFICEList as MultiSelectList, new { @class = "form-control boorderText  borderDDL", id = "ddlOff" })
+                </div>
+            </div>
+        </div>
+        @* الرقم القومى *@
+        <div class="col-lg-3 col-md-4 col-sm-12 col-12 my-1">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">الرقم القومى</span>
+            <div>
+                @Html.TextBox("txtNatId", "", new { @class = "form-control boorderText number", data_toggle = "tooltip", title = "ارقام فقط", data_placement = "bottom" })
+            </div>
+        </div>
+        @* فعال *@
+        <div class="col-lg-3 col-md-12 col-sm-12 col-12 my-1 mt-3 align-self-end">
+            <label class="color_main102 font-weight-bold ml-2" for="Active">فعال</label>
+            @Html.CheckBox("isAct", new { @class = "option-input-child checkbox" })
+        </div>
+        @* عنوان المستخدم *@
+        <div class="col-lg-12 col-md-12 col-sm-12 col-12 my-1">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">عنوان المستخدم</span>
+            <div>
+                @Html.TextBox("txtAdd", "", new { @class = "form-control boorderText arNumSign" })
+            </div>
+        </div>
+        @* الموقع الالكترونى للمسخدم *@
+        <div class="col-lg-12 col-md-12 col-sm-12 col-12 my-1">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">الموقع الالكترونى للمستخدم</span>
+            <div>
+                @Html.TextBox("txtEma", "", new { @class = "form-control boorderText", placeholder = "xxxxxx@email.com" })
+            </div>
+        </div>
+        @* 1 رقم الهاتف *@
+        <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+            <span class="color_main102 font-weight-bold ml-2 mx-3"> رقم الهاتف 1</span>
+            <div>
+                @Html.TextBox("txtPh1", "", new { @class = "form-control boorderText number", data_toggle = "tooltip", title = "ارقام فقط", data_placement = "bottom" })
+            </div>
+        </div>
+        @* 2 رقم الهاتف *@
+        <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1 mb-2">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">رقم الهاتف 2 </span>
+            <div>
+                @Html.TextBox("txtPh2", "", new { @class = "form-control boorderText number", data_toggle = "tooltip", title = "رقم فقط", data_placement = "bottom" })
+            </div>
+        </div>
+        @* setting btn *@
+        <div class="ml-3 mr-auto mt-2 mt-auto text-left">
+            <button type="submit" id="btnUsersSearch" onclick="loaderOpen();" class="btn btn-outline-info font-weight-bold"><i class="fas"></i></button>
+        </div>
+    </div>
+}
+<script src="~/Scripts/light.js"></script>
+<script src="~/Scripts/bootstrap-4.3.1-dist/bootstrap-select.min.js"></script>
+<script>
+    $(function () {
+        $('.selectpicker').selectpicker();
+    });
+</script>
+<script type="text/javascript">
+
+    function getUserType()
+    {
+        var val = $('#ddlTU').val();
+        if (val == 1)
+        {
+            document.getElementById("divAreaS").style.display = "inline-flex";
+            document.getElementById('divRefSideCont').style.display = "none"
+        }
+        else if (val == 3 || val == 2) {
+            document.getElementById("divAreaS").style.display = "none";
+            document.getElementById('divRefSideCont').style.display = "inline-flex"
+        }
+        else
+        {
+            document.getElementById("divAreaS").style.display = "none";
+            document.getElementById('divRefSideCont').style.display = "none"
+        }
+        $.getJSON("getUserType", { ID: val },
+        function (data)
+        {
+            var select = $("#ddlUsTy");
+            var selectOffice = $(select).siblings('.dropdown-menu').find('.dropdown-menu');
+            $(select).empty();
+            $(selectOffice).empty();
+            $.each(data, function (index, data) {
+                $(select).append($('<option />', {
+                    value: data.Value,
+                    text: data.Text
+                }));
+            });
+            $(select).selectpicker('refresh')
+        })
+    }
+
+    //function getUserType() {
+    //    var val = $('#UserType').val();
+    //    var mySelect = $('#FilterUserType');
+    //    if (val == 1) {
+    //        $('#ValidUserType').hide();
+    //        document.getElementById("divArea").style.display = "flex";
+    //        document.getElementById('divRefSideCont').style.display = "none"
+    //        document.getElementById('spFilterUserType').innerHTML = 'منطقه';
+    //    }
+    //        //else if (val == 2) {
+    //        //    $('#ValidUserType').hide();
+    //        //    document.getElementById("divArea").style.display = "none";
+    //        //    document.getElementById('spFilterUserType').innerHTML = 'جهة الاسناد'
+    //        //}
+    //    else if (val == 3 || val == 2) {
+    //        $('#ValidUserType').hide();
+    //        document.getElementById("divArea").style.display = "none";
+    //        document.getElementById('divRefSideCont').style.display = "flex"
+    //    }
+    //    else {
+    //        $('#ValidUserType').show();
+    //        document.getElementById("divArea").style.display = "none";
+    //    }
+    //    $.getJSON("getUserType", { ID: val },
+    //    function (data) {
+    //        //console.log('geha', data);
+    //        var select = $("#ddlUserType");
+    //        select.empty();
+    //        select.append($('<option />', {
+    //            value: '',
+    //            text: "---  اختر  ---"
+    //        }));
+    //        $.each(data, function (index, data) {
+    //            select.append($('<option />', {
+    //                value: data.Value,
+    //                text: data.Text
+    //            }));
+    //        });
+    //        $(select).selectpicker('refresh');
+    //    })
+    //}
+
+    function FilterArea()
+    {
+        var vallUserType = $('#ddlTU').val();
+        var valUserType = $('#ddlUsTy').val();
+        if (valUserType == 1) // مكتب التأمينات
+        {
+            var IDPram = {};
+            IDPram.ID = vallUserType;
+            //console.log("IDPram := ", IDPram);
+            $.getJSON("GetArea", $.param(IDPram, true),
+              function (data) {
+                  //console.log('GetArea', data);
+                  //var select = $("#ddlOff");
+                  //select.empty();
+                  //select.append($('<option />', {
+                  //    value: '',
+                  //    text: "---    ---"
+                  //}));
+                  $.each(data, function (index, data) {
+                      //select.append($('<option />', {value: data.Value,text: data.Text}));
+                      $('#ddlOff').append('<option value="' + item.Value + '">' + item.Text + '></option>');
+                  });
+              })
+        }
+    }
+</script>

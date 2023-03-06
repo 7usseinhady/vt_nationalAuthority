@@ -1,0 +1,9 @@
+﻿@{
+    Layout = "~/Views/Shared/_contractorLayout.cshtml";
+    <title>عمال العملية</title>
+}
+<div>
+    @*@{Html.RenderAction("_vpWorkersIndex", "Workers", new { ProcessId =Convert.ToInt32(Session["processCode"].ToString()), inPage = Request.QueryString["inPage"].ToString() });}*@
+    @*@{Html.RenderAction("_vpWorkersIndex", "Workers", new { ProcessId = String.IsNullOrEmpty(Request.QueryString["ProcessId"]) ? (Session["processCode"] == null ? 0 : Convert.ToInt32(Session["processCode"].ToString()))  : Convert.ToInt32(Request.QueryString["ProcessId"].ToString()) , inPage = Request.QueryString["inPage"].ToString() });}*@
+    @{Html.RenderAction("_vpWorkersIndex", "Workers", new { ProcessId = Session["processCode"].ToString(), inPage = Request.QueryString["inPage"] });}
+</div>

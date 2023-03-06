@@ -1,0 +1,74 @@
+﻿<div class="col-lg-12 col-md-12 col-sm-12 row">
+
+    @*   الرقم التامينى *@
+    <div class="col-lg-6 col-12 mt-2 text-center mb-2">
+        <span class="color_main102 font-weight-bold ml-2 mx-3 ">الرقم التأمينى</span>
+        <div>
+            @Html.TextBox("RefSideNum", "", new { @class = "form-control boorderText number", id = "RefSideNum", data_toggle = "tooltip", title = "ارقام فقط", data_placement = "bottom", onchange = "getRefSideContByInsurNum()" })
+        </div>
+    </div>
+
+    @* بحث *@
+    @*<div class="col-12 col-lg-6 mt-2 mt-4 text-center w-100">
+            <button type="button" id="btnSearchRefSideCont" class=""><i class=""></i></button>
+        </div>*@
+
+    @* TBL *@
+    <div class="col-12 mt-4 dr-rtl mb-2 row justify-content-center" id="divRefSideCont" style="display:none;">
+        <div class="text-center scroll-max grid_box_shadow">
+            <table class="table" id="tblRefSideCont">
+                @* thead *@
+                <thead>
+                    <tr>
+                        <th scope="col" class="color_main102">الكيان القانونى</th>
+                        <th scope="col" class="color_main102">الرقم التأمينى</th>
+                        <th scope="col" class="color_main102">الاسم</th>
+                        <th scope="col" class="color_main102">الفاعليه</th>
+                    </tr>
+                </thead>
+                <tbody id="tblBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    function getRefSideContByInsurNum() {
+
+        $("#tblBody").empty();
+
+        if ($('#RefSideNum').val() != '') {
+            console.log('test: ', $('#RefSideNum').val());
+
+            $.getJSON("../Process/getRefSideContByInsurNumLegalEntityList", { legalEntity: "-1", insNum: $('#RefSideNum').val() },
+           function (data) {
+
+               var appendTR = "";
+
+               console.log('data: ', data);
+
+               if (data.length == 0) {
+                   sAlert('عفوا ,هذا الرقم غير صحيح .. الرجاء التأكد من الرقم ثم إعاده كتابته بشكل صحيح.');
+                   $("#divRefSideCont").css('display', 'none')
+               }
+               else {
+                   $("#divRefSideCont").css('display', 'block');
+
+
+                   for (var i = 0 ; i < data.lrefConModel.length ; i++) {
+                       appendTR =
+                     '<tr><td class="color_main103">' + data.lrefConModel[i].sLegalEntityName + '</td><td class="color_main103 natID">' + data.lrefConModel[i].sReferanceSideContractorNum + '</td><td class="color_main103">' + data.lrefConModel[i].sReferenceSideContractorName + '</td>' +
+                     '<td class="color_main103">' + data.lrefConModel[i].sIsActive + '</tr>'
+
+                       $("#tblBody").append(appendTR);
+
+                   }
+               }
+           });
+        }
+        else {
+            sAlert('برجاء كتابه الرقم التأمينى ', 2);
+        }
+    }
+
+</script>

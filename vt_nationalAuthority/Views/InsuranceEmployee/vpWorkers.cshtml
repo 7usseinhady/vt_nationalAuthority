@@ -1,0 +1,7 @@
+﻿@{
+    Layout = "~/Views/Shared/InsuranceEmployeeLayout.cshtml";
+}
+<div>
+    @{ Html.RenderAction("_vpWorkersIndex", "Workers", new {inPage =Request.QueryString["inPage"] , areas = TempData["areas"] == null ? null : TempData["areas"].ToString(), Offices = TempData["Offices"] == null ? null : TempData["Offices"].ToString(), cd=Request.QueryString["cd"] }); }
+    @Html.Raw(TempData["msg"]);
+</div>

@@ -1,0 +1,78 @@
+﻿@{
+    var list = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+    int i = 1;
+}
+
+<div class="dr-rtl mt-3  row justify-content-center " style="padding: 20px;">
+
+    <div class="scroll-max grid_box_shadow">
+        <table class="table w-100">
+            <thead>
+                <tr style="text-align:center;">
+                    <th scope="col" class="color_main102">#</th>
+                    <th scope="col" class="color_main102">الحالة الصحية</th>
+                    <th scope="col" class="color_main102">تاريخ البداية</th>
+                    <th scope="col" class="color_main102">تاريخ النهاية</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach (var item in list)
+                    {
+                        <tr style="text-align:center;">
+                            <th scope="row" class="color_main102">@i</th>
+                            @if (i == 1 || i == 3 || i == 4)
+                            {
+                                <td class="color_main103">غير لائق</td>
+                            }
+                            else
+                            {
+                                <td class="color_main103">لائق</td>
+                            }
+                            <td class="color_main103">01-01-2019</td>
+                            <td class="color_main103">30-07-2019</td>
+                        </tr>
+                        i++;
+                    }
+                }
+            </tbody>
+        </table>
+
+        @* pagination *@
+        <div class="col">
+            <nav class="pagination-outer font102">
+                <ul class="pagination">
+                    @* « First *@
+                    <li class="page-item">
+                        <a href="#" class="page-link hvr-bob">
+                            <span aria-hidden="true">«</span>
+                        </a>
+                    </li>
+                    @* < Previous *@
+                    <li class="page-item">
+                        <a href="#" class="page-link hvr-bob">
+                            <span aria-hidden="true"><</span>
+                        </a>
+                    </li>
+                    <li class="page-item active"><a class="page-link hvr-bob" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link hvr-bob hTable" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link hvr-bob hTable" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link hvr-bob hTable" href="#">4</a></li>
+                    <li class="page-item"><a class="page-link hvr-bob hTable" href="#">5</a></li>
+                    @* Next > *@
+                    <li class="page-item">
+                        <a href="#" class="page-link hvr-bob" aria-label="Next">
+                            <span aria-hidden="true">></span>
+                        </a>
+                    </li>
+                    @* Last » *@
+                    <li class="page-item">
+                        <a href="#" class="page-link hvr-bob" aria-label="Last">
+                            <span aria-hidden="true">»</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>

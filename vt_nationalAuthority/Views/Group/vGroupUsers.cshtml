@@ -1,0 +1,127 @@
+﻿@model List<DataAccessLayer.Models.groupUserModel>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    //
+    List<DataAccessLayer.Models.userModel> lstUsers = TempData["userList"] as List<DataAccessLayer.Models.userModel>;
+    List<int?> ListUsers = TempData["lstusers"] as List<int?>;
+    if(ListUsers.Count > 0)
+    {
+        lstUsers = lstUsers.Where(x => !ListUsers.Contains(x.iUserCode)).OrderBy(x => x.sUserFullName).ToList();
+    }
+    else
+    {
+        lstUsers = lstUsers.OrderBy(x => x.sUserFullName).ToList();
+    }
+    <title>مستخدمين المجموعه</title>
+}
+@* Header and button back *@
+<div class="mt-3 font102">
+    <div>
+        @* Back btn  *@
+        <div class="col-lg-12 col-md-12 col-sm-12 " style="text-align: right;">
+            <div class="dr-rtl grid_box_shadow mt-2 ">
+                <div style="direction: rtl;">                
+                    <span style="margin-right:5px;" class="bTable">مجموعــــه &nbsp;:&nbsp; @TempData["groupName"]</span>
+                    &nbsp;
+                    <a href="@Url.Action("vGroupIndex", "Group")" class="iconColor">
+                        <span class="fas fa-backward" data-placement="bottom" data-toggle="tooltip" title="عوده"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@* Table *@
+<div class="font102">
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-12">
+            @using (Html.BeginForm("vGroupUserSave", "Group", FormMethod.Post, new { @id = "formIndexAddGroupUser" }))
+            {
+                <div class="row">
+                    @* Users *@
+                    <div class="col-lg-10 col-md-12 col-sm-12 ml-3">
+                        <div class="dr-rtl grid_box_shadow mt-2 container" style="min-height: 500px;">
+                            <div class="card-body">
+                                @* Users *@
+                                <div class="col-md-12 col-sm-12">
+                                    <div class="border-bottom mb-2 " style="text-align:right">
+
+                                        <h5 class="text_color102"> <i class="fas fa-users iconColor"></i>  موظفين التأمينـــــــــــــــــــــــــــــات  </h5>
+                                    </div>
+                                    <table>
+                                        <tbody style="display:grid">
+                                            @foreach (var item in lstUsers)
+                                        {
+                                        <tr>
+                                            <td>
+                                                <label class="mb-0">
+                                                    @Html.CheckBox("check", false, new { @class = "option-input-child checkboxe", value = item.iUserCode })
+                                                    <span class="align-top">&nbsp; @item.sUserName</span>
+                                                </label>
+                                            </td>
+                                        </tr>
+                                        }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @* Buttons Add  *@
+                    <div class="col-lg-2 col-md-6 col-sm-6 align-self-center row ">
+                        @* btn Add user to group *@
+                        <div class="text-center col-lg-12 col-md-6 col-sm-6 col-6 mgroup rotate">
+                            <button id="btnAddUserGroup" type="submit" value="Save" class="circle btn UGStyle" data-toggle="tooltip" title="اضافة الى المجموعه" data-placement="bottom">
+                                <i class="fa fa-chevron-circle-right fa-2x iconColor" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                    </div>
+                    }
+                </div>
+        <div class="col-lg-6 col-md-6 col-sm-12">
+            @using (Html.BeginForm("vGroupUserDelete", "Group", FormMethod.Post))
+            {
+                <div class="row">
+                    @* Buttons Delete *@
+                    <div class="col-lg-2 col-md-6 col-sm-6 align-self-center row ">
+                        <div class="text-center col-lg-12 col-md-6 col-sm-6 col-6 mgroup rotate">
+                            <button id="btnDeleteUserGroup" type="submit" value="Delete" class="circle btn UGStyle" data-toggle="tooltip" title="حذف للمجموعه" data-placement="bottom"><i class="fa fa-chevron-circle-left fa-2x iconColor" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                    @* Users Group *@
+                    <div class="col-lg-10 col-md-12 col-sm-12">
+                        <div class="dr-rtl grid_box_shadow mt-2 container" style="min-height: 500px;">
+                            <div class="card-body">
+                                <div class="col-md-12 col-sm-12">
+
+                                    <div class="border-bottom mb-2 " style="text-align: right;">
+                                        <h5 class="text_color102"> <i class="fas fa-user iconColor"></i>@TempData["groupName"]</h5>
+                                    </div>
+                                    <table>
+                                        <tbody style="display: grid;">
+
+                                            @foreach (var item in Model)
+                                            {
+                                            <tr>
+                                                <td>
+                                                    <label class="mb-0">
+                                                        @Html.CheckBox("chkUserGroup", false, new { @class = "option-input-child checkbox", value = item.iGroupUserCode })
+                                                        <span class="align-top"> &nbsp; @item.sUserName</span>
+                                                    </label>
+                                                </td>
+                                            </tr>
+                                           }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+    </div>
+</div>
+@Html.Raw(TempData["msg"])

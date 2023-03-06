@@ -1,0 +1,314 @@
+﻿@{
+    var screen = "";
+    var Contr = "";
+    string[] path = HttpContext.Current.Request.Url.AbsolutePath.Split('/');
+    screen = path[2];
+    Contr = path[1];
+    Layout = null;
+    Layout = "~/Views/Shared/_partialLayout.cshtml";
+}
+
+@using (Html.BeginForm("_vpSaveAttendance", "InsuranceEmployee", FormMethod.Post, new { @id = "formIndex", onsubmit = "return validateMyForm(event);" }))
+{   @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.Hidden("screen", TempData["path"] == null ? screen : TempData["path"].ToString());
+    <div class="mt-3 dr-rtl grid_box_shadow mx-3 mb-2 ">
+        <div class="row text-right">
+            @if (TempData["path"] != null)
+            {
+                if (TempData["path"].ToString() == "attendance")
+                {
+                    @* الرقم القومى *@
+                    <div class="col-lg-4 col-md-4 col-sm-12">
+                        <span class="color_main102 font-weight-bold ml-2 mx-3">
+                            الرقم القومى
+                        </span>
+                        <div>
+                            @Html.TextBox("WNatNum", "", new { @class = "form-control boorderText number", onchange = "fillDataWorkerNational("+@Convert.ToInt32(Session["processCode"].ToString())+")", id = "WNatNum", data_toggle = "tooltip", title = "14 رقم فقط", data_placement = "bottom" })
+                        </div>
+                        <div id="divMsgWNatNum" style="display:none;">
+                            @Html.ValidationMessage("msgWNatNum", "برجاء ادخال الرقم القومى", new { @class = "d-flex justify-content-center text-danger" })
+                        </div>
+                    </div>
+                    @* الرقم التأمينى *@
+                    <div class="col-lg-4 col-md-4 col-sm-12">
+                        <span class="color_main102 font-weight-bold ml-2 mx-3">
+                            الرقم التأمينى
+                        </span>
+                        <div>
+                            @Html.TextBox("WInNum", "", new { @class = "form-control borderText number", id = "WInNum", data_toggle = "tooltip", title = "9 ارقام فقط", data_placement = "bottom", onchange = "fillDataWorkerInsurance(" + @Convert.ToInt32(Session["processCode"].ToString()) + ")" })
+                        </div>
+                        <div id="divMsgWInNum" style="display:none;">
+                            @Html.ValidationMessage("msgWInNum", "برجاء ادخال الرقم التأمينى", new { @class = "d-flex justify-content-center text-danger" })
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                @* الرقم القومى *@
+                <div class="col-lg-4 col-md-4 col-sm-12">
+                    <span class="color_main102 font-weight-bold ml-2 mx-3">
+                        الرقم القومى
+                    </span>
+                    <div>
+                        @Html.TextBox("WNatNum", TempData["NationalNumber"] == null ? "" : TempData["NationalNumber"].ToString(), new { @class = "form-control borderText number", id = "WNatNum", data_toggle = "tooltip", title = "ارقام فقط ", data_placement = "bottom", onchange = "fillDataWorker()", @readonly = "readonly" })
+                    </div>
+                </div>
+                @* الرقم التأمينى *@
+                <div class="col-lg-4 col-md-4 col-sm-12">
+                    <span class="color_main102 font-weight-bold ml-2 mx-3">
+                        الرقم التأمينى
+                    </span>
+                    <div>
+                        @Html.TextBox("WInNum", TempData["InsuranceNumber"] == null ? "" : TempData["InsuranceNumber"].ToString(), new { @class = "form-control borderText number", id = "WInNum", data_toggle = "tooltip", title = "ارقام فقط ", data_placement = "bottom", onchange = "fillDataWorker()", @readonly = "readonly" })
+                    </div>
+                </div>
+            }
+            @if (TempData["path"] == null)
+            {
+                @*تاريخ الحصور *@
+                <div class="col-lg-4 col-md-4 col-sm-12">
+                    <span class="color_main102 font-weight-bold ml-2 mx-3">تاريخ الحضور</span>
+                    <div>
+                        @Html.TextBox("DAtten", "", new { @class = "form-control boorderText date", autoComplete = "off", id = "DAtten", required = "required", onchange = "fillDataProcess()" })
+                        @Html.ValidationMessage("DAtten", "برجاء أدخال تاريخ الحضور", new { @class = "text-danger" })
+                    </div>
+                </div>
+            }
+            @*  اسم العامــــل *@
+            <div class="col-lg-12 col-md-12 col-sm-12 mt-2">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">
+                    اسم العامــــل
+                </span>
+                <div>
+                    @Html.TextBox("WNam", TempData["WorkerName"] == null ? "" : TempData["WorkerName"].ToString(), new { @class = "form-control borderText", id = "WNam", disabled = "disabled", data_toggle = "tooltip", title = "حروف عربية فقط", data_placement = "bottom" })
+                </div>
+            </div>
+            @* المهنــــــــــــــــــه *@
+            <div class="col-lg-12 col-md-12 col-sm-12 mt-2">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">
+                    المهنــــــــــــــــــه
+                </span>
+                <div>
+                    @Html.TextBox("WCareer", TempData["Career"] == null ? "" : TempData["Career"].ToString(), new { @class = "form-control borderText", id = "WCareer", disabled = "disabled" })
+                </div>
+            </div>
+            @* العنــــــــــــــــوان *@
+            <div class="col-lg-12 col-md-12 col-sm-12 mt-2">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">
+                    العنــــــــــــــــوان
+                </span>
+                <div>
+                    @Html.TextBox("WAdd", TempData["Address"] == null ? "" : TempData["Address"].ToString(), new { @class = "form-control borderText", id = "WAdd", disabled = "disabled", data_toggle = "tooltip", title = "حروف عربية فقط", data_placement = "bottom" })
+                </div>
+            </div>
+
+            @if (TempData["path"] == null)
+            {
+                @* رقم العملية *@
+                <div class="col-lg-4 col-md-4 col-sm-12">
+                    <span class="color_main102 font-weight-bold ml-2 mx-3 " id="SpInsurNumber">رقم العملية</span>
+                    <div>
+                        @Html.TextBox("PrNum", "", new { @class = "form-control boorderText", onchange = "fillDataProcess()", id = "PrNum", required = "required" })
+                        @Html.ValidationMessage("PrNum", "برجاء أدخال رقم العمليه", new { @class = "text-danger" })
+                    </div>
+                </div>
+                @* اسم العمليه *@
+                <div class="col-lg-8 col-md-8 col-sm-12 mt-2">
+                    <span class="color_main102 font-weight-bold ml-2  mx-3">اسم العمليه</span>
+                    <div>
+                        @Html.TextBox("PrName", "", new { @class = "form-control boorderText", disabled = "disabled", id = "PrName" })
+                    </div>
+                </div>
+                @* نوع العمليه *@
+                <div class="col-lg-6 col-md-6 col-sm-12 mt-2">
+                    <span class="color_main102 font-weight-bold ml-2 mx-3">نوع العمليه</span>
+                    <div>
+                        @Html.TextBox("PrType", "", new { @class = "form-control boorderText", disabled = "disabled", id = "PrType" })
+                    </div>
+                </div>
+                @* موقع العملية *@
+                <div class="col-lg-6 col-md-6 col-sm-12 mt-2">
+                    <span class="color_main102 font-weight-bold ml-2 mx-3 " id="SpInsurNumber">موقع العملية</span>
+                    <div>
+                        @Html.TextBox("PrSite", "", new { @class = "form-control boorderText", disabled = "disabled", id = "PrSite" })
+                    </div>
+                </div>
+            }
+            <div class="col-sm-12 my-1 text-left mt-3 align-self-end">
+                <button type="submit" id="btnAddWorkerAttend" class="" onclick="loaderOpen();"><i class=""></i> </button>
+                @* صفحه العمال في موظف التأمينات *@
+                @if (TempData["path"] == null)
+                {
+                    <button type="button" onclick="ClearTexts(1)" class="btnsStyle btn btn-outline-primary" font-weight-bold">تحضير جديد<i class="fas fa fa-rotate-left	"></i></button>
+                }
+                // صفحه العمال في تفاصيل العمليه في شاشه المقاول
+                else
+                {
+                    <button type="button" onclick="ClearTexts(2)" class="btnsStyle btn btn-outline-primary" font-weight-bold">تحضير جديد<i class="fas fa fa-rotate-left	"></i></button>
+                }
+            </div>
+        </div>
+    </div>
+}
+<script type="text/javascript">
+    // الرقم القومى
+    function fillDataWorkerNational(processID) {
+        $('#WInNum').val() == '';
+        var x = document.getElementById("WNatNum").value;
+        if (x == '') {
+            loaderClose();
+            $('#WInNum,#WNatNum,#WNam,#WCareer,#WAdd').val('');
+            sAlert("من فضلك أدخل الرقم القومى للعامل اولا", 2);
+            $('#divMsgWNatNum').css("display", "inherit");
+            $('#WNatNum').css("border-color", "#dc3545");
+            $('#divMsgWInNum').css("display", "none");
+            $('#WInNum').css("border-color", "");
+        }
+        else if (x.length = 0) {
+            loaderClose();
+            $('#WInNum,#WNatNum,#WNam,#WCareer,#WAdd').val('');
+            sAlert("من فضلك أدخل الرقم القومى للعامل اولا", 2);
+            $('#divMsgWNatNum').css("display", "inherit");
+            $('#WNatNum').css("border-color", "#dc3545");
+            $('#divMsgWInNum').css("display", "none");
+            $('#WInNum').css("border-color", "");
+
+        }
+        else if (x.length > 14 || x.length < 14) {
+            loaderClose();
+            $('#WInNum,#WNatNum,#WNam,#WCareer,#WAdd').val('');
+            $('#divMsgWNatNum').css("display", "inherit");
+            $('#WNatNum').css("border-color", "#dc3545");
+            sAlert("من فضلك الرقم القومى 14 رقم فقط", 2);
+            $('#divMsgWInNum').css("display", "none");
+            $('#WInNum').css("border-color", "");
+        }
+        else
+            fillDataWorker(x, 'national',processID);
+    }
+    // الرقم التأمينى
+    function fillDataWorkerInsurance(processID)  // الرقم التأمينى
+    {
+        $('#WNatNum').val() == '';
+        var x = document.getElementById("WInNum").value;
+        if (x == '') {
+            loaderClose();
+            $('#WInNum,#WNatNum,#WNam,#WCareer,#WAdd').val('');
+            sAlert("من فضلك أدخل الرقم التأمينى للعامل اولا", 2);
+
+            $('#divMsgWNatNum').css("display", "none");
+            $('#WNatNum').css("border-color", "");
+        }
+        else
+            fillDataWorker(x, 'insurance',processID);
+    }
+    function fillDataWorker(x, tybe,processID) {
+        if (x != '') {
+            loaderOpen();
+            $.getJSON("../jsonFunctions/GetWorkerDetails", { Num: x, tybe: tybe,processCode:processID},
+            function (data)
+            {
+                console.log('data : ', data);
+                $('#divMsgWNatNum,#divMsgWInNum').css("display", "none");
+                $('#WNatNum,#WInNum').css("border-color", "");
+                if (data == "Error")
+                {
+                    loaderClose();
+                    sAlert(" عفوا لا يوجد اتصال بقواعد الهيئه ", 2);
+                    $('#WInNum,#WNatNum,#WNam,#WCareer,#WAdd').val('');
+                }
+                else if (data == "ERR-NATIONAL")
+                {
+                    loaderClose();
+                    sAlert(" عفوا لا يمكن تسجيل الرقم القومى ", 2);
+                    $('#WInNum,#WNatNum,#WNam,#WCareer,#WAdd').val('');
+                }
+                else if (data == "OPEN")
+                {
+                    loaderClose();
+                    sAlert(" عفوا لا يمكن تسجيل الرقم القومى لوجود مده مفتوحه للعامل ", 2);
+                    $('#WInNum,#WNatNum,#WNam,#WCareer,#WAdd').val('');
+                }
+                else if (data[0].msg != null)
+                {
+                    loaderClose();
+                    sAlert(data[0].msg, 2);
+                    $('#WInNum,#WNatNum,#WNam,#WCareer,#WAdd').val('');
+                }
+                else if (data == "error") {
+                    loaderClose();
+                    sAlert(" عفوا لا يمكن التحضير الاّن ", 2);
+                    $('#WInNum,#WNatNum,#WNam,#WCareer,#WAdd').val('');
+                }
+                else
+                {
+                    loaderClose();
+                    $('#WInNum').val(data[0].workerInsuranceNum);
+                    $('#WNatNum').val(data[0].workerNationalID);
+                    $('#WNam').val(data[0].workerName);
+                    $('#WCareer').val(data[0].careerName);
+                    $('#WAdd').val(data[0].govermentName + ' , ' + data[0].centerName + ' , ' + data[0].villageName);
+                }
+            })
+        }
+        else {
+            loaderClose();
+            sAlert("من فضلك أدخل الرقم القومى للعامل او الرقم التأمينى", 2);
+            $('#divMsgWNatNum,#divMsgWInNum').css("display", "inherit");
+            $('#WNatNum,#WInNum').css("border-color", "#dc3545");
+        }
+
+    }
+    function ClearTexts(page) {
+        $('#divMsgWNatNum,#divMsgWInNum').css("display", "none");
+        $('#WNatNum,#WInNum').css("border-color", "");
+        if (page == 2) {
+            $('#WInNum,#WNatNum,#WNam,#WCareer,#WAdd').val('');
+        }
+        else if (page == 1) {
+            $('#DAtten,#PrNum,#PrName,#PrType,#PrSite').val('');
+        }
+
+    }
+    function validateMyForm(event) {
+
+        $("#btnAddWorkerAttend").attr("disabled", false);
+        if ($('#WNatNum').val() == '' && $('#WInNum').val() == '') // هنا مدخلش رقم قومى / تأمينى
+        {
+            loaderClose();
+            sAlert("عفوا   برجاء ادخال الرقم التأمينى او الرقم القومى ", 2);
+            event.preventDefault();
+            $('#divMsgWNatNum,#divMsgWInNum').css("display", "inherit");
+            $('#WNatNum,#WInNum').css("border-color", "#dc3545");
+            return false;
+        }
+    }
+</script>
+@* شاشة العامل التحضير *@
+<script type="text/javascript">
+    function fillDataProcess() {
+        if (document.getElementById("PrNum").value != '') {
+            var x = document.getElementById("PrNum").value;
+            var nationalid = document.getElementById("WNatNum").value;
+            var date = document.getElementById("DAtten").value;
+            $.getJSON("getProcessDet", { ProcessNum: x, NationalId: nationalid, Date: date },
+            function (data) {
+                var dataType = typeof data;
+                if (dataType == "string") {
+                    sAlert(data, 2);
+                    $('#PrName,#PrSite,#PrType,#PrNum').val('');
+                }
+                else if (dataType == "object") {
+                    //console.log('data is object');
+                    $('#PrName').val(data.processName);
+                    $('#PrType').val(data.processTypeName);
+                    $('#PrSite').val(data.siteAddress);
+                }
+            })
+        }
+        else {
+            sAlert("من فضلك أدخل رقم العمليه", 2);
+        }
+    }
+</script>

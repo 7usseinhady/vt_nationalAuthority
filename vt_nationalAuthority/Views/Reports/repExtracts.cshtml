@@ -1,0 +1,213 @@
+﻿@{
+    Layout = "~/Views/Shared/ReportsLayout.cshtml";
+}
+
+<html>
+<head>
+    <title> بيان باشتراكات العمليات</title>
+</head>
+<body>
+
+    <div class="mt-3 dr-rtl grid_box_shadow mx-3 mb-2 row" style="margin-top: 10px !important;">
+        <div class="col-lg-4 col-md-6 col-sm-12 mt-2 text-right">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">استعلام عن اشتراكات العمليات</span>
+        </div>
+    </div>
+
+    @* منطقة *@@* مكتب *@@*  جهة الاسناد  *@@*  المقاول الرئيسي *@@*تاريخ  من *@@* تاريخ الى  *@@*  نوع المستحلص *@@*  التسديد *@@* رقم العمليه *@@*عرض التقرير*@
+    <div class="row text-right mt-3 dr-rtl mx-3 mb-2 grid_box_shadow">
+
+        @* منطقة *@
+        <div class="col-lg-3 col-md-3 col-sm-12 col-12 my-1">
+            <span class="color_main102 font-weight-bold ml-2 mx-4">
+                منطقة
+            </span>
+            <div>
+                @Html.ListBox("area", ViewBag.areas as SelectList, new { @class = "form-control borderDDL selectpicker", title = "--  الكل --", id = "area", @data_live_search = "true", onchange = "FilterArea();" })
+            </div>
+        </div>
+
+        @* مكتب *@
+        <div class="col-lg-3 col-md-3 col-sm-12 col-12 my-1">
+            <span class="color_main102 font-weight-bold ml-2 mx-4">
+                مكتــــــــــــــــــب
+            </span>
+            <div>
+                @Html.ListBox("office", ViewBag.Offices as SelectList, new { @class = "form-control borderDDL selectpicker", title = "--  الكل --", id = "office", @data_live_search = "true" })
+            </div>
+        </div>
+
+        @*  جهة الاسناد  *@
+        <div class="col-lg-3 col-md-3 col-sm-12 mt-2">
+            <span class="color_main102 font-weight-bold ml-2 mx-3"> جهة الاسناد</span>
+            <div>
+                @Html.ListBox("RefSideName", ViewBag.repRef as SelectList, new { @class = "form-control borderDDL selectpicker", id = "RefSideName", title = "--  الكل --", @data_live_search = "true" })
+            </div>
+        </div>
+
+        @*  المقاول الرئيسي *@
+        <div class="col-lg-3 col-md-3 col-sm-12 mt-2">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">المقاول الرئيسي</span>
+            <div>
+                @Html.ListBox("ContractotName", ViewBag.repCont as SelectList, new { @class = "form-control borderDDL selectpicker", title = "--  الكل --", id = "ContractotName", @data_live_search = "true" })
+            </div>
+        </div>
+
+        @*تاريخ  من *@
+        <div class="col-lg-2 col-md-2 col-sm-12">
+            <span class="color_main102 font-weight-bold ml-2 mx-3"> من تاريخ </span>
+            <div>
+                @Html.TextBox("DateStartProcess", "", new { @class = "form-control boorderText date", id = "DateStartProcess", autoComplete = "off" })
+            </div>
+        </div>
+
+        @* تاريخ الى  *@
+        <div class="col-lg-2 col-md-2 col-sm-12">
+            <span class="color_main102 font-weight-bold ml-2 mx-3"> الى تاريخ </span>
+            <div>
+                @Html.TextBox("DateEndProcess", "", new { @class = "form-control boorderText date", id = "DateEndProcess", autoComplete = "off" })
+            </div>
+        </div>
+
+        @*  نوع المستحلص *@
+        <div class="col-lg-2 col-md-2 col-sm-12 col-12 my-1">
+            <span class="color_main102 font-weight-bold ml-2 mx-4">
+                نوع المستخلص
+            </span>
+            <div>
+                @Html.DropDownList("extractTypes", ViewBag.extractTypes as SelectList, "-- الكل --", new { @class = "form-control borderDDL", @data_live_search = "true", id = "extractTypes" })
+            </div>
+        </div>
+
+        @*  التسديد *@
+        <div class="col-lg-2 col-md-2 col-sm-12 col-12 my-1">
+            <span class="color_main102 font-weight-bold ml-2 mx-4">
+                التسديد
+            </span>
+            <div>
+                @Html.DropDownList("extractPaid", ViewBag.extractPaid as SelectList, new { @class = "form-control borderDDL", @data_live_search = "true" })
+            </div>
+        </div>
+
+        @* رقم العمليه *@
+        <div class="col-lg-2 col-md-2 col-sm-12 mt-2">
+            <span class="color_main102 font-weight-bold ml-2  mx-3">رقم العمليه</span>
+            <div>
+                @Html.TextBox("processNum", "", new { @class = "form-control boorderText", id = "processNum", data_toggle = "tooltip", title = " ارقام فقط", data_placement = "bottom" })
+            </div>
+        </div>
+
+        @*عرض التقرير*@
+        <div class="col-sm-12 col-lg-2 col-md-2 col-sm-12 align-self-end">
+            <button id="btnShow" type="button" style="margin-top: 34px;margin-right: 3px;" value="submit" onclick="callReport()" class="btn btnsStyle btn-outline-primary searchBtnWork font-weight-bold" data-toggle="tooltip" title="عرض" data-placement="bottom">عرض التقرير <span class="glyphicon glyphicon-search"></span></button>
+        </div>
+    </div>
+
+    <script>
+     
+        function FilterArea() {
+            var vallUserType = $('#area').val();
+
+            // ده array عادى بعرفه
+            var IDPram = {};
+            IDPram.ID = vallUserType;
+
+            if (vallUserType == '') {
+                console.log('vallUserType is empty');
+                IDPram.ID = '-1'
+            }
+
+            $.getJSON("../InsuranceEmployee/GetAreas", $.param(IDPram, true),
+              function (data) {
+
+                  var select = $("#office");
+                  var selectOffice = $(select).siblings('.dropdown-menu').find('.dropdown-menu');
+
+                  $(select).empty();
+                  $(selectOffice).empty();
+
+                  officeFilter = data;
+
+                  $.each(data, function (index, data) {
+
+                      $(select).append($('<option />', {
+                          value: data.officeInsuranceCode,
+                          text: data.officeInsuranceIDName
+                      }));
+                  });
+
+                  $(select).selectpicker('refresh')
+
+              })
+        }
+
+        function callReport() {
+
+            @* مكتب *@
+            var office = $('#office').val();
+            if (office == '')
+                office = '-1'
+
+            @* منطقة *@
+            var area = $('#area').val();
+            if (area == '')
+                area = '-1'
+
+            if (area != '-1' && office == '-1')
+                office = '-2'
+
+            @*  جهة الاسناد  *@
+            var RefSideName = $('#RefSideName').val();
+            if (RefSideName == '')
+                RefSideName = '-1'
+
+            @*  المقاول الرئيسي *@
+            var ContractotName = $('#ContractotName').val();
+            if (ContractotName == '')
+                ContractotName = '-1'
+
+             @*تاريخ  من *@
+            var DateStartProcess = $('#DateStartProcess').val();
+
+            @* تاريخ الى  *@
+            var DateEndProcess = $('#DateEndProcess').val();
+
+            if (DateStartProcess == '' && DateEndProcess == '') {
+                DateStartProcess = '1800-01-01';
+                DateEndProcess = '2100-01-01';
+            } else if (DateStartProcess != '' && DateEndProcess != ''){ }
+            else if (DateStartProcess != '') {
+                DateEndProcess = DateStartProcess;
+            }
+            else if (DateEndProcess != '') {
+                DateStartProcess = DateEndProcess;
+            }
+
+             @*  نوع المستحلص *@
+            var extractTypes = $('#extractTypes').val();
+            if (extractTypes == '')
+                extractTypes = '-1'
+
+            @* رقم العمليه *@
+            var processNum = $('#processNum').val();
+            if (processNum == '')
+                processNum = '-1'
+
+            @*  التسديد *@
+            var extractPaid = $('#extractPaid').val();
+            if (extractPaid == '')
+                extractPaid = '-1'
+
+            if (new Date(DateStartProcess) > new Date(DateEndProcess))
+                sAlert('"عفوا , لابد من جعل "من تاريخ" اقل من او يساوى "الى تاريخ".  ', 2);
+            else
+            window.open("/Reports/callReport?reportName=repExtracts&userCode=" + @(Convert.ToInt32(Session["uc"].ToString())) + "&RefSideCode=" + RefSideName + "&extractTypeCode=" + extractTypes +
+              "&ContactorCode=" + ContractotName + "&from_date=" + DateStartProcess + "&to_date=" + DateEndProcess + "&processNumber=" + processNum +
+              "&officeInsuranceCode=" + office + "&areaCode=" + area + "&isPaid=" + extractPaid,
+                'popup_window', 'scrollbars=yes,resizable=yes,status=no,location=no,toolbar=no,menubar=no,width=0,height=0,left=-1000,top=-1000');
+        }
+
+    </script>
+
+</body>
+</html>

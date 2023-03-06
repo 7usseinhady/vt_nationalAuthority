@@ -1,0 +1,72 @@
+﻿@{
+    Layout = "~/Views/Shared/ReportsLayout.cshtml";
+}
+
+<html>
+<head>
+    <title> بيان بتحضير العمال الشهريه</title>
+</head>
+<body>
+
+    <div class="mt-3 dr-rtl grid_box_shadow mx-3 mb-2 row" style="margin-top: 10px !important;">
+        <div class="col-lg-4 col-md-6 col-sm-12 mt-2 text-right">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">استعلام عن تحضير العمال</span>
+        </div>
+    </div>
+
+    <div class="row text-right mt-3 dr-rtl mx-3 mb-2 grid_box_shadow">
+
+        @*تاريخ  من *@
+        <div class="col-lg-2 col-md-2 col-sm-12">
+            <span class="color_main102 font-weight-bold ml-2 mx-3"> من تاريخ </span>
+            <div>
+                @Html.TextBox("DateStartProcess", "", new { @class = "form-control boorderText date", id = "DateStartProcess", autoComplete = "off" })
+            </div>
+        </div>
+
+        @* تاريخ الى  *@
+        <div class="col-lg-2 col-md-2 col-sm-12">
+            <span class="color_main102 font-weight-bold ml-2 mx-3"> الى تاريخ </span>
+            <div>
+                @Html.TextBox("DateEndProcess", "", new { @class = "form-control boorderText date", id = "DateEndProcess", autoComplete = "off" })
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-lg-2 col-md-2 col-sm-12 align-self-end">
+            <button id="btnShow" type="button" style="margin-top: 34px;margin-right: 3px;" value="submit" onclick="callReport()" class="btn btnsStyle btn-outline-primary searchBtnWork font-weight-bold" data-toggle="tooltip" title="عرض" data-placement="bottom">عرض التقرير <span class="glyphicon glyphicon-search"></span></button>
+        </div>
+    </div>
+
+    <script>
+
+        function callReport() {
+
+            @*تاريخ  من *@
+            var DateStartProcess = $('#DateStartProcess').val();
+
+            @* تاريخ الى  *@
+            var DateEndProcess = $('#DateEndProcess').val();
+
+
+            if (DateStartProcess == '' && DateEndProcess == '') {
+                DateStartProcess = '1800-01-01';
+                DateEndProcess = '2100-01-01';
+            } else if (DateStartProcess != '' && DateEndProcess != ''){ }
+            else if (DateStartProcess != '') {
+                DateEndProcess = DateStartProcess;
+            }
+            else if (DateEndProcess != '') {
+                DateStartProcess = DateEndProcess;
+            }
+
+            if (new Date(DateStartProcess) > new Date(DateEndProcess))
+                sAlert('"عفوا , لابد من جعل "من تاريخ" اقل من او يساوى "الى تاريخ".  ', 2);
+            else
+                window.open("/Reports/callReport?reportName=repWorkersWithoutInsNum&from_date=" + DateStartProcess + "&to_date=" + DateEndProcess,
+                'popup_window', 'scrollbars=yes,resizable=yes,status=no,location=no,toolbar=no,menubar=no,width=0,height=0,left=-1000,top=-1000');
+        }
+
+    </script>
+
+</body>
+</html>

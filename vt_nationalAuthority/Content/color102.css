@@ -1,0 +1,28 @@
+﻿body {
+    background: #bdc3c7;
+    background: -webkit-linear-gradient(to right, #2c3e50, #bdc3c7);
+    background: linear-gradient(to right, #2c3e50, #bdc3c7);
+}
+
+.bg_g101{
+    background: #fff;  /* fallback for old browsers */
+
+}
+.list_lg_a{
+    color:#808080 !important;
+        font-size: large;
+    font-weight: 600;
+}
+.color_main{
+        color: #FFF!important;
+}
+.box_nav101{
+   box-shadow: 0px 0px 8px 0px #FFF;
+}
+.navbar-light .navbar-toggler {
+    color: #fff!important;
+    border-color: #fff!important;
+}
+ a:hover {
+            text-decoration: none !important;
+        }

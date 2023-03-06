@@ -1,0 +1,42 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    <title> العمليات </title>
+}
+<script src="~/Scripts/signalR/Notifications.js"></script>
+
+<style>
+    @@media (min-width: 992px) {
+        .mrgPagging {
+            margin-right: 12% !important;
+            margin-bottom: 10% !important;
+        }
+    }
+
+    @@media(max-width:768px) {
+        .buttonsCss {
+            z-index: 50000 !important;
+        }
+    }
+</style>
+
+<div class="mt-3">
+    @if (TempData["pCode"] != null && TempData["cp"] != null)
+    {
+        Html.RenderAction("_vpProcessIndexShow", "Process", new { pCode = TempData["pCode"], cp = TempData["cp"] });
+    }
+    else if (TempData["pCode"] != null)
+    {
+        Html.RenderAction("_vpProcessIndexShow", "Process", new { pCode = TempData["pCode"]});
+    }
+    else if (TempData["cp"] != null)
+    {
+        Html.RenderAction("_vpProcessIndexShow", "Process", new { cp = TempData["cp"] });
+    }
+    else
+    {
+        Html.RenderAction("_vpProcessIndexShow", "Process");
+    }
+
+</div>
+
+@Html.Raw(TempData["msg"])

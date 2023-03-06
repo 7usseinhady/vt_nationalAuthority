@@ -1,0 +1,76 @@
+﻿<div class="mt-3 dr-rtl grid_box_shadow mx-3 mb-2">
+    <div class="row text-right">
+
+        @* الرقم القومى *@
+        <div class="col-lg-6 col-md-6 col-sm-12">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                الرقم القومى
+            </span>
+            <div>
+                @Html.TextBox("WorkerNatNum", "", new { @class = "form-control borderText", data_toggle = "tooltip", title = "ارقام فقط", data_placement = "bottom" })
+            </div>
+        </div>
+        @* الرقم التأمينى *@
+        <div class="col-lg-6 col-md-6 col-sm-12">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                الرقم التأمينى
+            </span>
+            <div>
+                @Html.TextBox("WorkerSecNum", "", new { @class = "form-control borderText", id = "insNum", data_toggle = "tooltip", title = "ارقام فقط ", data_placement = "bottom" })
+            </div>
+        </div>
+        @*  اسم العامــــل *@
+        <div class="col-lg-12 col-md-12 col-sm-12 mt-3">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                اسم العامــــل
+            </span>
+            <div>
+                @Html.TextBox("WorkerName", "", new { @class = "form-control borderText", id = "workerName", data_toggle = "tooltip", title = "حروف عربية فقط", data_placement = "bottom" })
+            </div>
+        </div>
+        @* الموقع *@
+        <div class="col-lg-12 col-md-12 col-sm-12 mt-3">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                الموقــــــــــــــــع
+            </span>
+            <div>
+                @Html.TextBox("WorkerName", "", new { @class = "form-control borderText", id = "address", data_toggle = "tooltip", title = "حروف عربية فقط", data_placement = "bottom" })
+            </div>
+        </div>
+     
+        @*  من تاريخ*@
+        <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1 mt-3">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                من تاريخ (الاختبار)
+            </span>
+            <div>
+                @Html.TextBox("dateFrom", "", new { @class = "form-control borderText date" })
+            </div>
+        </div>
+        @* الى تاريخ *@
+        <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1 mt-3">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                الى تاريخ (الاختبار)
+            </span>
+            <div>
+                @Html.TextBox("dateTo", "", new { @class = "form-control borderText date" })
+            </div>
+        </div>
+
+        @*  الحالة الصحية *@
+        <div class="col-lg-6 col-md-6 col-sm-12 mt-3">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                الحالة الصحية
+            </span>
+            <div>
+                @Html.ListBox("healthStatus", ViewBag.healthStatus as SelectList, new { @class = "form-control selectpicker borderDDL", @data_live_search = "true" })
+            </div>
+        </div>
+
+        @* بحث *@
+        <div class="col-lg-6 col-md-6 col-sm-12 my-1 text-left mt-3 align-self-end">
+            <button type="button" id="btnManPowerSearch" class="btn btnsStyle btn-outline-info font-weight-bold"> <i class="fas fa-search"> بحث</i></button>
+        </div>
+    </div>
+ 
+</div>

@@ -1,0 +1,7 @@
+﻿@{
+    Layout = "~/Views/Shared/ProcessLayout.cshtml";
+    <title>المقاولين</title>
+}
+<div>
+    @{Html.RenderAction("_vpContractors", "Contractor", new { ProcessId = Request.QueryString["ProcessId"], inPage = Request.QueryString["inPage"]==null?1:Convert.ToInt32(Request.QueryString["inPage"].ToString()), Cont = Request.QueryString["Cont"] == null ? null : Request.QueryString["Cont"], screen = "insurance",cd4=Request.QueryString["cd4"] });}
+</div>

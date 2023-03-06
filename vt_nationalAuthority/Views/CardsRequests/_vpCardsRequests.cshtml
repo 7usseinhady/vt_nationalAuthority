@@ -1,0 +1,189 @@
+﻿@using PagedList.Mvc;
+@model PagedList.PagedList<DataAccessLayer.Models.cardsRequestModel>
+@{
+    var iCount = 1;
+    var screen = "";
+    var controller = "";
+    string[] path = HttpContext.Current.Request.Url.AbsolutePath.Split('/');
+    screen = path[2];
+    Layout = null;
+
+    List<DataAccessLayer.CheckModuleUserPermisiom_Result> x = TempData["checkLevel2"] as List<DataAccessLayer.CheckModuleUserPermisiom_Result>;
+    if (x.Count > 0)
+    {
+        Session["checkLevel2"] = x.ToList();
+    }
+    else if (Session["checkLevel2"] != null)
+    {
+        x = Session["checkLevel2"] as List<DataAccessLayer.CheckModuleUserPermisiom_Result>;
+    }
+}
+<div class="dr-rtl mb-3 row justify-content-center">
+    <div class="text-center scroll-max grid_box_shadow">
+        @if (Model == null)
+        {
+            <h1 id="tblSearchNotFound">
+                <strong>@generalVariables.CardsRequestNotFound</strong>
+            </h1>
+        }
+        else if (Model.Count == 0)
+        {
+            <h1 id="tblSearchNotFound">
+                <strong>@generalVariables.CardsRequestNotFound</strong>
+            </h1>
+        }
+        else
+        {
+            <table class="table">
+                @* thead *@
+                <thead>
+                    <tr>
+                        <th scope="col" class="color_main102">#</th>
+                        <th scope="col" class="color_main102">مكتب</th>
+                        <th scope="col" class="color_main102">اسم المستخدم</th>
+                        <th scope="col" class="color_main102">اسم الطلب</th>
+                        <th scope="col" class="color_main102">تاريخ الطلب</th>
+                        <th scope="col" class="color_main102">تاريخ الاستلام</th>
+                        <th scope="col" class="color_main102">الحالة</th>
+                        <th scope="col" class="color_main102">تاريخ التسليم</th>
+                        @if (x.Count > 0)
+                        {
+                            <th scope="col" class="color_main102"><i class="fas fa-cog"></i></th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @{iCount = 1; }
+                    @foreach (var item in Model)
+                    {
+                        string Color = "";
+                        if (String.IsNullOrEmpty(item.sDeliveryDate) && String.IsNullOrEmpty(item.sReciveDate)) // ليس بعد
+                        {
+                            Color = "black";
+                        }
+                        else if (!String.IsNullOrEmpty(item.sReciveDate) && !String.IsNullOrEmpty(item.sDeliveryDate)) //تم تسليم الطلب
+                        {
+                            Color = "green";
+                        }
+                        else if (String.IsNullOrEmpty(item.sDeliveryDate) && !String.IsNullOrEmpty(item.sReciveDate)) // تم استلام الطلب
+                        {
+                            Color = "#2193b0!important";
+                        }
+                        <tr style="color:@Color">
+                            <th scope="row" class="color_main102">@((Convert.ToInt32(Model.PageNumber) * Convert.ToInt32(generalVariables.PageSize)) - (Convert.ToInt32(generalVariables.PageSize) - iCount) )</th>
+                            <td>@item.sOfficeInsuranceName</td>
+                            <td>@item.sUserFullName</td>
+                            <td>@item.sCardsRequestName</td>
+                            <td>@item.sRequestDate</td>
+                            <td>@(item.sReciveDate == null ? "لم يتم الاستلام بعد" : item.sReciveDate.ToString())</td>
+                            <td>@(item.sCardStatusName == null ? "ليس بعد" : item.sCardStatusName)</td>
+                            <td>@(item.sDeliveryDate == null ? "لم يتم التسليم بعد" : item.sDeliveryDate.ToString())</td>
+
+                            @if (x.Count > 0)
+                            {
+                                <td>
+                                    <div>
+                                        <div class="dropdown-j">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                            <div class="dropdown-content-j" style="min-width: auto;">
+                                                <div class="row text-left">
+                                                    <div class="col-12">
+                                                        @foreach (var code in x)
+                                                        {
+                                                            if ((item.sDeliveryDate == null || item.sDeliveryDate == "") && item.iCardStatusCode == 1)
+                                                            {
+                                                                @* تعديل *@
+                                                        if (code.functionCode == 10)
+                                                        {
+                                                            <button type="button" name="submitType" value="1"
+                                                                    class="btn btn-sm btn-outline-warning font-weight-bold btnsStyle"
+                                                                    onclick="openModel('#titleSharedModal', `تعديل طلب كارت : @item.sCardsRequestName`, '#btnAddOrEditCardsRequests', 'تعديل', 'far fa-edit font-weight-bold', 'btn-outline-warning btn font-weight-bold', '../CardsRequests/_vpCardsRequestsAddOrEdit', 'CardId=@item.iCardsRequestCode', '#sharedModalBody')"
+                                                                    data-toggle="modal" data-target="#sharedModal">
+                                                                <i class="far fa-edit"></i> تعديل
+                                                            </button>
+                                                        }
+                                                        @* حذف الطلب *@
+                                                        if (code.functionCode == 59)
+                                                        {
+                                                            <a href="#" data-toggle="tooltip" data-placement="bottom" class="btn btn-sm btn-outline-danger font-weight-bold"
+                                                               onclick="return sAlertDel(this,'هل تريد حذف هذا الطلب ؟', 'حذف  الطلب', 'إلغاء الحذف','CardsRequests','vCardsRequestDelete','IDDelete=@(item.iCardsRequestCode) ');"><i class="fas fa-trash-alt"></i> حذف</a>
+                                                            }
+                                                        }
+
+                                                        @* المرفقات *@
+                                                        if (code.functionCode == 60)
+                                                        {
+                                                            <button type="button" name="submitType" data-toggle="modal" data-target="#shareAttachmentSearchAddModal"
+                                                                    class="btn btn-sm btn-outline-primary font-weight-bold"
+                                                                    onclick="openAttachmentModel('../Attachments/_vpAttachmentAdd','../Attachments/_vpAttachmentSearch','CardsRequest,@item.iCardsRequestCode','actionName=@path[2]&controllerName=@path[1]&screenType=5','')">
+                                                                <i class="fa fa-paperclip"></i>  المرفقات
+                                                            </button>
+                                                            }
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            }
+                        </tr>
+                        iCount++;
+                    }
+                </tbody>
+            </table>
+                        }
+        @if (Model != null)
+        {
+            if (Model.Count > 0)
+            {
+                @* pagination *@
+                <div id="divPagination">
+                    <h5 style="text-align:center;color:#306fc2"> صفحة <strong style="color:#CA2553"> @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)</strong> من <strong>@Model.PageCount </strong> </h5>
+                    <div style="text-align:center">
+                        <div class="justify-content-lg-center pagination">
+                            @Html.PagedListPager(Model, inPage => Url.Action("vCardsRequestsIndex", new { areas = Request.QueryString["areas"] == null ? null : Request.QueryString["areas"], inPage, Offices = Request.QueryString["Offices"] == null ? null : Request.QueryString["Offices"] }))
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+
+    </div>
+
+    @* اضافه / بحث *@
+    <div class="text-right fixed_btn bg-white w-100">
+        <div>
+            @* بحث *@
+            <button type="button" name="submitType" value="Search" class="btn btn-outline-primary font-weight-bold" data-toggle="modal" data-target="#sharedModal"
+                    onclick="openModel('#titleSharedModal', 'بحث عن كارت', '#btnSearchCardsRequests', ' بحث', 'fas fa-search', 'btn btn-outline-primary font-weight-bold', '_vpCardsRequestsSearch', '', '#sharedModalBody')">
+                <i class="fas fa-search"></i> بحث
+            </button>
+
+            @*الغاء البحث*@
+            <a class="btn btn-sm btn-default font-weight-bold " href="@Url.Action("vCancelSearchCardRequest", "CardsRequests", new { cp = Request.QueryString["cp"],cd=Request.QueryString["cd"] })">الغاء البحث <span class="glyphicon"></span></a>
+
+
+            @if (x.Count > 0)
+            {
+                foreach (var code in x)
+                {
+                    if (code.functionCode == 9)
+                    {
+                        <button type="button" name="submitType" value="Save" class="btn btn-outline-info font-weight-bold" data-toggle="modal" data-target="#sharedModal"
+                                onclick="openModel('#titleSharedModal', 'طلب كارت', '#btnAddOrEditCardsRequests', 'طلب كارت', 'fas fa-check', 'btn btn-outline-info font-weight-bold mb-1', '_vpCardsRequestsAddOrEdit', '', '#sharedModalBody')">
+                            <i class="fas fa-plus"></i> طلب كارت
+                        </button>
+                    }
+                }
+            }
+        </div>
+        @* Colors *@
+        <div class="text-center border-top mt-1">
+            <span class="fa fa-circle text-right mx-2" style="color:green;font-size: small;"> تم تسليم الطلب</span>
+            <span class="fa fa-circle text-right color_main102" style="font-size: small;"> تم استلام الطلب </span>
+            <span class="fa fa-circle text-right mx-2" style="font-size: small;"> لم يتم استلام او تسليم الطلب </span>
+        </div>
+        @Html.Raw(TempData["msg"] == null ? null : TempData["msg"].ToString())
+    </div>
+</div>

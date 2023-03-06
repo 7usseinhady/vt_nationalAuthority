@@ -1,0 +1,139 @@
+﻿@{
+    var screen = "";
+    var controller = "";
+    string[] path = HttpContext.Current.Request.Url.AbsolutePath.Split('/');
+
+    if (path.Length > 2)
+    {
+        screen = path[2];
+    }
+
+    controller = path[1];
+}
+@using (Html.BeginForm("_vpOfficeAreaa", "InsuranceEmployee", FormMethod.Post, new { @id = "formIndex" }))
+{
+    @Html.Hidden("action", screen);
+    @Html.Hidden("controller", controller);
+    <div class="row text-right mt-3 dr-rtl mx-3 mb-2">
+
+        @* المنطقة *@
+        <div class="col-lg-5 col-md-5 col-sm-12">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                اسم المنطقة
+            </span>
+            <div>
+                @Html.ListBox("areas", ViewBag.areas as SelectList, new { @class = "form-control borderText selectpicker", @data_live_search = "true", onchange = "FilterArea();", id = "areas" })  @*FilterArea*@
+            </div>
+        </div>
+        @* المكتب *@
+        <div class="col-lg-5 col-md-5 col-sm-12">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                اسم المكتب
+            </span>
+            <div @*id="divOffice" onclick="officeClick()"*@>
+                @Html.ListBox("Offices", ViewBag.Offices as SelectList, new { @class = "form-control borderText selectpicker", @data_live_search = "true", id = "Offices" })
+            </div>
+        </div>
+         @*@if (screen == "vAreaOfficeIndex")
+         {
+             //    مكاتب المقاولين فقط
+            <div class="col-lg-2 col-md-5 col-sm-12">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">
+                   مكاتب المقاولين فقط
+                </span>
+                <div>
+                    @Html.CheckBox("chkOffCont", new { @class = "option-input-child checkbox mt-4", id = "chkOffCont" })
+                </div>
+            </div>
+         }*@
+        <div class="col-sm-12 my-1 text-left mt-3 col-lg-2 col-md-2 col-sm-12 align-self-end text-right">
+            <button type="submit" id="btnManPowerSearch" onclick="loaderOpen();" class="btn btnsStyle btn-outline-info font-weight-bold"> <i class="fas fa-search"> بحث</i></button>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+    var loc = window.location.href;
+    if (loc.indexOf("areas") > -1) {
+
+        var myAreas;
+        if (loc.indexOf("&") > -1)
+            myAreas = loc.substring(loc.indexOf("areas") + 6, loc.indexOf("&")).split('%2C');
+        else
+            myAreas = loc.substring(loc.indexOf("areas") + 6).split('%2C');
+
+        $('select[name=areas]').val(myAreas); $('.selectpicker').selectpicker('refresh');
+
+       // console.log('myAreas: ', myAreas);
+    }
+
+
+    if (loc.indexOf("Offices") > -1) {
+
+        var myOffices;
+        if (loc.lastIndexOf("&") > -1 && loc.lastIndexOf("&") > loc.indexOf("Offices"))
+            myOffices = loc.substring(loc.indexOf("Offices") + 8, loc.lastIndexOf("&")).split('%2C');
+        else
+            myOffices = loc.substring(loc.indexOf("Offices") + 8).split('%2C');
+
+        $('select[name=Offices]').val(myOffices); $('.selectpicker').selectpicker('refresh');
+
+        //console.log('myOffices: ', myOffices);
+    }
+
+</script>
+
+<script type="text/javascript">
+
+    var officeFilter = '';
+
+    function FilterArea()
+    {
+        var vallUserType = $('#areas').val();
+
+        // ده array عادى بعرفه
+        var IDPram = {};
+        IDPram.ID = vallUserType;
+
+        if (vallUserType == '') {
+           // console.log('vallUserType is empty');
+            IDPram.ID = '-1'
+        }
+
+        $.getJSON("../InsuranceEmployee/GetAreas", $.param(IDPram, true),
+          function (data) {
+
+             // console.log('GetArea', data);
+
+              var select = $("#Offices");
+              var selectOffice = $(select).siblings('.dropdown-menu').find('.dropdown-menu');
+
+             // console.log('selectOffice: ', selectOffice);
+
+              $(select).empty();
+              $(selectOffice).empty();
+
+             // console.log('after empty');
+
+              //$(select).append($('<option />', {
+              //    value: '',
+              //    text: "---  الكل  ---"
+              //}));
+             // console.log('all');
+
+              officeFilter = data;
+
+              $.each(data, function (index, data) {
+
+                  $(select).append($('<option />', {
+                      value: data.officeInsuranceCode,
+                      text: data.officeInsuranceIDName
+                  }));
+              });
+
+              $(select).selectpicker('refresh')
+
+          })
+    }
+
+</script>

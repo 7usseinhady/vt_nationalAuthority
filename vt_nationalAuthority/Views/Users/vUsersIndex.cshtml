@@ -1,0 +1,148 @@
+﻿@using PagedList.Mvc;
+@using DataAccessLayer;
+@model PagedList.PagedList<DataAccessLayer.Models.userModel>
+@{
+    //Layout = "~/Views/Shared/UserLayout.cshtml";
+
+    // Regular Employee
+    if (Session["areaOfficePermission"] != null && Session["areaOfficePermission"].ToString() != "1")
+    {
+        Layout = "~/Views/Shared/InsuranceEmployeeLayout.cshtml";
+    }
+    else // Admin
+    {
+        Layout = "~/Views/Shared/UserLayout.cshtml";
+    }
+
+    var list = new List<int> { 0, 1, 2, 3, 4, 5 };
+    <title> المستخدمين </title>
+}
+@*<script src="~/Scripts/Users/AddEditSearchUser.js"></script>*@
+<div class="dr-rtl grid_box_shadow mx-3">
+    @* tabe users *@
+    <div class="font102">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 ">
+                <div class="card_b101">
+                    <div class="card-body">
+                        <div id="divUsersIndex" style="" class="row">
+                            @if (Model == null)
+                            {
+                                <h1 id="tblSearchNotFound" class="col-12">
+                                    <strong>@generalVariables.SearchNotFound</strong>
+                                </h1>
+                            }
+                            else if (Model.Count == 0)
+                            {
+                                <h1 id="tblSearchNotFound" class="col-12">
+                                    <strong>@generalVariables.SearchNotFound</strong>
+                                </h1>
+                            }
+                            else if (Model.Count > 0)
+                            {
+                                foreach (var item in Model)
+                                {
+
+                                    <div class="col-lg-2 col-md-6 col-sm-12">
+                                        <div class="card card_b101 box_shadow103 mt-2">
+                                            <div class="card-body" style="text-align:center;">
+                                                @* الصوره *@
+                                                <div class="">
+                                                    @if (System.IO.File.Exists(Server.MapPath(item.sImageURL)))
+                                                    {
+                                                        <img src=@item.sImageURL.Replace("~","") id="blah" width="90" height="90" style="border-radius: 50%;" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="~/UserImage/generic-user.jpg" class="m-auto" width="90" height="90" id="blah" style="border-radius: 50%;" />
+                                                    }
+                                                </div>
+                                                @* الاسم *@
+                                                <div class="">
+                                                    <h6 style=""><span style="color:#264d73">@item.sUserName</span></h6>
+                                                </div>
+                                                @* التعديل و الحذف *@
+                                                @if (Convert.ToInt32(Session["uc"]) == item.inUserInsertCode || (Session["areaOfficePermission"] != null && Session["areaOfficePermission"].ToString() == "1"))
+                                                {
+                                                    <div class="">
+                                                        <div class="text-center" id="divBtnSetting" style="">
+                                                            <button type="button" name="submitType" value="@item.iUserCode"
+                                                                    class="btn btn-sm btn-outline-warning font-weight-bold"
+                                                                    onclick="openModel('#titleSharedModal', 'تعديل المستخدم', '#btnUsers', ' تعديل المستخدم', 'fas fa-edit font-weight-bold', 'btn btn-outline-warning font-weight-bold', '_vpUsersAdd', 'ID=@item.iUserCode', '#sharedModalBody')"
+                                                                    data-toggle="modal" data-target="#sharedModal">
+                                                                <i class="far fa-edit"></i> تعديل
+                                                            </button>
+
+                                                            @* حذف *@
+                                                            <a href="#" data-toggle="tooltip" data-placement="bottom" class="btn btn-sm btn-outline-danger font-weight-bold"
+                                                               onclick="return sAlertDel(this,'هل تريد حذف هذا المستخدم ؟', 'حذف المستخدم', 'إلغاء الحذف','Users','vUsersIndex','IDDelete=@(item.iUserCode)');"><i class="fas fa-trash-alt"></i> حذف </a>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+
+                            }
+                        </div>
+                        @* pagination *@
+                        <div id="divPagination">
+                            <h5 style="text-align:center;color:#306fc2"> صفحة <strong style="color:#CA2553"> @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)</strong> من <strong>@Model.PageCount </strong> </h5>
+                            <div style="text-align:center">
+                                <div class="justify-content-lg-center pagination">
+                                    @Html.PagedListPager(Model, inPage => Url.Action("vUsersIndex", new { inPage }))
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @* buttons setting *@
+    <div class="text-right fixed_btn w-100">
+        <div class="text-right fixed_btn w-100 bg-white">
+
+            @* بحث *@
+            <button type="button" name="submitType" value="Search" class="btn btn-outline-primary font-weight-bold" data-toggle="modal" data-target="#sharedModal"
+                    onclick="openModel('#titleSharedModal', 'بحث عن مستخدم', '#btnUsersSearch', ' بحث', 'fas fa-search', 'btn btn-outline-primary font-weight-bold', '_vpUserSearch', '', '#sharedModalBody')">
+                <i class="fas fa-search"></i> بحث
+            </button>
+
+            @*الغاء البحث*@
+            <a class="btn btn-default font-weight-bold " href="@Url.Action("_vpSearchCancel", "Users")">الغاء البحث <span class="glyphicon"></span></a>
+
+            @* اضافة مستخدم *@
+            <button type="button" name="submitType" value="Save" class="btn btn-outline-info font-weight-bold" data-toggle="modal" data-target="#sharedModal"
+                    onclick="openModel('#titleSharedModal', 'اضافه مستخدم', '#btnUsers', ' اضافة مستخدم', 'fas fa-plus', 'btn btn-outline-info font-weight-bold', '_vpUsersAdd', '', '#sharedModalBody')">
+                <i class="fas fa-plus"></i> اضافة مستخدم
+            </button>
+
+            @* اضافة جهه اسناد - مقاول *@
+            <button type="button" name="submitType" value="Save" class="btn btn-outline-info font-weight-bold" data-toggle="modal" data-target="#sharedModal"
+                    onclick="openModel('#titleSharedModal', 'اضافه جهه اسناد - مقاول', '#btnAddRefSideCont', ' اضافة جهه اسناد - مقاول', 'fas fa-plus', 'btn btn-outline-info font-weight-bold', '_vpRefSideContAdd', '', '#sharedModalBody')">
+                <i class="fas fa-plus"></i> اضافة جهه اسناد - مقاول
+            </button>
+
+        </div>
+    </div>
+</div>
+
+@Html.Raw(TempData["msg"])
+
+<style>
+    .card_b101 {
+        border-radius: 31px !important;
+    }
+
+    .box_shadow103 {
+        box-shadow: 1px 1px 4px 0px #adb5bd !important;
+    }
+
+    @@media only screen and (max-width: 359px) {
+        .pagination {
+            display: inline-flex;
+        }
+    }
+</style>

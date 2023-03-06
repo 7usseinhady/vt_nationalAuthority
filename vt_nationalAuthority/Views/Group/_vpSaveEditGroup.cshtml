@@ -1,0 +1,37 @@
+﻿@model DataAccessLayer.Requests.groupRequest
+@*<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>*@
+@{
+    Layout = "~/Views/Shared/_partialLayout.cshtml";
+}
+@using (Html.BeginForm("_vpSaveEditGroup", "Group", FormMethod.Post))
+{
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.OModel.iGroupCode)
+
+    <div class="mt-3 dr-rtl mx-3">
+        <div class="row text-right grid_box_shadow">
+            @* اسم المجموعه *@
+            <div class="col-lg-8 col-md-8 col-sm-12 col-12 my-1 text-right ">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">
+                    اسم المجموعه
+                </span>
+                <div>
+                    @Html.TextBoxFor(model => model.OModel.sGroupName, new { @class = "form-control borderText arNumSign", required = "required" })
+                    @*@Html.ValidationMessageFor(model => model.OModel.sGroupName, "", new { @class = "text-danger" })*@
+                </div>
+            </div>
+
+            @*اضافه - تعديل عاسم المجموعه *@
+            <div class="col-lg-4 col-md-4 align-self-end col-sm-12 my-1 text-right">
+                <button type="submit" id="btnAddOrEditGroup" onclick="loaderOpen();"></button>
+            </div>
+            <div class="col-lg-8 col-md-12">
+                @Html.ValidationMessageFor(model => model.OModel.sGroupName, "", new { @class = "d-flex justify-content-center" })
+            </div>
+
+        </div>
+    </div>
+}
+
+@*<script src="~/Scripts/light.js"></script>*@

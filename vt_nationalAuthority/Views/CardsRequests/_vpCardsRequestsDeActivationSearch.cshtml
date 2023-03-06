@@ -1,0 +1,79 @@
+﻿@using (Html.BeginForm("_vpCardsRequestsDeActivationSearch", "CardsRequests", FormMethod.Post))
+{
+    <div class="mt-3 dr-rtl grid_box_shadow mx-3 mb-2 ">
+
+        <div class="row text-right">
+
+            @* مكتب *@
+            <div class="col-lg-6 col-md-12 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">
+                    مكتــــــــــــــــــــــــــب
+                </span>
+                <div>
+                    @Html.TextBox("officeName", "", new { @class = "form-control borderText arabic" })
+                </div>
+            </div>
+             
+            @* منطقة *@
+            <div class="col-lg-6 col-md-12 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">
+                    منطقــــــــــــــــة
+                </span> 
+                <div>
+                    @Html.TextBox("areaName", "", new { @class = "form-control borderText arabic" })
+                </div>
+            </div>
+
+            @*  من تاريـــــــــــخ*@
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">
+                    من تاريــــــــــــــــــــخ
+                </span>
+                <div>
+                    @Html.TextBox("dateFrom", "", new { @class = "form-control borderText date", autocomplete = "off" })
+                </div>
+            </div>
+
+            @* الى تاريـــــــــــخ *@
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">
+                    الى تاريـــــــــــخ
+                </span>
+                <div>
+                    @Html.TextBox("dateTo", "", new { @class = "form-control borderText date", autocomplete = "off" })
+                </div>
+            </div>
+
+            @* السبب *@
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">
+                    السبب
+                </span>
+                <div>
+                    @Html.TextBox("reason", "", new { @class = "form-control borderText arNumSign", data_toggle = "tooltip", title = "حروف عربية فقط", data_placement = "bottom" })
+                </div>
+            </div>
+
+            @*  الملاحظات *@
+            <div class="col-lg-11 col-md-12 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">
+                    الملاحظات
+                </span>
+                <div>
+                    @Html.TextArea("notes", new { @class = "form-control arNumSign", @id = "txt_notes" })
+                </div>
+            </div>
+
+
+            @* بحث *@
+            <div class="col-sm-12 my-1 text-left mt-2 align-self-end">
+                <button type="submit" id="btnSearchCards" onclick="loaderOpen();" class="btn btn-outline-primary font-weight-bold"><i class=""></i></button>
+            </div>
+
+        </div>
+    </div>
+}
+
+<script src="~/Scripts/light.js"></script>
+<link href="~/Content/bootstrap-datepicker3/bootstrap-datepicker3.css" rel="stylesheet" />
+<script src="~/Scripts/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>

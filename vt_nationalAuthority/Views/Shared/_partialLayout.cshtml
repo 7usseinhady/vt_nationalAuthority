@@ -1,0 +1,28 @@
+﻿@{
+    Layout = null;
+}
+
+<script src="~/Scripts/light.js"></script>
+
+@* For Checkbox *@
+<link href="~/Content/checkbox.css" rel="stylesheet" />
+
+@* For Date Datapicker *@
+<link href="~/Content/bootstrap-datepicker3/bootstrap-datepicker3.css" rel="stylesheet" />
+<script src="~/Scripts/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+
+@* For Validation Data Annotation *@
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<div>
+    @RenderBody()
+</div>
+
+<script>
+    $(function () {
+        $('.date').datepicker({ startView: "days", format: "yyyy-mm-dd", autoclose: true, todayHighlight: true, showWeekDays: false, clearBtn: true, todayBtn: true }).bind('cut copy paste', function (e) {
+            e.preventDefault();
+        });
+    });
+</script>

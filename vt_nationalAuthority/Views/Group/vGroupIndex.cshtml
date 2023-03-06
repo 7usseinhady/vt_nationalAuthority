@@ -1,0 +1,110 @@
+﻿@using PagedList.Mvc;
+@model PagedList.PagedList<DataAccessLayer.Models.groupModel>
+@{
+    Layout = "~/Views/Shared/UserLayout.cshtml";
+    <title> المستخدمين </title>
+    var iCount = 1;
+}
+
+<script src="~/Scripts/Users/AddEditSearchGroup.js"></script>
+<div class="dr-rtl grid_box_shadow mx-3 mb-3">
+    <div class="text-center scroll-max">
+        @if (Model == null)
+        {
+        <h1 id="tblSearchNotFound">
+            <strong>@generalVariables.GroupNotFound</strong>
+        </h1>
+        }
+        else if (Model.Count == 0)
+        {
+        <h1 id="tblSearchNotFound">
+            <strong>@generalVariables.GroupNotFound</strong>
+        </h1>
+        }
+        else if (Model.Count > 0)
+        {
+        <table class="table minTable">
+            @* thead *@
+            <thead>
+                <tr>
+                    <th scope="col" class="color_main102 hidCol">#</th>
+                    <th scope="col" class="color_main102">اسم المجموعه</th>
+                    <th scope="col" class="color_main102"><i class="fas fa-cog"></i></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{iCount = 1; }
+                @foreach (var item in Model)
+                    {
+                    <tr>
+                        <th scope="row" class="color_main102">@((Convert.ToInt32(Model.PageNumber) * Convert.ToInt32(generalVariables.PageSize)) - (Convert.ToInt32(generalVariables.PageSize) - iCount) )</th>
+                        @* الاسم *@
+                        <td class="color_main103">@item.sGroupName</td>
+                        <td class="color_main103">
+                            <div class="color_main103">
+                                <div class="dropdown-j color_main102">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                    <div class="dropdown-content-j" style="min-width: 116px;">
+                                        <div class="row text-left">
+                                            <div class="col-12">
+                                                <a type="button" class="btn btn-sm btn-outline-info  font-weight-bold btnsStyle" href="@Url.Action("vGroupUsers", "Group", new { GroupCode = item.iGroupCode })" data-toggle="tooltip"><i class="fas fa-users"></i> مستخدمين</a>
+                                                <a type="button" class="btn btn-sm btn-outline-primary font-weight-bold" href="@Url.Action("vGroupPermision", "Group", new { GroupCode = item.iGroupCode })" data-toggle="tooltip"><i class="fas fa-wrench"></i> صلاحيات</a>
+                                                @if (item.iGroupCode != 1)
+                                                    {
+                                                    @* تعديل *@
+                                                    <button type="button" name="submitType" value="@item.iGroupCode"
+                                                            class="btn btn-sm btn-outline-warning font-weight-bold"
+                                                            onclick="openModel('#titleSharedModal', `تعديل المجموعه : @item.sGroupName`, '#btnAddOrEditGroup', ' تعديل المجموعه', 'fas fa-edit font-weight-bold', 'btn btn-outline-warning font-weight-bold', '_vpSaveEditGroup', 'ID=@item.iGroupCode,inPage=@Request.QueryString["inPage"]', '#sharedModalBody')"
+                                                            data-toggle="modal" data-target="#sharedModal">
+                                                        <i class="fas fa-edit"></i>  تعديل
+                                                    </button>
+                                                    @* حذف *@
+                                                    <a href="#" data-toggle="tooltip" data-placement="bottom" class="btn btn-sm btn-outline-danger font-weight-bold"
+                                                       onclick="return sAlertDel(this,'هل تريد حذف هذه المجموعه ؟', 'حذف  المجموعه', 'إلغاء الحذف','Group','vGroupIndex','IDDelete=@(item.iGroupCode)');"><i class="fas fa-trash-alt"></i> حذف</a>
+
+                                                    }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
+
+                        iCount++;
+                    }
+            </tbody>
+        </table>
+                        //pagination
+        <div id="divPagination">
+            <h5 style="text-align:center;color:#306fc2"> صفحة <strong style="color:#CA2553"> @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)</strong> من <strong>@Model.PageCount </strong> </h5>
+            <div style="text-align:center">
+                <div class="justify-content-lg-center pagination">
+                    @Html.PagedListPager(Model, inPage => Url.Action("vGroupIndex", new { inPage }))
+                </div>
+            </div>
+        </div>
+                        }
+    </div>
+
+    @Html.Raw(TempData["msg"])
+    @* اضافة مجموعه / بحث *@
+    <div class="text-right fixed_btn bg-white w-100">
+
+        @* بحث *@
+        <button type="button" name="submitType" value="Search" class="btn btn-outline-primary font-weight-bold" data-toggle="modal" data-target="#sharedModal"
+                onclick="openModel('#titleSharedModal', 'بحث عن مجموعه', '#btnGroupSearch', ' بحث', 'fas fa-search', 'btn btn-outline-primary font-weight-bold', '_vpSearchGroup', '', '#sharedModalBody')">
+            <i class="fas fa-search"></i> بحث
+        </button>
+        @*الغاء البحث*@
+        <a class="btn btn-default font-weight-bold " href="@Url.Action("_vpSearchCancel", "Group")">الغاء البحث <span class="glyphicon"></span></a>
+
+        @* اضافة مجموعه *@
+        <button type="button" name="submitType" value="Save" class="btn btn-outline-info font-weight-bold" data-toggle="modal" data-target="#sharedModal"
+                onclick="openModel('#titleSharedModal', 'اضافه مجموعه', '#btnAddOrEditGroup', ' اضافة مجموعه', 'fas fa-plus font-weight-bold', 'btn btn-outline-info font-weight-bold', '_vpSaveEditGroup', '', '#sharedModalBody')">
+            <i class="fas fa-plus"></i> اضافة مجموعه
+        </button>
+    </div>
+
+</div>

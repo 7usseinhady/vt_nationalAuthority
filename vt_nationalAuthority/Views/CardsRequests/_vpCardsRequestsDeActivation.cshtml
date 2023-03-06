@@ -1,0 +1,245 @@
+﻿@using PagedList.Mvc;
+@model PagedList.PagedList<DataAccessLayer.Models.cardWorkerStopActiveModel>
+@{
+    string[] path = HttpContext.Current.Request.Url.AbsolutePath.Split('/');
+    var iCount = 1;
+
+    List<DataAccessLayer.CheckModuleUserPermisiom_Result> x = TempData["checkLevel2"] as List<DataAccessLayer.CheckModuleUserPermisiom_Result>;
+    if (x != null)
+    {
+        Session["checkLevel2"] = x.ToList();
+    }
+    else if (Session["checkLevel2"] != null)
+    {
+        x = Session["checkLevel2"] as List<DataAccessLayer.CheckModuleUserPermisiom_Result>;
+    }
+}
+
+@* تفاصيل العامل *@
+<div class="mt-3 dr-rtl mx-3 mb-2 ">
+    <div class="row text-right grid_box_shadow">
+        @* اسم العامل *@
+        <div class="col-lg-5 col-md-6 col-sm-12 col-12 my-1">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                اسم العامل :<span class="color_main103 font-weight-bold ml-2 mx-3">@TempData["sWorkerName"].ToString()</span>
+            </span>
+        </div>
+        @* الرقم القومى *@
+        <div class="col-lg-3 col-md-3 col-sm-12 col-12 my-1">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                الرقم القومى : <span class="color_main103 font-weight-bold ml-2 mx-3">@TempData["sWorkerNationalID"].ToString()</span>
+            </span>
+        </div>
+        @* الرقم التامينى *@
+        <div class="col-lg-3 col-md-3 col-sm-12 col-12 my-1">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                الرقم التامينى :<span class="color_main103 font-weight-bold ml-2 mx-3">@TempData["sWorkerInsuranceNum"].ToString()</span>
+            </span>
+        </div>
+    </div>
+</div>
+@if (TempData["isAtive"] != null)
+{
+    <div class="row justify-content-center">
+        <div class="text-center grid_box_shadow mt-4 dr-rtl scroll-max">
+            @if (Model == null)
+            {
+                if (TempData["isAtive"] == null)
+                {
+                    <h1 id="tblSearchNotFound">
+                        <strong>@generalVariables.CardRequestDeActivation</strong>
+                    </h1>
+                }
+                else
+                {
+                    <h1 id="tblSearchNotFound">
+                        <strong>@generalVariables.WorkerCardsNotSave</strong>
+                    </h1>
+                }
+            }
+            else if (Model.Count == 0)
+            {
+                if (TempData["isAtive"] == null)
+                {
+                    <h1 id="tblSearchNotFound">
+                        <strong>@generalVariables.CardRequestDeActivation</strong>
+                    </h1>
+                }
+                else
+                {
+                    <h1 id="tblSearchNotFound">
+                        <strong>@generalVariables.WorkerCardsNotSave</strong>
+                    </h1>
+                }
+            }
+            else if (Model.Count > 0 && Model != null)
+            {
+                <table class="table mt-2">
+                    @* thead *@
+                    <thead>
+                        <tr>
+                            <th scope="col" class="color_main102">#</th>
+                            <th scope="col" class="color_main102">مكتب</th>
+                            <th scope="col" class="color_main102">السبب</th>
+                            <th scope="col" class="color_main102">الملاحظات</th>
+                            <th scope="col" class="color_main102">تاريخ البداية</th>
+                            <th scope="col" class="color_main102">تاريخ النهاية</th>
+                            @if (x != null)
+                            {
+                                <th scope="col" class="color_main102"><i class="fas fa-cog"></i></th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{iCount = 1; }
+                        @foreach (var item in Model)
+                        {
+                            string Class = "";
+                            if (String.IsNullOrEmpty(item.sDateEndStopActive)) //تم ايقاف الكارت
+                            {
+                                Class = "";
+                            }
+                            else if (!String.IsNullOrEmpty(item.sDateEndStopActive)) //تم تفعيل الكارت
+                            {
+                                Class = "text-danger";
+                            }
+                            <tr class=@Class>
+                                <th scope="row" class="color_main102">@((Convert.ToInt32(Model.PageNumber) * Convert.ToInt32(generalVariables.PageSize)) - (Convert.ToInt32(generalVariables.PageSize) - iCount) )</th>
+                                <td>@item.sOfficeInsuranceName</td>
+                                <td>@item.sReasons</td>
+                                <td>@item.sNotes</td>
+                                <td>@Html.DisplayFor(modelItem => item.sDateStartStopActive)</td>
+                                @if (String.IsNullOrEmpty(item.sDateEndStopActive))
+                                {
+                                    <td>لم ينتهى بعد</td>
+                                }
+                                else
+                                {
+                                    <td>@Html.DisplayFor(modelItem => item.sDateEndStopActive)</td>
+                                }
+                                @if (x != null)
+                                {
+                                    <td>
+                                        <div>
+                                            <div class="dropdown-j">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                                <div class="dropdown-content-j text-danger" style="min-width: auto;">
+                                                    <div class="row text-left">
+                                                        <div class="col-12">
+                                                            @foreach (var Code in x)
+                                                            {
+                                                                if (Code.functionCode == 68)
+                                                                {
+                                                                    @* المرفقات *@
+                                                                    <button type="button" name="submitType" data-toggle="modal" data-target="#shareAttachmentSearchAddModal"
+                                                                            class="btn btn-sm btn-outline-primary font-weight-bold"
+                                                                            onclick="openAttachmentModel('../Attachments/_vpAttachmentAdd','../Attachments/_vpAttachmentSearch','Cards,@item.iCardWorkerStopActiveCode','actionName=@path[2]&controllerName=@path[1]&screenType=8','')">
+                                                                        <i class="fa fa-paperclip"></i>  المرفقات
+                                                                    </button>
+                                                                }
+
+                                                                if (Code.functionCode == 67)
+                                                                {
+                                                                    @* تعديل *@
+                                                            if (String.IsNullOrEmpty(item.sDateEndStopActive))
+                                                            {
+                                                                <button type="button" name="submitType" value="@item.iCardWorkerStopActiveCode"
+                                                                        class="btn btn-sm btn-outline-warning font-weight-bold"
+                                                                        onclick="openModel('#titleSharedModal', 'تعديل - ايقاف الكارت', '#btnAddOrEditCardsRequestsDeActivation', ' تعديل ', 'fas fa-edit font-weight-bold', 'btn btn-outline-warning font-weight-bold', '_vpCardsRequestsDeActivationAddOrEdit', 'ID=@item.iCardWorkerStopActiveCode', '#sharedModalBody')"
+                                                                        data-toggle="modal" data-target="#sharedModal">
+                                                                    <i class="fas fa-edit"></i>  تعديل
+                                                                </button>
+                                                                    }
+                                                                }
+                                                            }
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                }
+                            </tr>
+                            iCount++;
+                        }
+                    </tbody>
+                </table>
+                            }
+            @if (Model != null)
+            {
+                if (Model.Count > 0)
+                {
+                    @* pagination *@
+                    <div id="divPagination">
+                        <h5 style="text-align:center;color:#306fc2"> صفحة <strong style="color:#CA2553"> @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)</strong> من <strong>@Model.PageCount </strong> </h5>
+                        <div style="text-align:center">
+                            <div class="justify-content-lg-center pagination">
+                                @Html.PagedListPager(Model, inPage => Url.Action("vCardsRequestsDeActivationIndex", new { inPage, WorkerCode = Request.QueryString["WorkId"] == null ? (Session["workerCode"] == null ? null : Session["workerCode"].ToString()) : Request.QueryString["WorkId"].ToString(), cd = Request.QueryString["cd"] }))
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            <br /><br /><br />
+        </div>
+    </div>
+                            }
+@if (TempData["isAtive"] == null)
+{
+    <div class="text-right fixed_btn bg-white w-100 dr-rtl">
+        <h1 id="tblSearchNotFound">
+            <strong>@generalVariables.CardRequestDeActivation</strong>
+        </h1>
+        <a class="btn btn-outline-secondary font-weight-bold" href="@Url.Action("vpWorkers", "InsuranceEmployee", new { cp = 1, cd = 5 })"> عودة <i class="fas fa-chevron-circle-left"></i> </a>
+    </div>
+}
+else
+{
+    @* اضافه / بحث *@
+    <div class="text-right fixed_btn bg-white dr-rtl col-12">
+        @* بحث *@
+        <button type="button" name="submitType" value="Search" class="btn btn-outline-primary font-weight-bold" data-toggle="modal" data-target="#sharedModal"
+                onclick="openModel('#titleSharedModal', 'بحث عن كارت', '#btnSearchCards', ' بحث', 'fas fa-search', 'btn btn-outline-primary font-weight-bold', '_vpCardsRequestsDeActivationSearch', '', '#sharedModalBody')">
+            <i class="fas fa-search"></i> بحث
+        </button>
+        @*الغاء البحث*@
+        <a class="btn btn-sm btn-default font-weight-bold " href="@Url.Action("vCancelStopCardSearch", "CardsRequests", new { WorkId = Request.QueryString["WorkId"], cd = Request.QueryString["cd"] })">الغاء البحث <span class="glyphicon"></span></a>
+
+        @if (x != null)
+        {
+            foreach (var code in x)
+            {
+                if (code.functionCode == 66)
+                {
+                    if ((bool)TempData["isAtive"] == true)
+                    {
+                        <button type="button" name="submitType" value="Save" class="btn btn-outline-info font-weight-bold" data-toggle="modal" data-target="#sharedModal"
+                                onclick="openModel('#titleSharedModal', 'ايقاف كارت', '#btnAddOrEditCardsRequestsDeActivation', 'ايقاف كارت', 'fas fa-check font-weight-bold', 'btn btn-outline-info font-weight-bold', '_vpCardsRequestsDeActivationAddOrEdit', '', '#sharedModalBody')">
+                            <i class="fas fa-sync"></i> ايقاف كارت
+                        </button>
+                    }
+
+                    else if ((bool)TempData["isAtive"] == false)
+                    {
+                        <button type="button" name="submitType" value="Save" class="btn btn-outline-info font-weight-bold" data-toggle="modal" data-target="#sharedModal"
+                                onclick="openModel('#titleSharedModal', 'تفعيل كارت', '#btnAddOrEditCardsRequestsDeActivation', 'تفعيل كارت', 'fas fa-sync font-weight-bold', 'btn btn-outline-info font-weight-bold', '_vpCardsRequestsDeActivationAddOrEdit', '', '#sharedModalBody')">
+                            <i class="fas fa-sync"></i> تفعيل كارت
+                        </button>
+                    }
+                }
+            }
+        }
+
+        <a class="btn btn-outline-secondary font-weight-bold" href="@Url.Action("vpWorkers", "InsuranceEmployee", new { cp = 1, cd = 5 })"> عودة <i class="fas fa-chevron-circle-left"></i> </a>
+
+        <div class="border-top mt-1 text-center">
+            <span class="fa fa-circle text-danger mt-2 mx-2" style="font-size: small;"> تم تفعيل الكارت </span>
+            <span class="fa fa-circle" style="font-size: small;"> تم ايقاف الكارت</span>
+        </div>
+
+    </div>
+
+}
+
+@Html.Raw(TempData["msg"])

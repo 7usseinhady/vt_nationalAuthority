@@ -1,0 +1,106 @@
+﻿@using PagedList.Mvc;
+@model PagedList.PagedList<DataAccessLayer.Models.attachmentTypeModel>
+@{
+     Layout = "~/Views/Shared/_codesLayout.cshtml";
+    <title>انواع المرفقات</title>
+    var iCount = 1;
+}
+
+@* table *@
+<div class="dr-rtl mb-3 row justify-content-center mt-3">
+    <div class="text-center scroll-max grid_box_shadow">
+        @if (Model == null)
+        {
+            <h1 id="tblSearchNotFound">
+                <strong>@generalVariables.AttachmentsNotFound</strong>
+            </h1>
+        }
+        else if (Model.Count == 0)
+        {
+            <h1 id="tblSearchNotFound">
+                <strong>@generalVariables.AttachmentsNotFound</strong>
+            </h1>
+        }
+        else if (Model.Count > 0)
+        {
+            <table class="table minTable">
+                @* thead *@
+                <thead>
+                    <tr>
+                        <th scope="col" class="color_main102">#</th>
+                        <th scope="col" class="color_main102">نوع المرفق</th>
+                        <th scope="col" class="color_main102"><i class="fas fa-cog"></i></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{iCount = 1; }
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <th scope="row" class="color_main102">@((Convert.ToInt32(Model.PageNumber) * Convert.ToInt32(generalVariables.PageSize)) - (Convert.ToInt32(generalVariables.PageSize) - iCount) )</th>
+                            @* الاسم *@
+                            <td class="color_main103">@item.sAttachmentTypeName</td>
+
+                            <td class="color_main103">
+                                <div class="color_main103">
+                                    <div class="dropdown-j color_main102">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                        <div class="dropdown-content-j" style="min-width: max-content;">
+                                            <div class="row text-left">
+                                                <div class="col-12">
+
+                                                    @* تعديل *@
+                                                    <button type="button" name="submitType" value="@item.iAttachmentTypeCode"
+                                                            class="btn btn-sm btn-outline-warning font-weight-bold"
+                                                            onclick="openModel('#titleSharedModal', `تعديل : @item.sAttachmentTypeName`, '#btnAddOrEditAttachmentType', ' تعديل نوع مرفق', 'fas fa-edit font-weight-bold', 'btn btn-outline-warning font-weight-bold', '_vpAttachmentTypeAddOrEdit', 'ID=@item.iAttachmentTypeCode,inPage=@Request.QueryString["inPage"]', '#sharedModalBody')"
+                                                            data-toggle="modal" data-target="#sharedModal">
+                                                        <i class="fas fa-edit"></i>  تعديل
+                                                    </button>
+
+                                                    @* حذف *@
+                                                    @*<a href="#" data-toggle="tooltip" data-placement="bottom" class="btn btn-sm btn-outline-danger font-weight-bold"
+                                                       onclick="return sAlertDel(this,'هل تريد حذف هذا النوع ؟', 'حذف نوع المرفق', 'إلغاء الحذف','attachmentType','vAttachmentType','IDDelete=@(item.iAttachmentTypeCode)');"><i class="fas fa-trash-alt"></i> حذف</a>*@
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        iCount++;
+                    }
+                </tbody>
+            </table>
+
+            <div id="divPagination">
+                @*pagination*@
+                <h5 style="text-align:center;color:#306fc2"> صفحة <strong style="color:#CA2553"> @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)</strong> من <strong>@Model.PageCount </strong> </h5>
+                <div style="text-align:center">
+                    <div class="justify-content-lg-center pagination">
+                        @Html.PagedListPager(Model, inPage => Url.Action("vAttachmentType", new { inPage }))
+                    </div>
+                </div>
+            </div>
+                        }
+    </div>
+
+    @* اضافة نوع مرفق / بحث *@@*الغاء البحث*@
+    <div class="text-right fixed_btn bg-white w-100">
+        @* بحث *@
+        <button type="button" name="submitType" value="Search" class="btn btn-outline-primary font-weight-bold" data-toggle="modal" data-target="#sharedModal"
+                onclick="openModel('#titleSharedModal', 'بحث عن نوع المرفق', '#btnSearchArchivementType', ' بحث', 'fas fa-search font-weight-bold', 'btn btn-outline-primary font-weight-bold', '_vpAttachmentTypeSearch', '', '#sharedModalBody')">
+            <i class="fas fa-search"></i> بحث
+        </button>
+        @*الغاء البحث*@
+        <a class="btn btn-default font-weight-bold " href="@Url.Action("_vpSearchCancel", "attachmentType", new { })">الغاء البحث <span class="glyphicon"></span></a>
+
+        @* اضافة نوع مرفق *@
+        <button type="button" name="submitType" value="Save" class="btn btn-outline-info font-weight-bold" data-toggle="modal" data-target="#sharedModal"
+                onclick="openModel('#titleSharedModal', 'اضافه نوع مرفق', '#btnAddOrEditAttachmentType', ' اضافة نوع مرفق', 'fas fa-plus font-weight-bold', 'btn btn-outline-info font-weight-bold', '_vpAttachmentTypeAddOrEdit', '', '#sharedModalBody')">
+            <i class="fas fa-plus"></i> اضافة نوع مرفق
+        </button>
+    </div>
+</div>
+
+@Html.Raw(TempData["msg"])
+<script src="~/Scripts/signalR/NotificationProcess.js"></script>

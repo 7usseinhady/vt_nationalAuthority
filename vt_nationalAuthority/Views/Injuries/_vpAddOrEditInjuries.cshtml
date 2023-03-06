@@ -1,0 +1,175 @@
+﻿@model DataAccessLayer.Requests.workerInjuriesRequest
+@{
+    Layout = "~/Views/Shared/_partialLayout.cshtml";
+}
+
+@using (Html.BeginForm("_vpAddOrEditInjuries", "Injuries", FormMethod.Post, new { @onsubmit = "validationSubmit(event)" }))
+{
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.OModel.iWorkerInjuriesCode)
+    @Html.HiddenFor(model => model.OModel.iWorkerCode)
+    @Html.HiddenFor(model => model.OModel.inProcessCode)
+
+    <div class="mt-3 dr-rtl grid_box_shadow mx-3 mb-2 ">
+        <div class="row text-right">
+
+            @*  سبب الاصابة *@
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">
+                    سبب الاصابة
+                </span>
+                <div>
+                    @Html.TextBoxFor(model => model.OModel.sInjuryReason, new { @class = "form-control borderText arNumSign", data_toggle = "tooltip", title = "حروف عربية فقط", data_placement = "bottom", required = "required" })
+                </div>
+                <div>
+                    @Html.ValidationMessageFor(model => model.OModel.sInjuryReason, "", new { @class = "d-flex justify-content-center" })
+                </div>
+            </div>
+
+            @*  تاريخ الاصابة من *@
+            <div class="col-lg-3 col-md-3 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">
+                    تاريخ الاصابة من
+                </span>
+                <div>
+                    @Html.TextBoxFor(model => model.OModel.sDateStartInjury, "{0:yyyy-MM-dd}", new { @class = "form-control borderText date", onchange = "fillWorkerData()", id = "dateStartInjury", autocomplete = "off", required = "required" })
+                </div>
+                <div>
+                    @Html.ValidationMessageFor(model => model.OModel.sDateStartInjury, "", new { @class = "d-flex justify-content-center" })
+                </div>
+            </div>
+
+            @*  تاريخ الاصابة الى*@
+            <div class="col-lg-3 col-md-3 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">
+                    تاريخ الاصابة الى
+                </span>
+                <div>
+                    @Html.TextBoxFor(model => model.OModel.sDateEndInjury, "{0:yyyy-MM-dd}", new { @class = "form-control borderText date", autocomplete = "off", id = "dateEndInjury" })
+                </div>
+            </div>
+
+            @*  رقم العملية *@
+            <div class="col-lg-4 col-md-4 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">
+                    رقم العملية
+                </span>
+                <div>
+                    @Html.TextBoxFor(model => model.OModel.sProcessNum, new { @class = "form-control borderText number", id = "processNum", onchange = "fillWorkerData();", data_toggle = "tooltip", title = "ارقام فقط", data_placement = "bottom", required = "required" })
+                </div>
+                <div>
+                    @Html.ValidationMessageFor(model => model.OModel.sProcessNum, "", new { @class = "d-flex justify-content-center" })
+                </div>
+            </div>
+
+            @* نوع العملية *@
+            <div class="col-lg-8 col-md-8 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">
+                    نوع العملية
+                </span>
+                <div>
+                    @Html.TextBoxFor(model => model.OModel.sProcessType, new { @class = "form-control borderText", required = "required", disabled = "disabled", id = "process" })
+                </div>
+            </div>
+
+            @*   موقع العملية *@
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">
+                    موقع العملية
+                </span>
+                <div>
+                    @Html.TextBoxFor(model => model.OModel.sProcessSite, new { @class = "form-control borderText", required = "required", disabled = "disabled", id = "processSite" })
+                </div>
+            </div>
+
+            @*   المقاول الرئيسي *@
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">
+                    المقاول الرئيسي
+                </span>
+                <div>
+                    @Html.TextBoxFor(model => model.OModel.sProcessMainContractor, new { @class = "form-control borderText", required = "required", disabled = "disabled", id = "mainCont" })
+                </div>
+            </div>
+
+            @*  الملاحظات *@
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">
+                    الملاحظات
+                </span>
+                <div>
+                    @Html.TextAreaFor(model => model.OModel.sInjuryNote, new { @class = "form-control borderText arNumSign" })
+                </div>
+            </div>
+
+            @* اضافة / تعديل الاصابة *@
+            <div class="col-sm-12 my-1 text-left mt-2 align-self-end">
+                <button type="submit" id="btnAddOrEditInjury" onclick="loaderOpen();" class=""><i class=""></i></button>
+            </div>
+
+        </div>
+    </div>
+}
+
+<script>
+    function fillWorkerData() {
+
+        $('#mainCont,#process,#processSite').val('');
+
+        var processNum = $('#processNum').val();
+        var dateStartInjury = $('#dateStartInjury').val();
+
+        if ( processNum.length != 13)
+            sAlert('برجاء ادخال رقم العمليه صحيح (13 رقم)', 2);
+        else if(processNum != '' && dateStartInjury != '')
+        {
+            if ( processNum.length > 13 || processNum.length < 13)
+                sAlert('برجاء ادخال رقم العمليه صحيح (13 رقم)', 2);
+            else if (processNum.length == 13) {
+
+                $.getJSON("../Process/getMainProcessByPNumAndwCodeAndDateInjury", { processNum: processNum, dateStartInjury: dateStartInjury ,wc:@Session["workerCode"].ToString()},
+              function (data)
+              {
+
+                  if (data.sProcessNumber == "Done") {
+                      $('#mainCont').val(data.sContractorName);
+                      $('#process').val(data.sProcessTypeName);
+                      $('#processSite').val(data.sFullSiteAddress);
+                      $('#OModel_inProcessCode').val(data.iProcessCode);
+                  }
+                  else {
+                      sAlert(data.sProcessNumber,2);
+                      $('#processNum').val('');
+                  }
+              });
+            }
+        }
+        else if (dateStartInjury == '')
+            sAlert('برجاء ادخال تاريخ الاصابه.', 2);
+        else if(processNum == '')
+            sAlert('برجاء ادخال رقم العمليه.', 2);
+    }
+
+
+    function validationSubmit(event) {
+        loaderClose();
+        var dateStartInjury = $('#dateStartInjury').val(), dateEndInjury =  $('#dateEndInjury').val();
+
+        // مختار تاريخ نهايه الاصابه
+        if(dateEndInjury != '')
+        {
+            dateStartInjury = new Date(dateStartInjury).setHours(0,0,0);
+            dateEndInjury= new Date(dateEndInjury).setHours(0,0,0);
+
+            if (dateStartInjury > dateEndInjury) {
+                sAlert('عفوا , لابد من جعل "تاريخ الاصابة من" اقل من "تاريخ الاصابة الى".  ', 2);
+                $('#dateEndInjury').css("border-color","#dc3545");
+                event.preventDefault();
+            }
+            else
+                $('#dateEndInjury').css("border-color","");
+        }
+        else
+            $('#dateEndInjury').css("border-color","");
+    }
+</script>

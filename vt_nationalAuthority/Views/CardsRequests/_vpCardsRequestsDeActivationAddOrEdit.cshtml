@@ -1,0 +1,78 @@
+﻿@model DataAccessLayer.Requests.workerRequest
+@*<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>*@
+@{
+    Layout = "~/Views/Shared/_partialLayout.cshtml";
+    var sdate = " "; 
+    if (Session["StartDate"] != null)
+    {
+        sdate = Session["StartDate"].ToString();
+    }
+}
+
+@using (Html.BeginForm("_vpCardsRequestsDeActivationAddOrEdit", "CardsRequests", FormMethod.Post))
+{
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.OcardsWorkModel.iCardWorkerStopActiveCode)
+    <div class="row text-right grid_box_shadow">
+        @*  السبب *@
+        <div class="col-lg-8 col-md-8 col-sm-12 col-12 my-1">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                السبب
+            </span>
+            <div>
+                @Html.TextBoxFor(model => model.OcardsWorkModel.sReasons, new { @class = "form-control borderText arNumSign", required = "required" })
+                @*@Html.ValidationMessageFor(model => model.OcardsWorkModel.sReasons, "", new { @class = "text-danger" })*@
+            </div>
+            <div>
+                @Html.ValidationMessageFor(model => model.OcardsWorkModel.sReasons, "", new { @class = "d-flex justify-content-center" })
+            </div>
+        </div>
+        @*  التاريخ *@
+        <div class="col-lg-4 col-md-4 col-sm-12 col-12 my-1">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                التاريخ
+            </span>
+            <div> 
+                @Html.TextBoxFor(model => model.OcardsWorkModel.sDateStartStopActive, new { @class = "form-control borderText date", required = "required", autocomplete = "off" , onchange="checkValideDate()",id="txtDate"})
+                @*@Html.ValidationMessageFor(model => model.OcardsWorkModel.sDateStartStopActive, "", new { @class = "text-danger" })*@
+            </div>
+            <div>
+                @Html.ValidationMessageFor(model => model.OcardsWorkModel.sDateStartStopActive, "", new { @class = "d-flex justify-content-center" })
+            </div>
+        </div>
+        @*  الملاحظات *@
+        <div class="col-lg-12 col-md-12 col-sm-12 col-12 my-1">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                الملاحظات
+            </span>
+            <div>
+                @Html.TextAreaFor(model => model.OcardsWorkModel.sNotes, new { @class = "form-control arNumSign", @id = "txt_notes" })
+            </div>
+        </div>
+        @* اضافة / تعديل تفعيل / ايقاف كارت *@
+        <div class="col-sm-12 my-1 text-left mt-2 align-self-end">
+            <button type="submit" id="btnAddOrEditCardsRequestsDeActivation" onclick="loaderOpen();" class="btn  font-weight-bold"><i class=""></i></button>
+        </div>
+    </div>
+}
+
+
+<script>
+    function checkValideDate() {
+        if ($('#txtDate').val() != '')
+        {           
+            if(@sdate != '' )
+            {
+                var startDate =  new Date(@Html.Raw(Json.Encode(sdate)));
+                var currentDate = new Date(  $('#txtDate').val() );
+                if (currentDate <  startDate)
+                {
+                    event.preventDefault();
+                    $('#txtDate').val('');
+                    sAlert(' عفوا , لا يمكن إدخال هذا التاريخ , برجاء إدخال تاريخ اكبر او يساوى   '+@Html.Raw(Json.Encode(sdate)), 2);
+                }
+            }
+        }
+    }
+</script>

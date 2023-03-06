@@ -1,0 +1,181 @@
+﻿@model DataAccessLayer.Requests.processRequest
+@{
+    var screen = "";
+    string[] path = HttpContext.Current.Request.Url.AbsolutePath.Split('/');
+    screen = path[2];
+    Layout = "~/Views/Shared/_partialLayout.cshtml";
+}
+@*<script src="~/Scripts/bootstrap-4.3.1-dist/bootstrap-select.min.js"></script>*@
+@*<script>
+        $(function () {
+            $('.selectpicker').selectpicker();
+        });
+    </script>*@
+@using (Html.BeginForm("_vpContractorData", "Contractor", FormMethod.Post))
+{
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.oProcessSubContractorMode.iProcessSubContractorCode)
+    @Html.Hidden("screen", screen)
+    <div class="row  text-right grid_box_shadow">
+        <div class="row col-12">
+            <div class="my-1 col-lg-4 col-sm-12 ">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">الرقم التأمينى للمقاول  </span>
+                <div>
+
+                    @Html.TextBox("contractorInsNum", (TempData["iContractorNationalNumber"] ==null?"" : TempData["iContractorNationalNumber"].ToString()), new { @id = "contractorInsNum", @class = "form-control borderText number", data_toggle = "tooltip", title = "ارقام فقط", data_placement = "bottom", onchange = "GetContractorInsur(this)" })
+                
+                </div>
+            </div>
+            <div class="col-lg-8 my-1 col-sm-12 ">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">اســـــــم المـــــــقاول  </span>
+                <div class="row">
+                    <div class="col-10">
+                        @Html.TextBox("contractName", (TempData["sContractorName"] == null ? "" : TempData["sContractorName"].ToString()), new { @id = "contractName", @class = "form-control borderText arNumSign", data_toggle = "tooltip", title = "ارقام فقط", data_placement = "bottom" })
+                    </div>
+                    <div class="col-2">
+                        <button type="button" class="btn btn-outline-primary font-weight-bold" onclick="GetPageData(1)"><i class="fas fa-search"></i> بحث</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-lg-12 col-md-12 col-sm-12" style="display:none" id="divContractor">
+            <div style="height: 30px;" id="masterPaged">
+                <div id="paged" class="justify-content-lg-center pagination mt-3">
+                    <div class="pagination-container">
+                    </div>
+                </div>
+            </div>
+            <div class="text-center animate-bottom grid_box_shadow mt-2 mb-5 scroll-max" id="myDivContractor" style="margin-top: 15px !important;">
+                <table id="tbContractors" class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="color_main102">اسم المقاول</th>
+                            <th scope="col" class="color_main102">الرقم التأمينى المقاول</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyContractor"></tbody>
+                </table>
+            </div>
+        </div>
+
+
+
+
+        @if (screen == "_vpContractors")
+        {
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">المهمه المسنده اليه</span>
+                <div>
+                    @Html.ListBox("OperContractor", ViewBag.OperContractor as SelectList, new { @class = "form-control borderDDL selectpicker", title = "-- اختر --", @id = "OperContractor", @data_live_search = "true" })
+
+                    @*   @Html.DropDownList("OperContractor", ViewBag.OperContractor as SelectList, new { @class = "form-control  borderDDL", @id = "OperContractor", @data_live_search = "true" })*@
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">المهمه المسنده اليه</span>
+                <div>
+                    @Html.ListBox("OperContractor", ViewBag.OperContractor as SelectList, new { @class = "form-control borderDDL selectpicker", title = "اختر المهمه المسنده اليه", @id = "OperContractor", @data_live_search = "true", required = "required" })
+
+                    @*   @Html.DropDownList("OperContractor", ViewBag.OperContractor as SelectList, new { @class = "form-control  borderDDL", @id = "OperContractor", @data_live_search = "true" })*@
+                </div>
+                <div>
+                    @Html.ValidationMessage("OperContractor", "", new { @class = "d-flex justify-content-center" })
+                </div>
+            </div>
+        }
+
+        <div class="text-left w-100 mt-3">
+            @if (screen == "vContractorIndex" || screen == "_vpContractorData")
+            {
+                <button type="submit" name="submit" id="btnAddEditContractors" onclick="loaderOpen();" class="btn btnsStyle btn-outline-info font-weight-bold"><i></i></button>
+            }
+            @if (screen == "_vpContractors")
+            {
+                <button type="submit" name="submit" value="Search" id="btnSearchContractor" onclick="loaderOpen();" class="btn btnsStyle btn-outline-primary ml-3 font-weight-bold"><i class="fas fa-search"></i> بحث</button>
+            }
+        </div>
+
+    </div>
+
+}
+<link href="~/Content/pagination.css" rel="stylesheet" />
+<script type="text/javascript">
+    function GetContractorInsur(btn) {
+        var val = $(btn).val();
+        $('#contractName').val('');
+        if (val != '') {
+            $.getJSON("../Contractor/GetContractorInsur", { ID: val },
+           function (data) {
+               if (data.length == 0) {
+                   sAlert('عفوا ,هذا الرقم غير صحيح .. الرجاء التأكد من الرقم ثم إعاده كتابته بشكل صحيح.');
+                   $('#contractName').val('');
+               }
+               else {
+                   $('#contractName').val(data[0].Text);
+               }
+           });
+        }
+    }
+    function GetPageData(pageNum)
+    {
+        var val = $('#contractName').val();
+        if (val != '')
+        {
+            $("#paged").empty();
+            $.ajax({
+                url: "../Contractor/GetContractorData",
+                data: { 'name': val, 'pageIndex': pageNum },
+                type: "post",
+                cache: false,
+                success: function(response)
+                {
+                    contractors(response);
+                },
+                error: function (response)
+                {
+                    sAlert('عفوا ,هذا الاسم غير صحيح من فضلك تأكد من أسم المقاول.');
+                    $('#contractName').val('');
+                }
+            });
+        }
+        else
+        {
+            sAlert('عفوا ,من فضلك أدخل اسم المقاول.');
+            $('#contractName').val('');
+        }
+    }
+    function GetDetails(cont)
+    {
+        document.getElementById("divContractor").style.display = "none";
+        $('#contractName').val($(cont).find('#ConName').text());
+        $('#contractorInsNum').val($(cont).find('#ConNum').text());
+    }
+    function validateMyForm(event) {
+        if ($('#contractorInsNum').val() == '') {
+            sAlert("عفوا , يجب أدخال الرقم التأمينى للمقاول", 2);
+            event.preventDefault();
+            return false;
+        }
+        else if ($('#contractName').val() == '') {
+            sAlert("عفوا , يجب أدخال اسم المقاول", 2);
+            event.preventDefault();
+            return false;
+        }
+        else if ($('#OperContractor').val() == '') {
+            sAlert("عفوا , يجب أدخال المهام المسنده للمقاول", 2);
+            event.preventDefault();
+            return false;
+        }
+    }
+
+</script>
+<script>
+    $(function () {
+        $('.selectpicker').selectpicker();
+    });
+</script>

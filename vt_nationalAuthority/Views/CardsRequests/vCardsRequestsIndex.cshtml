@@ -1,0 +1,8 @@
+﻿@{
+
+    //Layout = "~/Views/Shared/ProcessLayout.cshtml";
+    Layout = "~/Views/Shared/InsuranceEmployeeLayout.cshtml";
+    <title>طلب الكروت</title>
+}
+
+@{Html.RenderAction("_vpCardsRequests", "CardsRequests", new { areas = Request.QueryString["areas"] == null ? null : Request.QueryString["areas"], Offices = Request.QueryString["Offices"] == null ? null : Request.QueryString["Offices"], inPage= Request.QueryString["inPage"], cd=Request.QueryString["cd"] });}

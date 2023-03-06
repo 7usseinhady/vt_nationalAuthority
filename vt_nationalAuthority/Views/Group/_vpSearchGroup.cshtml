@@ -1,0 +1,28 @@
+﻿@using (Html.BeginForm("vGroupIndex", "Group", FormMethod.Post))
+{
+    <div class="mt-3 dr-rtl mx-3 mb-3">
+        <div class="row text-right grid_box_shadow">
+            @* اسم المجموعه *@
+            <div class="col-lg-8 col-md-8 col-sm-12 col-12 my-1 text-right ">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">
+                   اسم المجموعه
+                </span>
+                <div>
+                    @Html.ListBox("ddlGroups", ViewBag.Groups as SelectList, new { @class = "form-control borderText selectpicker",title="-- الكل --", @data_live_search = "true" })
+                </div>
+            </div>
+
+            @* بحث عن مرفق *@
+            <div class="col-lg-4 col-md-4 align-self-end col-sm-12 my-1 mt-4 mb-3">
+                <button type="submit" id="btnGroupSearch" onclick="loaderOpen();"> </button>
+            </div>
+
+        </div>
+    </div>
+}
+
+<script>
+    $(function () {
+        $('.selectpicker').selectpicker();
+    });
+</script>

@@ -1,0 +1,81 @@
+﻿@model Tuple<DataAccessLayer.Models.processNotesModel, List<DataAccessLayer.Models.processNotesModel>>
+@*<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>*@
+
+@{
+    var list = new List<int> { 0, 1, 2, 3 };
+    var screen = "";
+    string[] path = HttpContext.Current.Request.Url.AbsolutePath.Split('/');
+    screen = path[2];
+    Layout = "~/Views/Shared/_partialLayout.cshtml";
+}
+@using (Html.BeginForm("_vpSaveNotes", "Process", FormMethod.Post, new { @id = "formIndex" }))
+{
+    @Html.Hidden("areas", Request.QueryString["areas"])
+    @Html.Hidden("Offices", Request.QueryString["Offices"])
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="mt-4 dr-rtl mx-3 text-right">
+        @if (TempData["screen"] != null)
+        {
+            if (TempData["screen"].ToString() != "")
+            {
+                <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
+                    <label class="color_main102 font-weight-bold ml-2 mx-3">الملاحظات</label>
+                    <div>
+                        @Html.TextAreaFor(model  => model.Item1.sNotes, new { @class = "form-control boorderText arNumSign", data_toggle = "tooltip", title = "الملاحظات", data_placement = "bottom", required = "required" })
+                        @*@Html.ValidationMessageFor(model => model.Item1.sNotes, "", new { @class = "text-danger" })*@
+                    </div>
+                    <div>
+                        @Html.ValidationMessageFor(model => model.Item1.sNotes, "", new { @class = "d-flex justify-content-center" })
+                    </div>
+                </div>
+            }
+
+        }
+        <div class="text-center">
+            @if (Model == null)
+            {
+                <div class="col-12">
+                    <h1 id="tblSearchNotFound">
+                        <strong>@generalVariables.NotesNotFound</strong>
+                    </h1>
+                </div>
+            }
+            else if (Model.Item2.Count == 0)
+            {
+                <div class="col-12">
+                    <h1 id="tblSearchNotFound">
+                        <strong>@generalVariables.NotesNotFound</strong>
+                    </h1>
+                </div>
+            }
+            else if (Model.Item2.Count > 0 && Model != null)
+            {
+                foreach (var item in Model.Item2)
+                {
+                    <div class="my-1 dr-rtl grid_box_shadow  ">
+                        <div class="col-12 mx-1" style="font-weight: bold;">
+                            @item.sNotes
+                        </div>
+                        <div class="col-12 mx-1" style="display:inline-block !important">
+                            <span style="font-size: 13px!important"> اسم الموظف : <span style="color:#104d5d!important">@item.sUserInser </span></span>
+                            <span style="font-size: 13px!important">مكتب : <span style="color:#104d5d!important">@item.sOfficeUser</span> </span>
+                            <span style="font-size: 13px!important"> منطقه : <span style="color:#104d5d!important">@item.sAreaUser </span></span>
+                            <span style="font-size:11px;color: #9E9E9E;display: inline-block;"> تاريخ الارسال: @item.sDate @item.sTime </span>
+                        </div>
+                    </div>
+                }
+            }
+
+            <div class="text-left mt-2 w-100">
+                @if (TempData["screen"] != null)
+                {
+                    if (TempData["screen"].ToString() != "")
+                    {
+                        <button type="submit" id="btnSaveNotes" onclick="loaderOpen();" class="btn btnsStyle btn-outline-info font-weight-bold"><i class=""></i></button>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+}

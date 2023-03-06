@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="f7885597f36a49e49678487f8255157d" Name="Diagram1" ZoomLevel="47">
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.area" Width="1.5" PointX="6.75" PointY="66.125" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.attachment" Width="1.5" PointX="3" PointY="5" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.attachmentType" Width="1.5" PointX="13.5" PointY="60.625" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.balanceTybe" Width="1.5" PointX="5.75" PointY="0.75" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.card" Width="1.5" PointX="30" PointY="68.375" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.cardsRequest" Width="1.5" PointX="22.5" PointY="56.5" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.cardsStatu" Width="1.5" PointX="20.25" PointY="47" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.career" Width="1.5" PointX="25.5" PointY="75.25" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.center" Width="1.5" PointX="11.25" PointY="43.875" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.companyCardRequest" Width="1.5" PointX="27.75" PointY="57.75" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.contractor" Width="1.5" PointX="3" PointY="57.75" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.documentType" Width="1.5" PointX="6" PointY="48.875" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.extractType" Width="1.5" PointX="14.25" PointY="46" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.goverment" Width="1.5" PointX="11.25" PointY="71.75" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.legalEntity" Width="1.5" PointX="0.75" PointY="58" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.medicalStatu" Width="1.5" PointX="33" PointY="70.75" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.officeInsurance" Width="1.5" PointX="9" PointY="65.5" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.oppositionType" Width="1.5" PointX="11.25" PointY="47" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.processType" Width="1.5" PointX="6" PointY="53" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.referenceSideContractor" Width="1.5" PointX="6" PointY="56" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.screenType" Width="1.5" PointX="0.75" PointY="6" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.skillDegree" Width="1.5" PointX="33" PointY="62.125" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.statusFirstAttendMonthWSDL" Width="1.5" PointX="16.5" PointY="75.875" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.stopStatu" Width="1.5" PointX="17.25" PointY="50" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.village" Width="1.5" PointX="11.25" PointY="68.875" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.missionSubContractor" Width="1.5" PointX="24.75" PointY="53.875" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.sysdiagram" Width="1.5" PointX="5.75" PointY="3.75" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.manPower" Width="1.5" PointX="21.75" PointY="67.25" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.medicalInsurance" Width="1.5" PointX="21.75" PointY="72.375" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.extractProcess" Width="1.5" PointX="16.5" PointY="62.5" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.migrehab" Width="1.5" PointX="5.75" PointY="6.75" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.processNote" Width="1.5" PointX="16.5" PointY="52.5" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.processOpposition" Width="1.5" PointX="13.5" PointY="48.625" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.processSite" Width="1.5" PointX="16.5" PointY="56.5" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.processStop" Width="1.5" PointX="19.5" PointY="49.875" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.processSubContractor" Width="1.5" PointX="19.5" PointY="55.125" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.processUserLettersSite" Width="1.5" PointX="13.5" PointY="54.5" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.processUser" Width="1.5" PointX="24.75" PointY="57" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.specialProcess" Width="1.5" PointX="7.75" PointY="0.75" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.apiUserRequest" Width="1.5" PointX="3" PointY="1" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.apiUser" Width="1.5" PointX="0.75" PointY="1" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.function" Width="1.5" PointX="21.5" PointY="42.375" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.group" Width="1.5" PointX="13.5" PointY="64.25" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.groupAreaOfficeSetting" Width="1.5" PointX="19.25" PointY="80.75" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.groupPermission" Width="1.5" PointX="23.75" PointY="62.25" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.groupUser" Width="1.5" PointX="21.75" PointY="52.25" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.module" Width="1.5" PointX="19.25" PointY="44.375" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.permissionAreaOffice" Width="1.5" PointX="21.5" PointY="63.5" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.treeColor" Width="1.5" PointX="19.25" PointY="42" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.user" Width="1.5" PointX="11.25" PointY="50.25" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.userType" Width="1.5" PointX="7.75" PointY="3.75" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.cardsRequestWorker" Width="1.5" PointX="27.75" PointY="69.125" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.cardWorkerStopActive" Width="1.5" PointX="32.25" PointY="65.25" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.workerAttendanceInsurance" Width="1.5" PointX="21" PointY="77.375" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.workerContact" Width="1.5" PointX="24.75" PointY="71" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.workerDetail" Width="1.5" PointX="35.25" PointY="65.375" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.workerInjury" Width="1.5" PointX="18.75" PointY="71.125" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.workerOfficeInsurance" Width="1.5" PointX="24.75" PointY="66.625" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.workerPeriod" Width="1.5" PointX="15.75" PointY="70.375" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.smsReturn" Width="1.5" PointX="9" PointY="49.875" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_groupAreaOfficeSetting_area" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_officeInsurance_area" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_attachments_screenType" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_attachmentType_user" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_attachmentType_user1" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_card_cardsRequestWorkers" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_cardWorkerStopActive_card" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_workerDetails_card" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_cardsRequest_cardsStatus" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_cardsRequest_user" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_cardsRequest_user1" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_cardsRequest_user2" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_cardsRequest_user3" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_cardsRequestWorkers_cardsRequest" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_companyCardRequest_cardsRequest" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_companyCardRequest_cardsStatus" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_cardsRequestWorkers_career" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_workerDetails_career" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_processSite_center" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_processUserLettersSite_center" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_contractor_legalEntity" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_extractProcess_extractType" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_processSite_goverment" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_processUserLettersSite_goverment" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_referenceSide_legalEntity" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_medicalInsurance_medicalStatus" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_workerDetails_medicalInsurance" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_extractProcess_officeInsurance" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_groupAreaOfficeSetting_officeInsurance" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_permissionAreaOffice_officeInsurance" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_user_officeInsurance" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_workerOfficeInsurance_officeInsurance" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_processOpposition_oppositionType" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_extractProcess_processType" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_missionSubContractor_processType" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_processSubContractor_referenceSideContractor" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_referenceSideContractor_user" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_referenceSideContractor_user1" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_user_referenceSide" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_user_referenceSideContractor" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_manPower_skillDegree" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_workerDetails_skillDegree" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_processStop_stopStatus" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_processSite_village" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_processUserLettersSite_village" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_missionSubContractor_processSubContractor" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_manPower_user" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_manPower_user1" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_medicalInsurance_user" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_medicalInsurance_user1" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_extractProcess_user" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_extractProcess_user1" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_processNotes_user" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_processOpposition_user" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_processOpposition_user1" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_processOpposition_user2" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_processSite_user" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_processSite_user1" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_processStop_user" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_processSubContractor_user" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_processSubContractor_user1" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_processSubContractor_user2" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_processSubContractor_user3" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_processUsers_processSubContractor" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_processUserLettersSite_user" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_processUserLettersSite_user1" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_processUsers_smsReturn" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_processUsers_user" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_processUsers_user1" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_apiUserRequests_apiUsers" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_function_function" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_function_module" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_function_treeColor" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_groupPermission_function" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_group_user" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_group_user1" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_groupPermission_group" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_groupUser_group" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_permissionAreaOffice_groupAreaOfficeSetting" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_groupPermission_user" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_groupPermission_user1" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_groupUser_user" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_groupUser_user1" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_groupUser_user2" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_permissionAreaOffice_user" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_cardWorkerStopActive_user" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_cardWorkerStopActive_user1" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_user_smsReturn" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_workerContact_user" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_workerDetails_user" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_workerDetails_user1" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_workerInjuries_user" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_workerInjuries_user1" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_workerOfficeInsurance_user" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_workerOfficeInsurance_user1" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_workerPeriod_user" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_workerPeriod_user1" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.orascomWorker" Width="1.5" PointX="8.75" PointY="6.75" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.orascomWorkers2" Width="1.5" PointX="0.75" PointY="9.75" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.worker" Width="1.5" PointX="13.5" PointY="69.125" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_manPower_worker" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_medicalInsurance_worker" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_worker_user" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_worker_user1" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_cardsRequestWorkers_worker" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_cardWorkerStopActive_worker" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_workerContact_worker" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_workerDetails_worker" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_workerInjuries_worker" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_workerOfficeInsurance_worker" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_workerPeriod_worker" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.orascomWorkers3" Width="1.5" PointX="10.375" PointY="0.75" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.statusCoverWSDL" Width="1.5" PointX="11.375" PointY="5.75" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.workerAttendance" Width="1.5" PointX="35.25" PointY="58" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_workerAttendance_card" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_workerAttendance_skillDegree" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_workerAttendance_statusFirstAttendMonthWSDL" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_workerAttendance_user" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_workerAttendance_user1" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_workerAttendance_worker" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_workerAttendanceInsurance_workerAttendance" />
+        <EntityTypeShape EntityType="vt_authorityInsuranceModel.process" Width="1.5" PointX="24.5" PointY="40.625" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_process_documentType" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_process_officeInsurance" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_process_processType" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_process_referenceSide" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_extractProcess_process" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_process_user" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_process_user1" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_process_user2" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_processNotes_process" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_processOpposition_process" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_processSite_process" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_processStop_process" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_processSubContractor_process" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_processUserLettersSite_process" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_workerAttendance_process" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_workerInjuries_process" />
+        <AssociationConnector Association="vt_authorityInsuranceModel.FK_workerPeriod_process" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

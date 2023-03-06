@@ -1,0 +1,280 @@
+﻿@using PagedList.Mvc;
+@model PagedList.PagedList<DataAccessLayer.Models.extractsModel>
+@{
+    string[] path = HttpContext.Current.Request.Url.AbsolutePath.Split('/');
+    var iCount = 1;
+
+    List<DataAccessLayer.CheckModuleUserPermisiom_Result> x = TempData["checkLevel4"] as List<DataAccessLayer.CheckModuleUserPermisiom_Result>;
+    if (x != null)
+    {
+        Session["checkLevel4"] = x.ToList();
+    }
+    else if (Session["checkLevel4"] != null)
+    {
+        x = Session["checkLevel4"] as List<DataAccessLayer.CheckModuleUserPermisiom_Result>;
+    }
+}
+
+<div class="dr-rtl grid_box_shadow mb-3 row justify-content-center">
+    <div class="text-center scroll-max">
+        @if (Model == null)
+        {
+            <h1 id="tblSearchNotFound">
+                <strong>@generalVariables.ExtractsNotFound</strong>
+            </h1>
+        }
+        else if (Model.Count == 0)
+        {
+            <h1 id="tblSearchNotFound">
+                <strong>@generalVariables.ExtractsNotFound</strong>
+            </h1>
+        }
+        else if (Model.Count > 0)
+        {
+            <table class="table">
+                @* thead *@
+                <thead>
+                    <tr>
+                        <th scope="col" class="color_main102">#</th>
+                        <th scope="col" class="color_main102">رقم المستخلص</th>
+                        <th scope="col" class="color_main102">اسم المستخلص</th>
+                        <th scope="col" class="color_main102"> قيمة المستخلص</th>
+                        <th scope="col" class="color_main102"> نوع المستخلص</th>
+                        <th scope="col" class="color_main102">تاريخ المستخلص</th>
+                        <th scope="col" class="color_main102">المسلم (المندوب)</th>
+                        <th scope="col" class="color_main102">المقاول</th>
+                        <th scope="col" class="color_main102">المهمة المنتهيه</th>
+                        @if (Session["officeCode"] == null)
+                        {
+                            <th scope="col" class="color_main102"><i class="fas fa-cog"></i></th>
+                        }
+                        else if (x != null)
+                        {
+                            if (x.Count > 0)
+                            {
+                                <th scope="col" class="color_main102"><i class="fas fa-cog"></i></th>
+                            }
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @{iCount = 1; }
+                    @foreach (var item in Model)
+                    {
+                        <tr class='@(item.inExtractTypeCode == 2 ?  "text-danger" : (item.inUserAcceptExtract == null) ? "text-center" : "color_main102")'>
+                            <th scope="row" class="color_main102">@((Convert.ToInt32(Model.PageNumber) * Convert.ToInt32(generalVariables.PageSize)) - (Convert.ToInt32(generalVariables.PageSize) - iCount) )</th>
+                            <th>@item.sExtractProcessID</th>
+                            <td>@item.sExtractName</td>
+                            @* قيمه المستخلص *@
+                            @if (item.dnBudget == null)
+                            {
+                                <td>لم يتم التحديد بعد.</td>
+                            }
+                            else
+                            {
+                                <td>@item.dnBudget</td>
+                            }
+                            <td>@item.sExtractTypeName</td>
+                            <td>@item.sDateExtract</td>
+                            <td>@item.sRecieverContractor </td>
+                            <td>@item.sProcessSubContractorName </td>
+                            <td>@item.sMissionExpiredTypeName</td>
+                            @* مقاول *@
+                            @if (Session["officeCode"] == null)
+                            {
+                                <td>
+                                    <div>
+                                        <div class="dropdown-j">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                            <div class="dropdown-content-j" style="min-width: auto;">
+                                                <div class="row text-left">
+                                                    <div class="col-12">
+                                                        @if (Session["uc"].ToString() == item.inUserInsertCode.ToString() && item.inUserAcceptExtract == null && Session["procStopActive"] == null)
+                                                        {
+                                                            @* تعديل *@
+                                                            <button type="button" name="submitType" value="Save" class="btn btn-sm btn-outline-warning font-weight-bold" data-toggle="modal" data-target="#sharedModal"
+                                                                    onclick="openModel('#titleSharedModal', `تعديل مستخلص : @item.sExtractName`, '#btnAddOrEditExtract', ' تعديل مستخلص', 'far fa-edit', 'btn btn-sm btn-outline-warning font-weight-bold', '../Extracts/_vpExtractsAddOrEdit', 'ID=@item.iExtractProcessCode', '#sharedModalBody')">
+                                                                <i class="far fa-edit"></i> تعديل
+                                                            </button>
+
+                                                            @* حذف  *@
+                                                            <a href="#" data-toggle="tooltip" data-placement="bottom" class="btn btn-sm btn-outline-danger font-weight-bold"
+                                                               onclick="return sAlertDel(this,'هل تريد حذف هذا المستخلص ؟', 'حذف هذا المستخلص', 'إلغاء الحذف','Extracts','vExtractsShow','IDDelete=@item.iExtractProcessCode');"><i class="fas fa-trash-alt"></i> حذف</a>
+                                                        }
+
+                                                        @* المرفقات *@
+                                                        @*@if (Session["procStopActive"] == null) // عمليه ساريه
+                                                        {*@
+                                                            <button type="button" name="submitType" data-toggle="modal" data-target="#shareAttachmentSearchAddModal"
+                                                                    class="btn btn-sm btn-outline-primary font-weight-bold"
+                                                                    onclick="openAttachmentModel('../Attachments/_vpAttachmentAdd','../Attachments/_vpAttachmentSearch','Processes,@item.iProcessCode,pExtracts,@item.iExtractProcessCode','actionName=@path[2]&controllerName=@path[1]&screenType=6','')">
+                                                                <i class="fa fa-paperclip"></i>  المرفقات
+                                                            </button>
+                                                        @*}
+                                                        else // العمليه موقوفه - منتهيه
+                                                        {
+                                                            <button type="button" name="submitType"
+                                                                    class="btn btn-sm btn-outline-primary font-weight-bold"
+                                                                    onclick="openAttachmentSearchOrAdd('#titleSharedAttachmentSearchModal', 'مرفقات : @item.sExtractName ', '', '../Attachments/_vpAttachmentSearch', 'Processes/@item.iProcessCode/pExtracts/@item.iExtractProcessCode','actionName=@path[2]&controllerName=@path[1]','#divDisplaySharedSearchAttchment')"
+                                                                    data-toggle="modal" data-target="#shareAttachmentSearchModal">
+                                                                <i class="fa fa-paperclip"></i>  المرفقات
+                                                            </button>
+                                                        }*@
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            }
+                            else if (x != null)
+                            {
+                                if (x.Count > 0)
+                                {
+                                    <td>
+                                        <div>
+                                            <div class="dropdown-j">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                                <div class="dropdown-content-j" style="min-width: auto;">
+                                                    <div class="row text-left">
+                                                        <div class="col-12">
+                                                            @foreach (var code in x)
+                                                            {
+                                                                @* موظف التأمينات *@
+                                                            if (Session["officeCode"] != null)
+                                                            {
+                                                                if (code.functionCode == 50 && item.inUserAcceptExtract == null && Session["procStopActive"] == null)
+                                                                {
+                                                                    @*تأكيد*@
+                                                                    <button type="button" class="btn btn-sm btn-outline-secondary font-weight-bold" id="extractDelete" onclick="return sAlertAccept(this, 'هل تريد التأكيد ؟', 'التأكيد', 'إلغاء التأكيد', 'Extracts', '_vpAcceptExtract', 'extractCode=@item.iExtractProcessCode');"><i class="fas fa-check"></i> تأكيد</button>
+                                                                }
+
+                                                                if (code.functionCode == 76)
+                                                                {
+                                                                    if (item.bIsPaid != true && Session["procStopActive"] == null)
+                                                                    {
+                                                                        @*تسديد*@
+                                                                        <button type="button" class="btn btn-sm btn-outline-secondary font-weight-bold" onclick="return sAlertAccept(this, 'هل تريد تأكيد تسديد الاشتراكات ؟', 'تأكيد تسديد الاشتراكات ', 'إلغاء التأكيد', 'Extracts', '_vpPaidExtract', 'extractCode=@item.iExtractProcessCode');"><i class="fas fa-money-bill"></i> تسديد الاشتراك</button>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <button type="button" class="btn btn-sm btn-outline-success font-weight-bold" disabled><i class="fas fa-money-bill-wave"></i> مسدد </button>
+                                                                    }
+                                                                }
+                                                            }
+                                                            if (Session["uc"].ToString() == item.inUserInsertCode.ToString() && item.inUserAcceptExtract == null && Session["procStopActive"] == null)
+                                                            {
+                                                                if (code.functionCode == 51)
+                                                                {
+                                                                    @* تعديل *@
+                                                                        <button type="button" name="submitType" value="Save" class="btn btn-sm btn-outline-warning font-weight-bold" data-toggle="modal" data-target="#sharedModal"
+                                                                                onclick="openModel('#titleSharedModal', `تعديل مستخلص : @item.sExtractName`, '#btnAddOrEditExtract', ' تعديل مستخلص', 'far fa-edit', 'btn btn-sm btn-outline-warning font-weight-bold', '../Extracts/_vpExtractsAddOrEdit', 'ID=@item.iExtractProcessCode', '#sharedModalBody')">
+                                                                            <i class="far fa-edit"></i> تعديل
+                                                                        </button>
+                                                                    }
+
+                                                                    if (code.functionCode == 52)
+                                                                    {
+                                                                        @* حذف  *@
+                                                                        <a href="#" data-toggle="tooltip" data-placement="bottom" class="btn btn-sm btn-outline-danger font-weight-bold"
+                                                                           onclick="return sAlertDel(this,'هل تريد حذف هذا المستخلص ؟', 'حذف هذا المستخلص', 'إلغاء الحذف','Extracts','vExtractsShow','IDDelete=@item.iExtractProcessCode');"><i class="fas fa-trash-alt"></i> حذف</a>
+                                                                    }
+                                                                }
+
+                                                                @* موظف التأمينات *@
+                                                                @* المرفقات *@
+                                                            if (code.functionCode == 53)
+                                                            {
+
+                                                                //if (Session["procStopActive"] == null) // عمليه ساريه
+                                                                //{
+                                                                    <button type="button" name="submitType" data-toggle="modal" data-target="#shareAttachmentSearchAddModal"
+                                                                            class="btn btn-sm btn-outline-primary font-weight-bold"
+                                                                            onclick="openAttachmentModel('../Attachments/_vpAttachmentAdd','../Attachments/_vpAttachmentSearch','Processes,@item.iProcessCode,pExtracts,@item.iExtractProcessCode','actionName=@path[2]&controllerName=@path[1]&screenType=6','')">
+                                                                        <i class="fa fa-paperclip"></i>  المرفقات
+                                                                    </button>
+                                                                @*}
+    else // العمليه موقوفه - منتهيه
+    {
+        <button type="button" name="submitType"
+                class="btn btn-sm btn-outline-primary font-weight-bold"
+                onclick="openAttachmentSearchOrAdd('#titleSharedAttachmentSearchModal', 'مرفقات : @item.sExtractName ', '', '../Attachments/_vpAttachmentSearch', 'Processes/@item.iProcessCode/pExtracts/@item.iExtractProcessCode','actionName=@path[2]&controllerName=@path[1]','#divDisplaySharedSearchAttchment')"
+                data-toggle="modal" data-target="#shareAttachmentSearchModal">
+            <i class="fa fa-paperclip"></i>  المرفقات
+        </button>
+        }*@
+                                                                }
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                }
+                            }
+                        </tr>
+
+                        iCount++;
+                    }
+                </tbody>
+            </table>
+            <div id="divPagination">
+                @* pagination *@
+                <h5 style="text-align:center;color:#306fc2"> صفحة <strong style="color:#CA2553"> @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)</strong> من <strong>@Model.PageCount </strong> </h5>
+                <div style="text-align:center">
+                    <div class="justify-content-lg-center pagination">
+                        @Html.PagedListPager(Model, inPage => Url.Action("../Extracts/vExtractsShow", new { inPage, pc = Request.QueryString["pc"] }))
+                    </div>
+                </div>
+            </div>
+            <br /><br /><br />
+                        }
+    </div>
+
+    @* اضافه / بحث *@
+    <div class="text-right fixed_btn bg-white w-100">
+
+        @* بحث *@
+        <button type="button" name="submitType" value="Save" class="btn btn-outline-primary font-weight-bold" data-toggle="modal" data-target="#sharedModal"
+                onclick="openModel('#titleSharedModal', 'بحث', '#btnExtractSearch', ' بحث', 'fas fa-search', 'btn btn-outline-primary font-weight-bold', '../Extracts/_vpExtractsSearch', '', '#sharedModalBody')">
+            <i class="fas fa-search"></i> بحث
+        </button>
+
+        @*الغاء البحث*@
+        <a class="btn btn-default font-weight-bold " href="@Url.Action("_vpSearchCancel", "Extracts")">الغاء البحث <span class="glyphicon"></span></a>
+
+        @* مقاول *@
+        @if (Session["officeCode"] == null && Session["procStopActive"] == null)
+        {
+            <button type="button" name="submitType" value="Save" class="btn btn-outline-info font-weight-bold" data-toggle="modal" data-target="#sharedModal"
+                    onclick="openModel('#titleSharedModal', 'اضافة مستخلص', '#btnAddOrEditExtract', ' اضافه مستخلص', 'fas fa-plu', 'btn btn-outline-info font-weight-bold', '../Extracts/_vpExtractsAddOrEdit', '', '#sharedModalBody')">
+                <i class="fas fa-plus"></i> اضافه مستخلص
+            </button>
+        }
+        else if (x != null && Session["procStopActive"] == null)
+        {
+            foreach (var code in x)
+            {
+                if (code.functionCode == 48)
+                {
+                    <button type="button" name="submitType" value="Save" class="btn btn-outline-info font-weight-bold" data-toggle="modal" data-target="#sharedModal"
+                            onclick="openModel('#titleSharedModal', 'اضافة مستخلص', '#btnAddOrEditExtract', ' اضافه مستخلص', 'fas fa-plu', 'btn btn-outline-info font-weight-bold', '../Extracts/_vpExtractsAddOrEdit', '', '#sharedModalBody')">
+                        <i class="fas fa-plus"></i> اضافه مستخلص
+                    </button>
+                }
+            }
+        }
+
+        @* Colors *@
+        <div class="border-top mt-1 text-center">
+            <span class="fa fa-circle mt-2 mx-2 text-danger" style="font-size: small;"> مستخلص نهائى </span>
+            <span class="fa fa-circle color_main102 mx-2" style="font-size: small;"> مستخلص دورى (تم التأكيد )  </span>
+            <span class="fa fa-circle" style="font-size: small;"> مستخلص دورى (لم يتم التأكيد)  </span>
+        </div>
+
+    </div>
+
+</div>
+
+@Html.Raw(TempData["msg"])

@@ -1,0 +1,88 @@
+﻿@model DataAccessLayer.Models.workerInjuriesModel
+@{
+    Layout = "~/Views/Shared/_partialLayout.cshtml";
+}
+
+@using (Html.BeginForm("_vpSearchInjuries", "Injuries", FormMethod.Post))
+{
+    <div class="mt-3 dr-rtl grid_box_shadow mx-3 mb-2 ">
+         
+        <div class="row text-right">
+
+            @*  سبب الاصابة *@
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">
+                    سبب الاصابة
+                </span>
+                <div>
+                    @Html.TextBoxFor(model => model.sInjuryReason, new { @class = "form-control borderText arabic", data_toggle = "tooltip", title = "حروف عربية فقط", data_placement = "bottom"})
+                </div>
+            </div>
+
+            @*  تاريخ الاصابة من *@
+            <div class="col-lg-3 col-md-3 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">
+                    تاريخ الاصابة من
+                </span>
+                <div> 
+                    @Html.TextBoxFor(model => model.sDateStartInjury, "{0:yyyy-MM-dd}", new { @class = "form-control borderText date", autocomplete = "off" })
+                </div>
+            </div>
+
+            @*  تاريخ الاصابة الى*@
+            <div class="col-lg-3 col-md-3 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">
+                    تاريخ الاصابة الى
+                </span>
+                <div>
+                    @Html.TextBoxFor(model => model.sDateEndInjury, "{0:yyyy-MM-dd}", new { @class = "form-control borderText date", autocomplete = "off" })
+                </div>
+            </div>
+
+            @*  رقم العملية *@
+            <div class="col-lg-4 col-md-4 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">
+                    رقم العملية
+                </span>
+                <div>
+                    @Html.TextBoxFor(model => model.sProcessNum, new { @class = "form-control borderText number", data_toggle = "tooltip", title = "ارقام فقط", data_placement = "bottom" })
+                </div>
+            </div>
+
+            @*   العملية *@
+            <div class="col-lg-8 col-md-8 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">
+                    نوع العملية
+                </span>
+                <div>
+                    @Html.ListBox("processType", ViewBag.processType as SelectList, new { @class = "form-control borderDDL selectpicker", title = "--  الكل --", @data_live_search = "true" })
+                </div>
+            </div>
+
+            @*   موقع العملية *@
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">
+                    موقع العملية
+                </span>
+                <div>
+                    @Html.TextBoxFor(model => model.sProcessSite, new { @class = "form-control borderText" })
+                </div>
+            </div>
+            @*   المقاول الرئيسي *@
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">
+                    المقاول الرئيسي
+                </span>
+                <div>
+                    @Html.TextBoxFor(model => model.sProcessMainContractor, new { @class = "form-control borderText arabic" })
+                </div>
+            </div>
+
+            @* بحث *@
+            <div class="col-sm-12 my-1 text-left mt-2 align-self-end">
+                <button type="submit" id="btnSearchInjury" onclick="loaderOpen();" class=""><i class=""></i> </button>
+            </div>
+
+        </div>
+    </div>
+}

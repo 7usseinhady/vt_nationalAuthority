@@ -1,0 +1,21 @@
+﻿<div class="mt-2 dr-rtl grid_box_shadow mx-3 mb-2 row">
+    @* رقم قومى *@
+    <div class="col-lg-6 col-md-6 col-sm-12 my-1 text-right">
+        <span class="color_main102 font-weight-bold ml-2">
+            رقم قـــــــــــــومى
+        </span>
+        <div>
+            @Html.TextBox("nationalID", "", new { @class = "form-control borderText number", data_toggle = "tooltip", title = "ارقام فقط", data_placement = "bottom" })
+        </div>
+    </div>
+    @* رقم تأمينى *@
+    <div class="col-lg-6 col-md-6 col-sm-12 my-1 text-right">
+        <span class="color_main102 font-weight-bold ml-2">
+            رقم تأمينـــــــى
+        </span>
+        <div>
+            @Html.TextBox("insuranceNumber", "", new { @class = "form-control borderText number", data_toggle = "tooltip", title = "ارقام فقط", data_placement = "bottom" })
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/light.js"></script>

@@ -1,0 +1,152 @@
+﻿@model DataAccessLayer.Requests.extractsRequest
+@{
+    var screen = "";
+    string[] path = HttpContext.Current.Request.Url.AbsolutePath.Split('/');
+    screen = path[2];
+    Layout = "~/Views/Shared/_partialLayout.cshtml";
+}
+@using (Html.BeginForm("_vpExtractsAddOrEdit", "Extracts", FormMethod.Post))
+{
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.OModel.iExtractProcessCode)
+    @Html.HiddenFor(model => model.OModel.iProcessCode)
+
+    <div class="mt-2 dr-rtl grid_box_shadow mx-3 mb-1 ">
+        <div class="row text-right">
+
+            @*  المقاول *@
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-4">
+                    المقــــــــــــــــــــــــــاول
+                </span>
+
+                @if (Session["officeCode"] != null) // موظف التأمينات
+                {
+                    <div>
+                        @Html.DropDownListFor(modal => modal.OModel.inProcessSubContractorCode, ViewBag.contractors as SelectList, "-- اختر --", new { @class = "form-control selectpicker", id = "DDLcontCode", required = "required", @data_live_search = "true", onchange = "getMissionExtracts()" })
+                    </div>
+                    <div>
+                        @Html.ValidationMessageFor(model => model.OModel.inProcessSubContractorCode, "", new { @class = "d-flex justify-content-center" })
+                    </div>
+                }
+                else // المقاول
+                {
+                    <div>
+                        @Html.TextBoxFor(modal => modal.OModel.sProcessSubContractorName, "", new { @class = "form-control borderText", disabled = "disabled" })
+                    </div>
+                }
+
+            </div>
+
+            @*  اسم المستخلص *@
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-4">
+                    اسم المســـــتخلص
+                </span>
+                <div>
+                    @Html.TextBoxFor(modal => modal.OModel.sExtractName, "", new { @class = "form-control borderText arNumSign", data_toggle = "tooltip", title = " حروف عربية فقط", data_placement = "bottom", required = "required" })
+                </div>
+                <div>
+                    @Html.ValidationMessageFor(model => model.OModel.sExtractName, "", new { @class = "d-flex justify-content-center" })
+                </div>
+            </div>
+
+            @*  المبلغ *@
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-4">
+                    المبلــــــــــــــــــــــــــــــغ
+                </span>
+                <div>
+                    @Html.TextBoxFor(modal => modal.OModel.dnBudget, "", new { @class = "form-control borderText decimal", data_toggle = "tooltip", title = "ارقام فقط", data_placement = "bottom", required = "required" })
+                </div>
+                <div>
+                    @Html.ValidationMessageFor(model => model.OModel.dnBudget, "", new { @class = "d-flex justify-content-center" })
+                </div>
+            </div>
+
+            @*  نوع المستحلص *@
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-4">
+                    نوع المستخلص
+                </span>
+                <div>
+                    @Html.DropDownListFor(modal => modal.OModel.inExtractTypeCode, ViewBag.extractTypes as SelectList, new { @class = "form-control borderDDL selectpicker", required = "required", @data_live_search = "true" })
+                </div>
+            </div>
+
+            @*  المسلم (المندوب) *@
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-4">
+                    المسلم (المندوب)
+                </span>
+                <div>
+                    @Html.TextBoxFor(modal => modal.OModel.sRecieverContractor, "", new { @class = "form-control borderText arNumSign", data_toggle = "tooltip", title = "حروف عربية فقط", data_placement = "bottom" })
+                </div>
+            </div>
+
+            @*  المهمة المنتهية *@
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-4">
+                    المهمة المنتهيــــــــة
+                </span>
+                <div>
+                    @Html.DropDownListFor(modal => modal.OModel.inMissionExpiredTypeCode, ViewBag.processTypes as SelectList, "-- اختر --", new { @class = "form-control selectpicker", id = "ddlMissionExtracts", required = "required", @data_live_search = "true" })
+                </div>
+                <div>
+                    @Html.ValidationMessageFor(model => model.OModel.inMissionExpiredTypeCode, "", new { @class = "d-flex justify-content-center" })
+                </div>
+            </div>
+
+            @* تاريخ المستخلص *@
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-4">
+                    تاريخ المســـــتخلص
+                </span>
+                <div>
+                    @Html.TextBoxFor(modal => modal.OModel.sDateExtract, "{0:yyyy-MM-dd}", new { @class = "form-control borderText date", autocomplete = "off", required = "required" })
+                </div>
+                <div>
+                    @Html.ValidationMessageFor(model => model.OModel.sDateExtract, "", new { @class = "d-flex justify-content-center" })
+                </div>
+            </div>
+
+            @* اضافة / تعديل مستخلص *@
+            <div class="col-lg-6 col-md-6 align-self-end col-sm-12 my-1 text-left">
+                <button type="submit" id="btnAddOrEditExtract" onclick="loaderOpen();" class=""><i class=""></i></button>
+            </div>
+
+        </div>
+    </div>
+}
+
+<script>
+
+    function getMissionExtracts() {
+
+        $.getJSON("../Extracts/MissionOfExtracts", { contCode: $('#DDLcontCode').val() },
+       function (data) {
+           var select = $("#ddlMissionExtracts");
+           select.empty();
+
+           if (data.length == 1)
+               select.append('<option value="' + data[0].processTypeCode + '" selected="selected">' + data[0].processTypeName + '</option>');
+           else {
+
+               select.append($('<option />', {
+                   value: '',
+                   text: "---  اختر  ---"
+               }));
+
+               $.each(data, function (index, data) {
+                   select.append($('<option />', {
+                       value: data.processTypeCode,
+                       text: data.processTypeName
+                   }));
+
+                   $(select).selectpicker('refresh');
+               });
+           }
+       });
+    }
+
+</script>

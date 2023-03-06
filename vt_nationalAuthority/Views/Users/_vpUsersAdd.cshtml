@@ -1,0 +1,388 @@
+﻿@model DataAccessLayer.Requests.userRequest
+@{
+    Layout = "~/Views/Shared/_partialLayout.cshtml";
+}
+
+@using (Html.BeginForm("_vpUsersAdd", "Users", FormMethod.Post, new { @id = "formIndex", onsubmit = "return validateMyForm(event);", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.OModel.iUserCode)
+    @Html.Hidden("addFromProcessScreenUsers", TempData["addFromProcessScreenUsers"])
+    <div class="row grid_box_shadow text-right">
+        @* اسم المستخدم بالكامل *@
+        <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">اسم المستخدم بالكامل</span>
+            <div>
+                @Html.TextBoxFor(model => model.OModel.sUserFullName, new { @class = "form-control boorderText arNumSign", data_toggle = "tooltip", title = "حروف عربيه فقط", data_placement = "bottom", required = "required" })
+            </div>
+            <div>
+                @Html.ValidationMessageFor(model => model.OModel.sUserFullName, "", new { @class = "d-flex justify-content-center" })
+            </div>
+        </div>
+        @* اسم المستخدم *@
+        <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">اسم المستخدم</span>
+            <div>
+                @Html.TextBoxFor(model => model.OModel.sUserName, new { @class = "form-control boorderText arNumSign", data_toggle = "tooltip", title = "حروف عربيه فقط", data_placement = "bottom", onchange = "checkUserName()", id = "sUserName", required = "required" })
+            </div>
+            <div>
+                @Html.ValidationMessageFor(model => model.OModel.sUserName, "", new { @class = "d-flex justify-content-center" })
+            </div>
+        </div>
+
+        @* المقاولين *@
+        @if (TempData["addFromProcessScreenUsers"] != null)
+        {
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">المقاول</span>
+                <div>
+                    @Html.DropDownList("contractorCode", ViewBag.users as SelectList, " -- اختر مقاول -- ", new { @class = "form-control selectpicker borderDDL", id = "ddlContractors", @data_live_search = "true", required = "required" })
+                    @Html.ValidationMessage("ddlContractors", "", new { @class = "text-danger" })
+                </div>
+                <div>
+                    @Html.ValidationMessage("ddlContractors", "", new { @class = "d-flex justify-content-center" })
+                </div>
+            </div>
+        }
+        else
+        {
+            @* نوع المستخدم *@
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">نوع المستخدم</span>
+                <div>
+                    @Html.DropDownList("UserType", ViewBag.UsersTypes as SelectList, new { @class = "form-control selectpicker borderDDL", @id = "UserType", @data_live_search = "true", onchange = "getUserType();", required = "required" })
+                    @Html.ValidationMessage("UserType", "يجب أدخال نوع المستخدم", new { @class = "text-danger", id = "ValidUserType" })
+                </div>
+                <div>
+                    @Html.ValidationMessage("UserType", "", new { @class = "d-flex justify-content-center" })
+                </div>
+            </div>
+            @*<div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+                    @if (Model.OModel != null)
+                    {
+                        <span class="color_main102 font-weight-bold ml-2 mx-3" id="spFilterUserType">@(Model.OModel.iReferenceSideCode != null ? "جهة اسناد" : Model.OModel.iContractorCode != null ? "المقاولين" : Model.OModel.iOfficeInsuranceCode != null ? "منطقه" : "" )</span>
+                    }
+                    else
+                    {
+                        <span class="color_main102 font-weight-bold ml-2 mx-3" id="spFilterUserType"></span>
+                    }
+                    <div>
+                        @Html.DropDownList("ddlUserType", ViewBag.FilterUserType as SelectList, new { @class = "form-control selectpicker borderDDL", @data_live_search = "true", @id = "ddlUserType", onchange = "FilterArea();", required = "required" })
+                    </div>
+                    <div>
+                        @Html.ValidationMessageFor(model => model.OModel.iFilterUserType, "", new { @class = "d-flex justify-content-center" })
+                    </div>
+                </div>*@
+            @* الكيان القانونى*@@* الرقم التامينى *@@*** الاسم لجهة *@
+            <div id="divRefSideCont" class="col-12" style="display:@(ViewBag.display == "none" ? "flex" : "none");">
+                @* الكيان القانونى *@
+                <div class="col-lg-3 col-md-3 col-sm-12 mt-3">
+                    <span class="color_main102 font-weight-bold ml-2 mx-3 ">الكيان القانونى</span>
+                    <div>
+                        @Html.DropDownList("legalEntityCont", ViewBag.legalEntity as SelectList, " -- اختر -- ", new { @class = "form-control borderDDL selectpicker", onchange = "getRefSideContByInsurNumLegalEntity('#legalEntityCont','#contNum','#txtCont','#insNumCode')", id = "legalEntityCont", @data_live_search = "true", required = "required" })
+                    </div>
+                </div>
+                @*   الرقم التامينى *@
+                <div class="col-lg-3 col-md-3 col-sm-12 mt-3">
+                    <span class="color_main102 font-weight-bold ml-2 mx-3 "> الرقم التأمينى </span>
+                    <div>
+                        @Html.TextBox("contNum", TempData["refSideContNum"], new { @class = "form-control boorderText number", id = "contNum", data_toggle = "tooltip", title = "ارقام فقط", data_placement = "bottom", onchange = "getRefSideContByInsurNumLegalEntity('#legalEntityCont','#contNum','#txtCont','#insNumCode')" })
+                    </div>
+                </div>
+                @* الاسم *@
+                <div class="col-lg-6 col-md-6 col-sm-12 mt-2">
+                    <span class="color_main102 font-weight-bold ml-2 mx-3">الاسم</span>
+                    <div class="d-inline-flex mt-1 w-100">
+                        @Html.Hidden("insNumCode", TempData["refSideContCode"])
+                        @Html.TextBox("txtCont", TempData["refSideContName"], new { @class = "form-control boorderText arNum", id = "txtCont", required = "required", disabled = "disabled" })
+                    </div>
+                </div>
+            </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 my-1" id="divArea" style="display:@(ViewBag.display == "" ? "none" : ViewBag.display )">
+                    @* منطقه *@
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-12 ">
+                        <span class="color_main102 font-weight-bold ml-2 mx-3" id="spFilterUserType"> منطقه</span>
+                        <div>
+                            @Html.DropDownList("ddlUserType", ViewBag.FilterUserType as SelectList, new { @class = "form-control selectpicker borderDDL", @data_live_search = "true", @id = "ddlUserType", onchange = "FilterArea();" })
+                        </div>
+                        <div>
+                            @Html.ValidationMessageFor(model => model.OModel.iFilterUserType, "", new { @class = "d-flex justify-content-center" })
+                        </div>
+                    </div>
+
+                    @* مكتب *@
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-12 ">
+                        <span class="color_main102 font-weight-bold ml-2 mx-3">مكتب</span>
+                        <div>
+                            @Html.DropDownListFor(model => model.OModel.iOfficeInsuranceCode, ViewBag.OFFICE as SelectList, new { @class = "form-control selectpicker borderDDL", id = "ddlArea", @data_live_search = "true" })
+                        </div>
+                    </div>
+                    @* أدمن *@
+                    <div class="col-lg-2 col-md-2 col-sm-12 col-12 my-1 mt-3 align-self-end">
+                        @Html.CheckBoxFor(model => model.OModel.bIsAdmin, new { @class = "option-input-child checkbox", id = "bIsAdmin" })
+                        <label class="color_main102 font-weight-bold ml-2" for="Active">أدمن</label>
+                    </div>
+                </div>
+        }
+        @* كلمة المرور *@
+        <div class="col-lg-3 col-md-12 col-sm-12 col-12 my-1" id="divPassword">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">كلمة المرور</span>
+            <div>
+                @Html.TextBoxFor(model => model.OModel.sPassword, new { @class = "form-control boorderText enNumSign", data_toggle = "tooltip", title = "ارقام وحروف", data_placement = "bottom", @id = "sPassword", required = "required" })
+            </div>
+            <div>
+                @Html.ValidationMessageFor(model => model.OModel.sPassword, "", new { @class = "d-flex justify-content-center" })
+            </div>
+        </div>
+        @* تأكيد كلمةالمرور *@
+        <div class="col-lg-3 col-md-12 col-sm-12 col-12 my-1" id="divConfirmPassword">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">تأكيد كلمةالمرور</span>
+            <div>
+                @Html.TextBoxFor(model => model.OModel.sConfirmPassword, new { @class = "form-control boorderText enNumSign", data_toggle = "tooltip", title = "ارقام وحروف", data_placement = "bottom", onchange = "ValidPassword();", id = "sConfirmPassword", required = "required" })
+            </div>
+            <div>
+                @Html.ValidationMessageFor(model => model.OModel.sConfirmPassword, "", new { @class = "d-flex justify-content-center" })
+            </div>
+        </div>
+        @* الرقم القومى *@
+        <div class="col-lg-3 col-md-4 col-sm-12 col-12 my-1">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">الرقم القومى</span>
+            <div>
+                @Html.TextBoxFor(model => model.OModel.sNationalID, new { @class = "form-control boorderText number", data_toggle = "tooltip", title = "ارقام فقط", data_placement = "bottom", onchange = "ValidPassword();", required = "required" })
+            </div>
+            <div>
+                @Html.ValidationMessageFor(model => model.OModel.sNationalID, "", new { @class = "d-flex justify-content-center" })
+            </div>
+        </div>
+        @* فعال *@
+        <div class="col-lg-3 col-md-12 col-sm-12 col-12 my-1 mt-3 align-self-end">
+            @Html.CheckBoxFor(model => model.OModel.bIsActive, new { @class = "option-input-child checkbox", id = "bIsActive" })
+            <label class="color_main102 font-weight-bold ml-2" for="Active">فعال</label>
+        </div>
+        @* عنوان المستخدم *@
+        <div class="col-lg-12 col-md-12 col-sm-12 col-12 my-1">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">عنوان المستخدم</span>
+            <div>
+                @Html.TextBoxFor(model => model.OModel.sAddress, new { @class = "form-control boorderText arNumSign", data_toggle = "tooltip", title = "ارقام وحروف", data_placement = "bottom", required = "required" })
+            </div>
+            <div>
+                @Html.ValidationMessageFor(model => model.OModel.sAddress, "", new { @class = "d-flex justify-content-center" })
+            </div>
+        </div>
+        @* الموقع الالكترونى للمسخدم *@@* الصوره*@
+        <div class="col-lg-12 col-md-12 col-sm-12 col-12 my-1" style="display: inline-flex;">
+            @* الموقع الالكترونى للمسخدم *@
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">الموقع الالكترونى للمستخدم</span>
+                <div>
+                    @Html.TextBoxFor(model => model.OModel.sE_mail, new { @class = "form-control boorderText", placeholder = "xxxxxx@email.com", required = "required" })
+                </div>
+                <div>
+                    @Html.ValidationMessageFor(model => model.OModel.sE_mail, "", new { @class = "d-flex justify-content-center" })
+                </div>
+            </div>
+            @* الصوره*@
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+                <div class="text-right">
+                    <label for="img1">ارفاق صورة</label>
+                    <br class="auto-style3" />
+                </div>
+                <div class="text-right">
+                    <input type="file" name="uploadFile" class="form-control" />
+                </div>
+            </div>
+        </div>
+        @* 1 رقم الهاتف *@
+        <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+            <span class="color_main102 font-weight-bold ml-2 mx-3"> رقم الهاتف 1</span>
+            <div>
+                @Html.TextBoxFor(model => model.OModel.sPhone1, new { @class = "form-control boorderText number", data_toggle = "tooltip", title = "ارقام فقط", data_placement = "bottom", required = "required" })
+                <div>
+                    @Html.ValidationMessageFor(model => model.OModel.sPhone1, "", new { @class = "d-flex justify-content-center" })
+                </div>
+            </div>
+        </div>
+        @* 2 رقم الهاتف *@
+        <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1 mb-2">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">رقم الهاتف 2 </span>
+            <div>
+                @Html.TextBoxFor(model => model.OModel.sPhone2, new { @class = "form-control boorderText number", data_toggle = "tooltip", title = "رقم فقط", data_placement = "bottom" })
+            </div>
+        </div>
+        @* setting btn *@
+        <div class="ml-3 mr-auto mt-2 mt-auto text-left">
+            <button type="submit" id="btnUsers" onclick="loaderOpen();" class="btn btn-outline-info font-weight-bold"><i class="fas"></i></button>
+        </div>
+    </div>
+}
+<script type="text/javascript">
+            $(document).ready(function () {
+
+                var ddlVal = $('#UserType').val();
+                if (ddlVal != 0 || ddlVal != '' || ddlVal != null) {
+                    $('#ValidUserType').hide();
+                }
+                else {
+                    $('#ValidUserType').show();
+                }
+            });
+            function validateMyForm(event) {
+                //var Active = $("#bIsActive").is(":checked");
+                var Active = $("#bIsActive").prop("checked");
+                $("#btnUsers").attr("disabled", false);
+                var ddlVal = $('#UserType').val();
+                console.log('ddlVal: ', ddlVal);
+                loaderClose();
+                if (ddlVal == 0) // هنا مدخلش نوع مستخدم
+                {
+                    sAlert("عفوا , يجب أدخال نوع المستخدم قبل التسجيل", 2);
+                    event.preventDefault();
+                    return false;
+                }
+                else if (ddlVal == 1) // هنا اختار موظف التأمينات
+                {
+                    var ddlArea = $('#ddlUserType').val(); // الليست بتاعت المناطق
+                    var ddlOffice = $('#ddlArea').val();
+                    if (ddlArea == null || ddlArea == '') // هنا مختارش منطقه
+                    {
+                        sAlert("عفوا , يجب أدخال المنطقه اولا", 2);
+                        event.preventDefault();
+                        return false;
+                    }
+                    else if (ddlOffice == null || ddlOffice == '') {
+                        sAlert("عفوا , يجب أدخال المكتب اولا", 2);
+                        event.preventDefault();
+                        return false;
+                    }
+                    //bIsAdmin
+                    var IsAdmin = $("#bIsAdmin").is(":checked");
+                    if (IsAdmin == true) {
+                        sAlert("هذا المستخدم سوف يتم تفعيله كمسئول على النظام", 2);
+                    }
+                }
+                else if (ddlVal == 2) // هنا اختار جهة اسناد
+                {
+                    var ddlRefrence = $('#contNum').val(); // الليست بتاعت جهة الاسناد
+                    if (ddlRefrence == null || ddlRefrence == '') // هنا مختارش جهة الاسناد
+                    {
+                        sAlert("عفوا , يجب أدخال جهة الاسناد اولا ", 2);
+                        event.preventDefault();
+                        return false;
+                    }
+                }
+                else if (ddlVal == 3) // هنا اختار المقاولين
+                {
+                    var ddlContractor = $('#contNum').val(); // الليست بتاعت المقاولين
+                    console.log('ddlContractor: ', ddlContractor);
+                    if (ddlContractor == null || ddlContractor == '') // هنا مختارش المقاول
+                    {
+                        console.log('ddlVal == 3');
+                        sAlert("عفوا ,يجب أدخال المقاول اولا ", 2);
+                        event.preventDefault();
+                        return false;
+                    }
+                }
+                if (Active == false) {
+                    sAlert("هذا المستخدم لم يتم تفعيله بعد", 2);
+                }
+            }
+            function getUserType() {
+                var val = $('#UserType').val();
+                var mySelect = $('#FilterUserType');
+                if (val == 1) {
+                    $('#ValidUserType').hide();
+                    document.getElementById("divArea").style.display = "flex";
+                    document.getElementById('divRefSideCont').style.display = "none"
+
+                    document.getElementById('spFilterUserType').innerHTML = 'منطقه';
+                }
+                    //else if (val == 2) {
+                    //    $('#ValidUserType').hide();
+                    //    document.getElementById("divArea").style.display = "none";
+                    //    document.getElementById('spFilterUserType').innerHTML = 'جهة الاسناد'
+                    //}
+                else if (val == 3 || val == 2) {
+                    $('#ValidUserType').hide();
+                    document.getElementById("divArea").style.display = "none";
+                    document.getElementById('divRefSideCont').style.display = "flex"
+                }
+                else {
+                    $('#ValidUserType').show();
+                    document.getElementById("divArea").style.display = "none";
+                }
+                $.getJSON("getUserType", { ID: val },
+                function (data) {
+                    //console.log('geha', data);
+                    var select = $("#ddlUserType");
+                    select.empty();
+                    select.append($('<option />', {
+                        value: '',
+                        text: "---  اختر  ---"
+                    }));
+                    $.each(data, function (index, data) {
+                        select.append($('<option />', {
+                            value: data.Value,
+                            text: data.Text
+
+                        }));
+                    });
+
+                    $(select).selectpicker('refresh');
+                })
+
+            }
+
+            function FilterArea() {
+                var vallUserType = $('#ddlUserType').val();
+                var valUserType = $('#UserType').val();
+                if (valUserType == 1) // مكتب التأمينات
+                {
+                    // ده array عادى بعرفه
+                    var IDPram = {};
+                    IDPram.ID = vallUserType;
+
+                    $.getJSON("GetArea", $.param(IDPram, true),
+                      function (data) {
+                          //console.log('GetArea', data);
+                          var select = $("#ddlArea");
+                          select.empty();
+                          select.append($('<option />', {
+                              value: '',
+                              text: "---  اختر  ---"
+                          }));
+                          $.each(data, function (index, data) {
+                              select.append($('<option />', {
+                                  value: data.Value,
+                                  text: data.Text
+
+                              }));
+                          });
+
+                          $(select).selectpicker('refresh');
+                      })
+                }
+            }
+            function ValidPassword() {
+                var password = $('#sPassword').val();
+                var confirmPassword = $('#sConfirmPassword').val();
+                if ((password == "" || password == undefined) && confirmPassword != "") {
+                    sAlert(" عفوا , ادخال كلمة المرور اولا ", 2);
+                    $('#sConfirmPassword').val('');
+                }
+                else if (password != confirmPassword) {
+                    sAlert(" عفوا , يجب تساوى كلمة المرور مع تأكيد كلمة المرور ", 2);
+                    $('#sConfirmPassword').val('');
+                }
+            }
+            function checkUserName() {
+                var Name = $('#sUserName').val();
+                $.getJSON("checkUserName", { userName: Name },
+                     function (data) {
+                         if (data == "error") {
+                             sAlert(" عفوا هذا المستخدم موجود مسبقا ", 2);
+                             $('#sUserName').val('');
+                         }
+                     })
+            }
+</script>

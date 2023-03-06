@@ -1,0 +1,201 @@
+﻿@using PagedList.Mvc;
+@model PagedList.PagedList<DataAccessLayer.Models.workerInjuriesModel>
+@{
+    string[] path = HttpContext.Current.Request.Url.AbsolutePath.Split('/');
+    var iCount = 1;
+
+    List<DataAccessLayer.CheckModuleUserPermisiom_Result> x = TempData["checkLevel2"] as List<DataAccessLayer.CheckModuleUserPermisiom_Result>;
+    if (x != null)
+    {
+        Session["checkLevel2"] = x.ToList();
+    }
+    else if (Session["checkLevel2"] != null)
+    {
+        x = Session["checkLevel2"] as List<DataAccessLayer.CheckModuleUserPermisiom_Result>;
+    }
+}
+
+@* اسم العامل *@@* الرقم القومى *@@* الرقم التامينى *@
+<div class="mt-3 dr-rtl mx-3 mb-2">
+    <div class="row text-right grid_box_shadow">
+        @* اسم العامل *@
+        <div class="col-lg-5 col-md-6 col-sm-12 col-12 my-1">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                اسم العامل :<span class="color_main103 font-weight-bold ml-2 mx-3"> @TempData["sWorkerName"].ToString() </span>
+            </span>
+        </div>
+        @* الرقم القومى *@
+        <div class="col-lg-3 col-md-3 col-sm-12 col-12 my-1">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                الرقم القومى : <span class="color_main103 font-weight-bold ml-2 mx-3"> @TempData["sWorkerNationalID"].ToString() </span>
+            </span>
+        </div>
+        @* الرقم التامينى *@
+        <div class="col-lg-3 col-md-3 col-sm-12 col-12 my-1">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                الرقم التامينى :<span class="color_main103 font-weight-bold ml-2 mx-3"> @TempData["sWorkerInsuranceNum"].ToString() </span>
+            </span>
+        </div>
+    </div>
+</div>
+
+<div class="dr-rtl grid_box_shadow mb-3 row justify-content-center" style="margin: 0 22px !important;">
+    <div class="text-center scroll-max">
+        @if (Model == null)
+        {
+            <h1 id="tblSearchNotFound">
+                <strong>@generalVariables.WorkerInjuries</strong>
+            </h1>
+        }
+        else if (Model.Count == 0)
+        {
+            <h1 id="tblSearchNotFound">
+                <strong>@generalVariables.WorkerInjuries</strong>
+            </h1>
+        }
+        else if (Model.Count > 0)
+        {
+            <table class="table mt-2">
+                @* thead *@
+                <thead>
+                    <tr>
+                        <th scope="col" class="color_main102">#</th>
+                        <th scope="col" class="color_main102">منطقه</th>
+                        <th scope="col" class="color_main102">مكتب</th>
+                        <th scope="col" class="color_main102">سبب الاصابه</th>
+                        <th scope="col" class="color_main102">تاريخ الاصابه</th>
+                        <th scope="col" class="color_main102"> نوع العمليه</th>
+                        <th scope="col" class="color_main102">موقع العملية</th>
+                        <th scope="col" class="color_main102">تاريخ النهاية</th>
+                        @if (x != null)
+                        {
+                            if (x.Count() > 0)
+                            {
+                                <th scope="col" class="color_main102"><i class="fas fa-cog"></i></th>
+                            }
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @{iCount = 1; }
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <th scope="row" class="color_main102">@((Convert.ToInt32(Model.PageNumber) * Convert.ToInt32(generalVariables.PageSize)) - (Convert.ToInt32(generalVariables.PageSize) - iCount) )</th>
+                            <td> @item.sAreaID </td>
+                            <td> @item.sOfficeID </td>
+                            <td> @item.sInjuryReason</td>
+                            <td>@item.sDateStartInjury</td>
+                            <td> @item.sProcessType </td>
+                            <td> @item.sProcessSite</td>
+
+                            @if (item.sDateEndInjury == null)
+                            {
+                                <td>لم يتم العوده حتى الان</td>
+                            }
+                            else
+                            {
+                                <td>@Html.DisplayFor(modelItem => item.sDateEndInjury, "{0:yyyy-MM-dd}")</td>
+                            }
+                            @if (x != null)
+                            {
+                                <td>
+                                    <div>
+                                        <div class="dropdown-j">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                            <div class="dropdown-content-j text-success" style="min-width: auto;">
+                                                <div class="row text-left">
+                                                    <div class="col-12">
+                                                        @foreach (var Code in x)
+                                                        {
+                                                            if (String.IsNullOrEmpty(item.sDateEndInjury))
+                                                            {
+                                                                if (Code.functionCode == 63)
+                                                                {
+                                                                    @* تعديل *@
+                                                                    <button type="button" name="submitType"
+                                                                            class="btn btn-sm btn-outline-warning font-weight-bold"
+                                                                            onclick="openModel('#titleSharedModal', 'تعديل ', '#btnAddOrEditInjury', ' تعديل', 'fas fa-edit', 'btn btn-outline-warning font-weight-bold', '_vpAddOrEditInjuries', 'ID=@item.iWorkerInjuriesCode,inPage=@Request.QueryString["inPage"]', '#sharedModalBody')"
+                                                                            data-toggle="modal" data-target="#sharedModal">
+                                                                        <i class="fas fa-edit"></i>  تعديل
+                                                                    </button>
+                                                                }
+                                                                if (Code.functionCode == 64)
+                                                                {
+                                                                    @* حذف *@
+                                                                    <a href="#" data-toggle="tooltip" data-placement="bottom" class="btn btn-sm btn-outline-danger font-weight-bold"
+                                                                       onclick="return sAlertDel(this,'هل تريد حذف هذه الاصابه ؟', 'حذف هذه الاصابه', 'إلغاء الحذف','Injuries','vInjuriesIndex','IDDelete=@item.iWorkerInjuriesCode');"><i class="fas fa-trash-alt"></i>حذف</a>
+                                                                }
+                                                            }
+
+                                                            if (Code.functionCode == 65)
+                                                            {
+                                                                @* المرفقات *@
+                                                                <button type="button" name="submitType" data-toggle="modal" data-target="#shareAttachmentSearchAddModal"
+                                                                        class="btn btn-sm btn-outline-primary font-weight-bold"
+                                                                        onclick="openAttachmentModel('../Attachments/_vpAttachmentAdd','../Attachments/_vpAttachmentSearch','Workers,@item.iWorkerCode,Injuries,@item.iWorkerInjuriesCode','actionName=@path[2]&controllerName=@path[1]&screenType=9','')">
+                                                                    <i class="fa fa-paperclip"></i>  المرفقات
+                                                                </button>
+                                                            }
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            }
+                        </tr>
+                        iCount++;
+                    }
+                </tbody>
+            </table>
+            <div id="divPagination">
+                @* pagination *@
+                <h5 style="text-align:center;color:#306fc2"> صفحة <strong style="color:#CA2553"> @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)</strong> من <strong>@Model.PageCount </strong> </h5>
+                <div style="text-align:center">
+                    <div class="justify-content-lg-center pagination">
+                        @Html.PagedListPager(Model, inPage => Url.Action("../Injuries/vInjuriesIndex", new { inPage }))
+                    </div>
+                </div>
+            </div>
+            <br /><br /><br />
+                        }
+    </div>
+</div>
+
+@* اضافة اصابة *@@*الغاء البحث*@@* بحث *@@* عودة *@
+<div class="text-right fixed_btn bg-white w-100 dr-rtl">
+
+    @* بحث *@
+    <button type="button" name="submitType"
+            class="btn btn-outline-primary font-weight-bold"
+            onclick="openModel('#titleSharedModal', 'بحث ', '#btnSearchInjury', ' بحث', 'fas fa-plus', 'btn btn-outline-info font-weight-bold', '_vpSearchInjuries', 'wc=@Request.QueryString["wc"]', '#sharedModalBody')"
+            data-toggle="modal" data-target="#sharedModal">
+        <i class="fas fa-search"></i>  بحث
+    </button>
+
+    @*الغاء البحث*@
+    <a class="btn btn-default font-weight-bold " href="@Url.Action("_vpSearchCancel", "Injuries", new {wc=Request.QueryString["wc"]})">الغاء البحث <span class="glyphicon"></span></a>
+
+    @if (x != null)
+    {
+        foreach (var code in x)
+        {
+            if (code.functionCode == 62)
+            {
+                @* اضافة اصابة *@
+                <button type="button" name="submitType"
+                        class="btn btn-outline-info font-weight-bold"
+                        onclick="openModel('#titleSharedModal', 'اضافة اصابة ', '#btnAddOrEditInjury', ' اضافة اصابة', 'fas fa-plus', 'btn btn-outline-info font-weight-bold', '_vpAddOrEditInjuries', 'ID=null,wc=@Request.QueryString["wc"]', '#sharedModalBody')"
+                        data-toggle="modal" data-target="#sharedModal">
+                    <i class="fas fa-plus"></i>  اضافة اصابة
+                </button>
+            }
+        }
+    }
+    @* عودة *@
+    <a class="btn btn-outline-secondary font-weight-bold" href="@Url.Action("vpWorkers", "InsuranceEmployee",new {cp=1 , cd=5})"> عودة <i class="fas fa-chevron-circle-left"></i> </a>
+</div>
+
+@Html.Raw(TempData["msg"])

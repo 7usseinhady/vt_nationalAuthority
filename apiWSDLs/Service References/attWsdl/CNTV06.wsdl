@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd1="http://www.CNTV06I.com/schemas/CNTV06IInterface" xmlns:xsd2="http://www.CNTV06O.com/schemas/CNTV06OInterface" xmlns:tns="file://target.files" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" name="CNTV06" targetNamespace="file://target.files" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:cbl="http://www.CNTV06I.com/schemas/CNTV06IInterface" attributeFormDefault="qualified" elementFormDefault="unqualified" targetNamespace="http://www.CNTV06I.com/schemas/CNTV06IInterface">
+      <xsd:complexType name="COMMAREA">
+        <xsd:sequence>
+          <xsd:element form="unqualified" name="cnttran_code_b">
+            <xsd:annotation>
+              <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                <initialValue kind="SPACE" />
+              </xsd:appinfo>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="1" />
+                <xsd:whiteSpace value="collapse" />
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element form="unqualified" name="cnttran_number_b">
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:long">
+                <xsd:minInclusive value="0" />
+                <xsd:maxInclusive value="99999999999999" />
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element form="unqualified" name="cnttran_date_b">
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:int">
+                <xsd:minInclusive value="0" />
+                <xsd:maxInclusive value="99999999" />
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element form="unqualified" name="cnt_number_kind_b">
+            <xsd:annotation>
+              <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                <initialValue kind="SPACE" />
+              </xsd:appinfo>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="1" />
+                <xsd:whiteSpace value="collapse" />
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element form="unqualified" name="cnt_number_b">
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:int">
+                <xsd:minInclusive value="0" />
+                <xsd:maxInclusive value="999999999" />
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element form="unqualified" name="cnt_operation_num_b">
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:long">
+                <xsd:minInclusive value="0" />
+                <xsd:maxInclusive value="999999999999999" />
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element form="unqualified" name="cnt_number_job_b">
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:int">
+                <xsd:minInclusive value="0" />
+                <xsd:maxInclusive value="999999" />
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element form="unqualified" name="cnt_result_code_b">
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:short">
+                <xsd:minInclusive value="0" />
+                <xsd:maxInclusive value="9" />
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element form="unqualified" name="cnt_result_place_b">
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:int">
+                <xsd:minInclusive value="0" />
+                <xsd:maxInclusive value="999999" />
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element form="unqualified" name="work_date_b">
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:int">
+                <xsd:minInclusive value="0" />
+                <xsd:maxInclusive value="99999999" />
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element form="unqualified" name="cnt_today_b">
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:int">
+                <xsd:minInclusive value="0" />
+                <xsd:maxInclusive value="99999999" />
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:element name="COMMAREA" type="cbl:COMMAREA">
+        <xsd:annotation>
+          <xsd:documentation source="com.ibm.etools.xmlent.batch">11.3.100.V20191001_0406</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:schema>
+    <xsd:schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:cbl="http://www.CNTV06O.com/schemas/CNTV06OInterface" attributeFormDefault="qualified" elementFormDefault="unqualified" targetNamespace="http://www.CNTV06O.com/schemas/CNTV06OInterface">
+      <xsd:complexType name="DFHCOMMAREA">
+        <xsd:sequence>
+          <xsd:element form="unqualified" name="processing_statusdesc">
+            <xsd:annotation>
+              <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                <initialValue kind="SPACE" />
+              </xsd:appinfo>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="50" />
+                <xsd:whiteSpace value="collapse" />
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element form="unqualified" name="processing_statuscode">
+            <xsd:annotation>
+              <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                <initialValue kind="SPACE" />
+              </xsd:appinfo>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="1" />
+                <xsd:whiteSpace value="collapse" />
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:element name="DFHCOMMAREA" type="cbl:DFHCOMMAREA">
+        <xsd:annotation>
+          <xsd:documentation source="com.ibm.etools.xmlent.batch">11.3.100.V20191001_0406</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="CNTV06OperationRequest">
+    <wsdl:part name="COMM-AREAPart" element="xsd1:COMMAREA" />
+  </wsdl:message>
+  <wsdl:message name="CNTV06OperationResponse">
+    <wsdl:part name="DFHCOMMAREAPart" element="xsd2:DFHCOMMAREA" />
+  </wsdl:message>
+  <wsdl:portType name="CNTV06PortType">
+    <wsdl:operation name="CNTV06Operation">
+      <wsdl:input name="CNTV06OperationRequest" message="tns:CNTV06OperationRequest" />
+      <wsdl:output name="CNTV06OperationResponse" message="tns:CNTV06OperationResponse" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="CNTV06Binding" type="tns:CNTV06PortType">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="CNTV06Operation">
+      <soap:operation soapAction="urn:CNTV06" style="document" />
+      <wsdl:input name="CNTV06OperationRequest">
+        <soap:body use="literal" parts="COMM-AREAPart" />
+      </wsdl:input>
+      <wsdl:output name="CNTV06OperationResponse">
+        <soap:body use="literal" parts="DFHCOMMAREAPart" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="CNTV06Service">
+    <wsdl:port name="CNTV06Port" binding="tns:CNTV06Binding">
+      <soap:address location="http://10.240.240.202:22222/rdz/CNTV06" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

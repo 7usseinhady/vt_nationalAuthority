@@ -1,0 +1,67 @@
+﻿@{
+    Layout = "~/Views/Shared/_partialLayout.cshtml";
+}
+@using (Html.BeginForm("_vpSearchProcess", "ExpireProcess", FormMethod.Post))
+{
+
+    @Html.Hidden("areas", TempData["areas"])
+    @Html.Hidden("Offices", TempData["Offices"])
+
+    <div class="mt-2 dr-rtl grid_box_shadow mx-3 text-right row">
+        @* رقم العملية *@
+        <div class="col-lg-4 col-md-4 col-sm-12">
+            <span class="color_main102 font-weight-bold ml-2 mx-3 " id="SpInsurNumber">رقم العملية</span>
+            <div>
+                @Html.TextBox("processNum", "", new { @class = "form-control boorderText number" })
+            </div>
+        </div>
+        @*تاريخ نهاية العملية من *@
+        <div class="col-lg-4 col-md-4 col-sm-12">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">تاريخ  بدء العمليه</span>
+            <div>
+                @Html.TextBox("DateStartProcess", "", new { @class = "form-control boorderText date", autoComplete = "off" })
+            </div>
+        </div>
+        @* تاريخ نهاية العملية الى العمليه *@
+        <div class="col-lg-4 col-md-4 col-sm-12">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">تاريخ انتهاء العمليه</span>
+            <div>
+                @Html.TextBox("DateEndProcess", "", new { @class = "form-control boorderText date", autoComplete = "off" })
+            </div>
+        </div>
+        @* اسم العمليه *@
+        <div class="col-lg-12 col-md-12 col-sm-12 mt-2">
+            <span class="color_main102 font-weight-bold ml-2  mx-3">اسم العمليه</span>
+            <div>
+                @Html.TextBox("ProcessName", "", new { @class = "form-control boorderText arNumSign" })
+            </div>
+        </div>
+        @* نوع العمليه *@
+        <div class="col-lg-6 col-md-6 col-sm-12 mt-2">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">نوع العمليه</span>
+            <div>
+                @Html.ListBox("processType", ViewBag.processType as SelectList, new { @class = "form-control borderDDL selectpicker", title = "-- الكل --", @data_live_search = "true" })
+            </div>
+        </div>
+        @* موقع العملية *@
+        <div class="col-lg-6 col-md-6 col-sm-12 mt-2">
+            <span class="color_main102 font-weight-bold ml-2 mx-3 " id="SpInsurNumber">موقع العملية</span>
+            <div>
+                @Html.TextBox("fullSiteAddress", "", new { @class = "form-control boorderText arNumSign" })
+            </div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 row mt-2 row grid_box_shadow">
+            @* مستخدمين العمليه *@
+            <div class="col-lg-7 col-md-7 col-sm-12 text-right">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">مستخدمين العمليه</span>
+                <div>
+                    @Html.DropDownList("procUser", ViewBag.procUser as SelectList, "-- الكل --", new { @class = "form-control borderDDL" })
+                </div>
+            </div>
+            @* بحث *@
+            <div class="col-lg-5 align-self-end col-sm-12 my-1 text-left mt-3">
+                <button type="submit" id="btnExpireProcess" onclick="loaderOpen();" class=""><i class=""></i> </button>
+            </div>
+        </div>
+    </div>
+}

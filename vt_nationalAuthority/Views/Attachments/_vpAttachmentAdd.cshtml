@@ -1,0 +1,122 @@
+﻿@{
+    var screenType = TempData["screenType"];
+    var screenCode = TempData["screenCode"];
+    var actionName = TempData["actionName"].ToString();
+}
+@using (Ajax.BeginForm("apply_upload", "Attachments", new AjaxOptions()
+{
+    HttpMethod = "post",
+    InsertionMode = InsertionMode.Replace,
+}, new { enctype = "multipart/form-data", @class = "dropzone w-100", @id = "dropzoneForm", style = "background: #fff;padding: 20px;" }))
+{
+
+    @Html.Hidden("nFolder", TempData["nFolder"])
+    @Html.Hidden("actionName", actionName)
+    @Html.Hidden("controllerName", TempData["controllerName"])
+    @Html.Hidden("screenType", screenType)
+    @Html.Hidden("screenCode", screenCode)
+
+    // Officer الموظف
+    if (Session["officeCode"] != null && (actionName == "vProcessShowIndex" || actionName == "vProcessRequest" || actionName == "vExpireProcess" || actionName == "vExtractsShow" || actionName == "vpAttachmentShow" || actionName == "vProcessStop"))
+    {
+        <div class="row">
+            @* اسم المرفقات *@
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12 my-1 text-right ">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">
+                    اسم المرفقات
+                </span>
+                <div>
+                    @Html.TextBox("packageAttachmentsName", null, new { @class = "form-control borderText arabic", id = "packageAttachmentsName", data_toggle = "tooltip", title = "حروف عربية فقط", required = "required", data_placement = "bottom" })
+                </div>
+            </div>
+            @* نوع المرفق *@
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1 text-right ">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">
+                    نوع المرفق
+                </span>
+                <div>
+                    @Html.DropDownList("attachmentType", ViewBag.attachmentType as SelectList, new { @class = "form-control borderText", id = "attachmentType", required = "required", @data_live_search = "true" })
+                </div>
+            </div>
+            @* مقاول - جهه اسناد *@
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1 text-right ">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">
+                    مقاول - جهه اسناد
+                </span>
+                <div>
+                    @Html.DropDownList("contRefSide", ViewBag.contRefSide as SelectList, new { @class = "form-control borderText", id = "contRefSide", required = "required", @data_live_search = "true" })
+                </div>
+            </div>
+        </div>
+    }
+    else  // Contractor المقاول
+    {
+        <div class="row">
+            @* اسم المرفقات *@
+            <div class="col-lg-8 col-md-8 col-sm-12 col-12 my-1 text-right ">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">
+                    اسم المرفقات
+                </span>
+                <div>
+                    @Html.TextBox("packageAttachmentsName", null, new { @class = "form-control borderText arabic", id = "packageAttachmentsName", data_toggle = "tooltip", title = "حروف عربية فقط", required = "required", data_placement = "bottom" })
+                </div>
+            </div>
+
+            @* نوع المرفق *@
+            <div class="col-lg-4 col-md-4 col-sm-12 col-12 my-1 text-right ">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">
+                    نوع المرفق
+                </span>
+                <div>
+                    @Html.DropDownList("attachmentType", ViewBag.attachmentType as SelectList, new { @class = "form-control borderText", id = "attachmentType", required = "required", @data_live_search = "true" })
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="w-100 col text-center my-4">
+        <button type="submit" class="btn btn_save" style="font-size: xx-large;border-radius: 12px;" id="save_file" data-original-title="Save"><i class="far fa-paper-plane mx-1"></i> رفع الملفات</button>
+    </div>
+
+    <div class="fallback w-100">
+        <input name="file" type="file" multiple />
+    </div>
+
+    <div class="dropzone-previews dropzone"></div>
+}
+
+<div class="loader101 text-center align-content-center" id="loaderFiles">
+    <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+</div>
+
+
+<script src="~/Scripts/jquery/jquery-3.3.1.js"></script>
+<script src="~/Scripts/dropzone/dropzone.js"></script>
+<link href="~/Content/dropzone/dropzone.css" rel="stylesheet" />
+<link href="~/Content/dropzone/basic.css" rel="stylesheet" />
+<script src="~/Scripts/Attachments/uplaodFiles.js"></script>
+
+<script type="text/javascript">
+
+    Dropzone.autoDiscover = false;
+
+    $(document).ready(function () {
+
+        $("#dropzoneForm").dropzone({
+            maxFiles: 2000,
+            url: '../Attachments/apply_upload',
+            data: {
+                nFolder: $('#nFolder').val(),
+                actionName: $('#actionName').val(),
+                controllerName: $('#controllerName').val(),
+                packageAttachmentsName: $('#packageAttachmentsName').text(),
+                attachmentType: $('#attachmentType').val(),
+                screenType: @screenType,
+                screenCode: @screenCode,
+            },
+            success: function (file, response) {
+            }
+        });
+    })
+
+</script>

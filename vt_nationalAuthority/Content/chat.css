@@ -1,0 +1,43 @@
+﻿.user_img_chat {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+.user_img_in_chat {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+.unread_color {
+    background-color: #1f6a9e33;
+}
+.unread_msg_num {
+    font-size: 9px;
+    position: absolute;
+    color: #fff;
+    background-color: #d1e2ea !important;
+    padding: 3px 7px;
+    border-radius: 50%;
+}
+.chat_body{
+    height:600px;
+    overflow:scroll;
+}
+.pl-2px{
+    padding-left:2px!important
+}
+.pr-2px {
+    padding-right: 2px !important
+}
+.w-fit {
+    width: fit-content;
+}
+.border_t101 {
+    border-top: 1px solid #207ea8;
+}
+.user_img_in_chatboby {
+    width: 30px;
+    height: 30px;
+    margin-top: 12px;
+    border-radius: 50%;
+}

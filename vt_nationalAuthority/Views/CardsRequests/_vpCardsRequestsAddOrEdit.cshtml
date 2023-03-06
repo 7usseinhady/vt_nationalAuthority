@@ -1,0 +1,379 @@
+﻿@model DataAccessLayer.Requests.CardsRequestsRequest
+@{
+    int iCount = 0;
+    Layout = "~/Views/Shared/_partialLayout.cshtml";
+}
+@*<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>*@
+@using (Html.BeginForm("_vpCardsRequestsAddOrEdit", "CardsRequests", FormMethod.Post))
+{
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.OModel.iCardsRequestCode)
+    @*  اسم الطلب *@
+    <div class="col-lg-12 col-md-12 col-sm-12 col-12 my-1" style="text-align: center;">
+        <span class="color_main102 font-weight-bold ml-2 mx-3">
+            اسم الطلب
+        </span>
+        <div>
+            @Html.TextBoxFor(m => m.OModel.sCardsRequestName, new { @class = "form-control borderText arNumSign", data_toggle = "tooltip", title = "حروف عربية فقط", data_placement = "bottom", required = "required" })
+            @Html.ValidationMessageFor(model => model.OModel.sCardsRequestName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="mt-3 dr-rtl mx-3">
+        <div class="row text-right grid_box_shadow">
+            @* رقم قومى *@
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">
+                    رقم قـــــــــــــومى
+                </span>
+                <div>
+                    @Html.TextBox("nationalID", "", new { @class = "form-control borderText number", id = "nationalID", data_toggle = "tooltip", title = "ارقام فقط", data_placement = "bottom", onchange = "getWorkerData('nationalID')" })
+                </div>
+            </div>
+            @* رقم تأمينى *@
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">
+                    رقم تأمينـــــــى
+                </span>
+                <div>
+                    @Html.TextBox("insuranceNumber", "", new { @class = "form-control borderText number", data_toggle = "tooltip", title = "ارقام فقط", data_placement = "bottom", onchange = "getWorkerData('insuranceNumber')" })
+                    @Html.TextBox("wCode", "", new { @id = "wCode", style = "display:none;" })
+                </div>
+            </div>
+            @* اسم العامل *@
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12 my-1" style="text-align: center;">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">
+                    اسم العامل
+                </span>
+                <div>
+                    @Html.TextBox("workerName", "", new { @class = "form-control borderText", disabled = "disabled", id = "workerName" })
+                </div>
+            </div>
+            @* المهــــــــــــنــــــه *@
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1 mt-3">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">
+                    المهــــــــــــنــــــه
+                </span>
+                <div>
+                    @Html.DropDownList("workerCareer", ViewBag.career as SelectList, new { @class = "form-control borderText selectpicker", id = "workerCareer", title = "-- اختر -- ", @data_live_search = "true" })
+                </div>
+            </div>
+            @*  مستوى المهـــاره *@
+            <div class="col-lg-6 col-md-6 col-sm-12 mt-3 ">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">
+                    مستوى  المهـــاره
+                </span>
+                <div>
+                    @Html.DropDownList("skillDegree", ViewBag.skillDegree as SelectList, new { @class = "form-control borderDDL selectpicker", title = "-- اختر -- ", id = "skillDegree", @data_live_search = "true" })
+                </div>
+            </div>
+            @* اضافة / تعديل طلب كارت *@
+            <div class="col-sm-12 my-1 text-left mt-2 align-self-end">
+                @*<button type="submit" id="btnAddOrEditCardsRequests" onclick="loaderOpen();" class=""><i class=""></i>  </button>*@
+                <button type="submit" id="btnAddOrEditCardsRequests" class=""><i class=""></i>  </button>
+                <button type="button" id="btnAddRequest" class="btn btn-outline-info font-weight-bold mb-1 addWorker"><i class="fas fa-plus"> </i> اضافة عامل </button>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-lg-12 mr-xl-n4" style="display:none;">
+        <div class="text-right d-lg-inline-flex">
+            @Html.TextBox("workerId", "", new { @class = "form-control", id = "workerId" })
+            @Html.TextBox("hNationalID", "", new { @class = "form-control", id = "hNationalID" })
+            @Html.TextBox("hInsuranceNumber", "", new { @class = "form-control", id = "hInsuranceNumber" })
+            @Html.TextBox("hWorkerCareer", "", new { @class = "form-control", id = "hWorkerCareer" })
+            @Html.TextBox("hSkillDegree", "", new { @class = "form-control number", id = "hSkillDegree" })
+        </div>
+    </div>
+}
+
+@*<script src="~/Scripts/light.js"></script>*@
+
+@* طلب الكروت *@
+@if (Model == null)
+{
+    <div class="mt-4 dr-rtl mb-2 row justify-content-center" id="divCardsReq">
+        <div class="text-center scroll-max grid_box_shadow">
+            <table class="table" id="tblWorkers">
+                @* thead *@
+                <thead>
+                    <tr>
+                        <th scope="col" class="color_main102">اسم العامل</th>
+                        <th scope="col" class="color_main102">الرقم القومى</th>
+                        <th scope="col" class="color_main102">الرقم التأمنيى</th>
+                        <th scope="col" class="color_main102">المهنه</th>
+                        <th scope="col" class="color_main102">مستوى المهاره</th>
+                        <th scope="col" class="color_main102"><i class="fas fa-cog"></i></th>
+                    </tr>
+                </thead>
+                <tbody id="tblBody"></tbody>
+            </table>
+        </div>
+    </div>
+}
+else if (Model.LModels == null)
+{
+    <div class="mt-4 dr-rtl mb-2 row justify-content-center" id="divCardsReq">
+        <div class="text-center scroll-max grid_box_shadow">
+            <table class="table" id="tblWorkers">
+                @* thead *@
+                <thead>
+                    <tr>
+                        <th scope="col" class="color_main102">اسم العامل</th>
+                        <th scope="col" class="color_main102">الرقم القومى</th>
+                        <th scope="col" class="color_main102">الرقم التأمنيى</th>
+                        <th scope="col" class="color_main102">المهنه</th>
+                        <th scope="col" class="color_main102">مستوى المهاره</th>
+                        <th scope="col" class="color_main102"><i class="fas fa-cog"></i></th>
+                    </tr>
+                </thead>
+                <tbody id="tblBody"></tbody>
+            </table>
+        </div>
+    </div>
+}
+else
+{
+    <div class="mt-4 dr-rtl mb-2 row justify-content-center" id="divCardsReq">
+        <div class="text-center scroll-max grid_box_shadow">
+            <table class="table" id="tblWorkers">
+                @* thead *@
+                <thead>
+                    <tr>
+                        <th scope="col" class="color_main102">#</th>
+                        <th scope="col" class="color_main102">اسم العامل</th>
+                        <th scope="col" class="color_main102">الرقم القومى</th>
+                        <th scope="col" class="color_main102">الرقم التأمنيى</th>
+                        <th scope="col" class="color_main102">المهنه</th>
+                        <th scope="col" class="color_main102">مستوى المهاره</th>
+                        <th scope="col" class="color_main102"><i class="fas fa-cog"></i></th>
+                    </tr>
+                </thead>
+                <tbody id="tblBody">
+                    @{iCount = 1; }
+                    @foreach (var item in Model.LModels)
+                    {
+                        <tr>
+                            <th scope="row" class="color_main102">@(iCount)</th>
+                            <td class="color_main103">@item.sWorkerName</td>
+                            <td class="color_main103">@item.sWorkerNationalId</td>
+                            <td class="color_main103">@item.sWorkerInsuranceNumber</td>
+                            <td class="color_main103">@item.sCareerName</td>
+                            <td class="color_main103">@item.sSkillDegree</td>
+                            <td class="color_main103">
+                                @*<div>                                 
+                                    <div class="dropdown-j">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                        <div class="dropdown-content-j" style="min-width: 116px;">
+                                            <div class="row text-left">
+                                                <div class="col-12">
+                                                    <a href="#" data-toggle="tooltip" data-placement="bottom" class="btn btn-sm btn-outline-danger font-weight-bold"
+                                                       onclick="return sAlertDel(this,'هل تريد حذف هذا العامل ؟', 'حذف  العامل', 'إلغاء الحذف','CardsRequests','vcardRequestDeleteWorker','IDDelete=@(item.iCardsRequestWorkersCode) ');"><i class="fas fa-trash-alt"></i> حذف</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                 </div>*@
+                                <div class="col-12">
+                                    <a href="#" data-toggle="tooltip" data-placement="bottom" class="btn btn-sm btn-outline-danger font-weight-bold"
+                                       onclick="return sAlertDel(this,'هل تريد حذف هذا العامل ؟', 'حذف  العامل', 'إلغاء الحذف','CardsRequests','vcardRequestDeleteWorker','IDDelete=@(item.iCardsRequestWorkersCode) ');"><i class="fas fa-trash-alt"></i> حذف</a>
+                                </div>
+</td>
+                        </tr>
+                        iCount++;
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+                        }
+
+<script>
+
+    $(".addWorker").click(function ()
+    {
+        var workerName = $('#workerName').val();
+        var nationalID = $('#nationalID').val();
+        var insuranceNumber = $('#insuranceNumber').val();
+        var wCode = $('#wCode').val();
+
+        if (nationalID != '' || insuranceNumber != '') {
+
+            var workerCareer = $("#workerCareer").val();
+            var workerCareerText = $("#workerCareer option:selected").text();
+            var skillDegree = $("#skillDegree").val();
+            var skillDegreeText = $("#skillDegree option:selected").text();
+
+            if (workerCareer != "" && skillDegree != "") {
+
+                if (nationalID == '')
+                    nationalID = '---------';
+                if (insuranceNumber == '')
+                    insuranceNumber = '---------';
+
+                var appendTR = "";
+                if ($('#OModel_iCardsRequestCode').val() == "")
+                    appendTR =
+                       '<tr><td class="color_main103">' + workerName + '</td><td class="color_main103 natID">' + nationalID + '</td><td class="color_main103 insurNum">' + insuranceNumber + '</td>' +
+                       '<td class="color_main103 wCareer" data-val="' + workerCareer + '" >' + workerCareerText + '</td><td class="color_main103 sDegree" data-val="' + skillDegree + '">' + skillDegreeText + '</td><td style="display:none;" data-val="' + wCode + '"></td><td class="color_main103"><div class="color_main103">' +
+                       '<div class="dropdown-j color_main102"><i class="fas fa-ellipsis-v"></i><div class="dropdown-content-j" style="min-width: auto">' +
+                       '<div class="row text-left"><div class="col-12">' +
+                       '<button type="button" class="btn btn-sm btn-outline-danger font-weight-bold" id="cardRequestDelete" onclick="return deleteClick(this, \'هل تريد حذف هذا العامل ؟\', \'حذف العامل\', \'إلغاء الحذف\');"><i class="far fa-trash-alt"></i> حذف</button>' +
+                       '</div></div></div></div></div></td></tr>'
+                else
+                    appendTR =
+                   '<tr><th scope="row" class="color_main102">--</th><td class="color_main103">' + workerName + '</td><td class="color_main103 natID">' + nationalID + '</td><td class="color_main103 insurNum">' + insuranceNumber + '</td>' +
+                   '<td class="color_main103 wCareer" data-val="' + workerCareer + '" >' + workerCareerText + '</td><td class="color_main103 sDegree" data-val="' + skillDegree + '">' + skillDegreeText + '</td><td style="display:none;" data-val="' + wCode + '"></td><td class="color_main103"><div class="color_main103">' +
+                   '<div class="dropdown-j color_main102"><i class="fas fa-ellipsis-v"></i><div class="dropdown-content-j" style="min-width: auto">' +
+                   '<div class="row text-left"><div class="col-12">' +
+                   '<button type="button" class="btn btn-sm btn-outline-danger font-weight-bold" id="cardRequestDelete" onclick="return deleteClick(this, \'هل تريد حذف هذا العامل ؟\', \'حذف العامل\', \'إلغاء الحذف\');"><i class="far fa-trash-alt"></i> حذف</button>' +
+                   '</div></div></div></div></div></td></tr>'
+
+                $("#tblWorkers").append(appendTR);
+
+                // اول واحده هتتحط
+                if ($('#hNationalID').val() == '') {
+
+                    // الرقم القومى
+                    if (nationalID == '')
+                        $('#hNationalID').val('null');
+                    else
+                        $('#hNationalID').val(nationalID);
+
+                    // الرقم التأمينى
+                    if (nationalID == '')
+                        $('#hInsuranceNumber').val('null');
+                    else
+                        $('#hInsuranceNumber').val(insuranceNumber);
+
+                    $('#workerId').val(wCode);// كود العامل
+                    $('#hWorkerCareer').val(workerCareer); // المهنه
+                    $('#hSkillDegree').val(skillDegree); // مستوى المهاره
+
+                }
+                else { // كان حاطط عمال قبل كده
+
+                    // الرقم القومى
+                    if (nationalID == '')
+                        $('#hNationalID').val($('#hNationalID').val() + ',' + 'null');
+                    else
+                        $('#hNationalID').val($('#hNationalID').val() + ',' + nationalID);
+
+                    // الرقم التأمينى
+                    if (nationalID == '')
+                        $('#hInsuranceNumber').val($('#hInsuranceNumber').val() + ',' + 'null');
+                    else
+                        $('#hInsuranceNumber').val($('#hInsuranceNumber').val() + ',' + insuranceNumber);
+
+                    $('#workerId').val($('#workerId').val() + ',' + wCode);// كود العامل
+                    $('#hWorkerCareer').val($('#hWorkerCareer').val() + ',' + workerCareer); // المهنه
+                    $('#hSkillDegree').val($('#hSkillDegree').val() + ',' + skillDegree); // مستوى المهاره
+
+                }
+                $('#nationalID,#insuranceNumber,#workerName').val('');
+                $('.filter-option-inner-inner').text('');
+            }
+            else if (workerCareer == "" && skillDegree == "")
+                sAlert('الرجاء اختيار المهنه و مستوى المهاره.', 2);
+            else if (workerCareer = "")
+                sAlert('الرجاء اختيار المهنه.', 2);
+            else if (skillDegree == "")
+                sAlert('الرجاء اختيار مستوى المهاره.', 2);
+        }
+        else {
+            sAlert('الرجاء كتابه الرقم القومى او الرقم التأمينى على الاقل.', 2);
+        }
+    });
+
+    function getWorkerData(btnType)
+    {
+        loaderOpen();
+        var natID = '', insurNum = '';
+        $('#workerName').val('');
+        $('#workerCareer,#skillDegree').val('');
+        if ($('#nationalID').val().length > 14 || $('#nationalID').val().length < 14)
+        {
+            $('#nationalID,#insuranceNumber').val('');
+            sAlert('الرجاء , ادخال الرقم القومى صحيح.');
+            loaderClose();
+        }
+        else
+        {
+            if ($('#nationalID').val() != '' || $('#insuranceNumber').val() != '')
+            {
+                var Number = "";
+                var tybe_ = "";
+                if ($('#nationalID').val() != ''){
+                    Number = $('#nationalID').val();
+                    tybe_ = "national";
+                }
+                else if ($('#insuranceNumber').val() != '') {
+                    Number = $('#insuranceNumber').val();
+                    tybe_ = "insurance";
+                }
+
+                $.getJSON("../jsonFunctions/GetWorkerDetails", { Num: Number, tybe: tybe_, WorkerReqCard:"WorkerCards"},
+                    function (data)
+                    {
+                        if (data == "Eror")
+                        {
+                            sAlert(" عفوا لا يوجد اتصال بقواعد الهيئه ", 2);
+                            $('#WInNum,#WNatNum,#WNam,#WCareer,#WAdd').val('');
+                            loaderClose();
+                        }
+                        else if (data == "ErrorVt")
+                        {
+                            sAlert("  عفوا هناك خطأ في القطاع للرقم القومى  ", 2);
+                            $('#WInNum,#WNatNum,#WNam,#WCareer,#WAdd').val('');
+                            loaderClose();
+                        }
+                        else if (data == "ERR-NATIONAL") {
+                            sAlert(" عفوا لا يمكن تسجيل الرقم القومى ", 2);
+                            $('#WInNum,#WNatNum,#WNam,#WCareer,#WAdd').val('');
+                            loaderClose();
+                        }
+                        else if (data == "OPEN") {
+                            sAlert(" عفوا لا يمكن تسجيل الرقم القومى لوجود مده مفتوحه للعامل ", 2);
+                            $('#WInNum,#WNatNum,#WNam,#WCareer,#WAdd').val('');
+                            loaderClose();
+                        }
+                        else if (data[0].msg != null)
+                        {
+                            sAlert(data[0].msg, 2);
+                            $('#WInNum,#WNatNum,#WNam,#WCareer,#WAdd').val('');
+                            loaderClose();
+                        }
+                        else
+                        {
+                            $('#workerName').val(data[0].workerName);
+                            $('#wCode').val(data[0].workerCode);
+                            $('#nationalID').val('');
+                            $('#insuranceNumber').val('');
+                            $('#nationalID').val(data[0].workerNationalID);
+                            $('#insuranceNumber').val(data[0].workerInsuranceNum);
+                            loaderClose();
+                        }
+                        //else
+                        //{
+                        //    if (btnType == 'nationalID')
+                        //    {
+                        //        sAlert('الرجاء , ادخال الرقم القومى صحيح.');
+                        //        $('#insuranceNumber').val('');
+                        //    }
+                        //    else if (btnType == 'insuranceNumber')
+                        //    {
+                        //        $('#nationalID').val('');
+                        //        sAlert('الرجاء , ادخال الرقم التأمينى صحيح.');
+                        //    }
+                        //    $('#workerName').val('');
+                        //}
+                        //console.log('data : ', data);
+
+                    });
+            }
+        }
+    }
+
+</script>

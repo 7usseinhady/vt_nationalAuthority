@@ -1,0 +1,78 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var screen = "";
+    string[] path = HttpContext.Current.Request.Url.AbsolutePath.Split('/');
+
+    screen = path[2];
+    List<DataAccessLayer.CheckModuleUserPermisiom_Result> x = Session["CheckModule"] as List<DataAccessLayer.CheckModuleUserPermisiom_Result>;
+    if (x != null)
+    {
+        if (x.Count() > 0)
+        {
+            Session["CheckModule"] = x.ToList();
+        }
+        else if (Session["CheckModule"] != null)
+        {
+            x = Session["CheckModule"] as List<DataAccessLayer.CheckModuleUserPermisiom_Result>;
+        }
+    }
+    else if (Session["CheckModule"] != null)
+    {
+        x = Session["CheckModule"] as List<DataAccessLayer.CheckModuleUserPermisiom_Result>;
+    }
+}
+
+<script src="~/Scripts/signalR/NotificationProcess.js"></script>
+@if (screen != "vProcessStop" && screen != "vProcessUser")
+{
+    <div class="mt-3 mx-2">
+        <div class="grid_box_shadow">
+            @{Html.RenderAction("_vpOfficeAreaa", "InsuranceEmployee");}
+        </div>
+    </div>
+
+    <div class="mt-4 col-12 dr-rtl">
+        <ul role="tablist" id="navBar" class="nav justify-content-start  dr-rtl mt-4 mr-lg-3 mr-md-2 mr-0 col-lg-12 col-md-12 col-md-12">
+            @if (x != null)
+            {
+                foreach (var item in x)
+                {
+                    string[] URL = item.viewHtml.Split('/');
+                    <li id="2" class="nav-item tabs_box_shadow mx-1">
+                        @if (item.functionCode == 3)  // طلبات العمليات
+                        {
+                            <a class="nav-link color_main102 font-weight-bold" id="TabNavBarProcess" aria-haspopup="true" role="button" aria-expanded="false" data_toggle="dropdown" href=@Url.Action(URL[1], URL[0], new { areas = Request.QueryString["areas"] == null ? null : Request.QueryString["areas"], cp = 1, Offices = Request.QueryString["Offices"] == null ? null : Request.QueryString["Offices"], cd = item.functionCode })>
+                                @item.functionName
+                            </a>
+                        }
+                        else if (item.functionCode == 4) // العمليات الموشكه على الانتهاء
+                        {
+                            <a class="nav-link color_main102 font-weight-bold" id="TabNavBarStop" aria-haspopup="true" role="button" aria-expanded="false" data_toggle="dropdown" href=@Url.Action(URL[1], URL[0], new { areas = Request.QueryString["areas"] == null ? null : Request.QueryString["areas"], cp = 1, Offices = Request.QueryString["Offices"] == null ? null : Request.QueryString["Offices"], cd = item.functionCode })>
+                                @item.functionName
+                            </a>
+                        }
+                        else if (Session["areaOfficePermission"] != null && Session["areaOfficePermission"].ToString() != "1") // Regular Employee
+                        {
+                            <a class="nav-link color_main102 font-weight-bold" data_toggle="Tab" href=@Url.Action(URL[1], URL[0], new { areas = Request.QueryString["areas"] == null ? null : Request.QueryString["areas"], cp = 1, Offices = Request.QueryString["Offices"] == null ? null : Request.QueryString["Offices"], cd = item.functionCode })>
+                                @item.functionName
+                            </a>
+                        }
+                        else if (Session["areaOfficePermission"] != null && Session["areaOfficePermission"].ToString() == "1") // Admin
+                        {
+
+                            if (item.functionCode != 83 && item.functionCode != 84) // جهات الاسناد - المقاولين / المستخدمين
+                            {
+                                <a class="nav-link color_main102 font-weight-bold" data_toggle="Tab" href=@Url.Action(URL[1], URL[0], new { areas = Request.QueryString["areas"] == null ? null : Request.QueryString["areas"], cp = 1, Offices = Request.QueryString["Offices"] == null ? null : Request.QueryString["Offices"], cd = item.functionCode })>
+                                    @item.functionName
+                                </a>
+                            }
+                        }
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+                }
+<div class="dr-rtl mx-3 mb-3">
+    @RenderBody()
+</div>

@@ -1,0 +1,521 @@
+﻿@{
+    Layout = "~/Views/Shared/_partialLayout.cshtml";
+    var screen = "";
+    string[] path = HttpContext.Current.Request.Url.AbsolutePath.Split('/');
+    screen = path[2];
+}
+@using (Html.BeginForm("_vpSearchProcess", "Process", FormMethod.Post))
+{
+    @Html.Hidden("screenName", TempData["screenName"])
+    @Html.Hidden("areas", TempData["areas"])
+    @Html.Hidden("Offices", TempData["Offices"])
+
+    @* اسم العمليه *@    @* رقم العمليه *@   @* نوع العمليه *@    @*   الرقم التامينى لجهة الاسناد - المقاول الرئيسي *@    @*  جهة الاسناد - المقاول الرئيسي *@
+    <div class="mt-2 dr-rtl grid_box_shadow mx-3 text-right row">
+        @*  جهة الاسناد *@
+        <div class="col-lg-12 col-md-12 col-sm-12 row">
+            @*   الرقم التامينى لجهة الاسناد *@
+            <div class="col-lg-6 col-12 mt-2">
+                <span class="color_main102 font-weight-bold ml-2 mx-3 ">الرقم التأمينى لجهة الاسناد</span>
+                <div>
+                    @Html.TextBox("RefSideNum", "", new { @class = "form-control boorderText number", id = "RefSideNum", data_toggle = "tooltip", title = "ارقام فقط", data_placement = "bottom" })@*, onchange = "getRefSideContByInsurNum('refSide')"*@
+                </div>
+            </div>
+            @*  جهة الاسناد  *@
+            <div class="col-lg-6 col-12 mt-2">
+                <span class="color_main102 font-weight-bold ml-2 mx-3"> جهة الاسناد</span>
+                <div>
+                    @Html.TextBox("RefSideName", "", new { @class = "form-control boorderText arabic", id = "RefSideName" })
+                </div>
+            </div>
+        </div>
+        @*  المقاول الرئيسي *@
+        <div class="col-lg-12 col-md-12 col-sm-12 row mt-2 row">
+            @*   الرقم التامينى المقاول الرئيسي *@
+            <div class="col-lg-6 col-12 mt-2">
+                <span class="color_main102 font-weight-bold ml-2 mx-3 ">الرقم التأمينى للمقاول الرئيسي</span>
+                <div>
+                    @Html.TextBox("ContractotNum", "", new { @class = "form-control boorderText number", id = "ContractotNum", data_toggle = "tooltip", title = "ارقام فقط", data_placement = "bottom" })@*, onchange = "getRefSideContByInsurNum('mCont')"*@
+                </div>
+            </div>
+            @*  المقاول الرئيسي *@
+            <div class="col-lg-6 col-12 mt-2">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">المقاول الرئيسي</span>
+                <div>
+                    @Html.TextBox("ContractotName", "", new { @class = "form-control boorderText arabic", id = "ContractotName" })
+                </div>
+            </div>
+        </div>
+        @if (!TempData["screenName"].ToString().Contains("vProcessRequest"))
+        {
+            <div class="col-lg-12 col-md-12 col-sm-12 mt-2 row">
+                @* اسم العمليه *@
+                <div class="col-lg-6 col-12 mt-2">
+                    <span class="color_main102 font-weight-bold ml-2  mx-3">اسم العمليه</span>
+                    <div>
+                        @Html.TextBox("processName", "", new { @class = "form-control boorderText arNumSign", data_toggle = "tooltip", title = "حروف عربية فقط", data_placement = "bottom" })
+                    </div>
+                </div>
+                @* رقم العمليه *@
+                <div class="col-lg-3 col-12 mt-2">
+                    <span class="color_main102 font-weight-bold ml-2  mx-3">رقم العمليه</span>
+                    <div>
+                        @Html.TextBox("processNum", "", new { @class = "form-control boorderText number", id = "processNum", data_toggle = "tooltip", title = " ارقام فقط", data_placement = "bottom" })
+                    </div>
+                </div>
+                @* رقم الوارد *@
+                <div class="col-lg-3 col-12 mt-2">
+                    <span class="color_main102 font-weight-bold ml-2  mx-3">رقم الوارد</span>
+                    <div>
+                        @Html.TextBox("incommingNumber", "", new { @class = "form-control boorderText number", id = "incommingNumber", data_toggle = "tooltip", title = " ارقام فقط", data_placement = "bottom" })
+                    </div>
+                </div>
+            </div>
+            @* نوع العمليه *@
+            <div class="col-lg-12 col-md-12 col-sm-12 mt-2 row">
+                <div class="col-lg-12 col-12">
+                    <span class="color_main102 font-weight-bold ml-2 mx-3">نوع العمليه</span>
+                    <div>
+                        @Html.ListBox("processType", ViewBag.processType as SelectList, new { @class = "form-control borderDDL selectpicker", title = "--  الكل --", @data_live_search = "true" })
+                    </div>
+                </div>
+            </div>
+        }
+        else // طلبات العمليات
+        {
+            <div class="col-lg-12 col-md-12 col-sm-12 row mt-2 row">
+                @* اسم العمليه *@
+                <div class="col-lg-4 col-12 mt-2">
+                    <span class="color_main102 font-weight-bold ml-2  mx-3">اسم العمليه</span>
+                    <div>
+                        @Html.TextBox("processName", "", new { @class = "form-control boorderText arNumSign", data_toggle = "tooltip", title = "حروف عربية فقط", data_placement = "bottom" })
+                    </div>
+                </div>
+                @* نوع العمليه *@
+                <div class="col-lg-5 col-12 mt-2">
+                    <span class="color_main102 font-weight-bold ml-2 mx-3">نوع العمليه</span>
+                    <div>
+                        @Html.ListBox("processType", ViewBag.processType as SelectList, new { @class = "form-control borderDDL selectpicker", title = "--  الكل --", @data_live_search = "true" })
+                    </div>
+                </div>
+                @* مستبعده *@
+                <div class="col-lg-3 col-12 mt-4">
+                    @Html.CheckBox("isExclude", new { @class = "option-input-child checkbox" })
+                    <label class="color_main102 font-weight-bold ml-2" for="LimitCost">مستبعده</label>
+                </div>
+            </div>
+        }
+    </div>
+    @* نوع المستند *@@* محدد المده *@@*القيمه الكليه للعمليه*@
+    <div class="mt-4 dr-rtl grid_box_shadow mx-3 row text-right" style="margin-top: 15px !important;">
+        @* نوع المستند *@
+        <div class="col-lg-3 col-md-12 col-sm-12">
+            <span class="color_main102 font-weight-bold mb-1 mx-3">نوع المستند</span>
+            <div>
+                @Html.ListBox("documentType", ViewBag.documentType as SelectList, new { @class = "form-control borderDDL selectpicker", title = "-- الكل --", @data_live_search = "true" })
+            </div>
+        </div>
+        @* تاريخ المستند *@
+        <div class="col-lg-3 col-md-12 col-sm-12">
+            <span class="color_main102 font-weight-bold mb-1 mx-3">تاريخ المستند</span>
+            <div>
+                @Html.TextBox("dateDocument", "", new { @class = "form-control boorderText date", autoComplete = "off" })
+            </div>
+        </div>
+        @* محدد المده *@@*القيمه الكليه للعمليه*@
+        <div class="col-lg-6 col-md-12 col-sm-12 col-12 my-1 mt-3 align-self-end row">
+            @* محدد المده *@
+            <div class="col-lg-5 col-12">
+                @Html.CheckBox("isLimited", new { @class = "option-input-child checkbox", onclick = "OpenCost()", id = "LimitCost" })
+                <label class="color_main102 font-weight-bold ml-2" for="LimitCost">محدده المده</label>
+            </div>
+            @*القيمه الكليه للعمليه*@
+            <div class="col-lg-7 col-12" id="divCost">
+                <span class="color_main102 font-weight-bold ml-2 mx-3" style="font-size: 15px;">القيمه الكليه للعمليه</span>
+                <div>
+                    @Html.TextBox("fullBudget", "", new { @class = "form-control boorderText decimal", data_toggle = "tooltip", title = "القيمه الكليه للعمليه", data_placement = "bottom", placeholder = "1,000,000" })
+                </div>
+            </div>
+        </div>
+        @if (TempData["screenName"].ToString().Contains("vProcessShowIndex")) // عمليات الموظف
+        {
+            @*تاريخ بدء العمليه*@
+            <div class="col-lg-4 col-md-12 col-sm-12">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">ت بدء العمليه</span>
+                <div>
+                    @Html.TextBox("dateStartProcess", "", new { @class = "form-control boorderText  date", autoComplete = "off" })
+                </div>
+            </div>
+            @* تاريخ انتهاء العمليه *@
+            <div class="col-lg-4 col-md-12 col-sm-12">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">ت انتهاء العمليه</span>
+                <div>
+                    @Html.TextBox("dateEndProcess", "", new { @class = "form-control boorderText date", autoComplete = "off" })
+                </div>
+            </div>
+            @* حاله العمليه *@
+            <div class="col-lg-4 col-md-12 col-sm-12">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">حاله العمليه</span>
+                <div>
+                    @Html.ListBox("processStatus", ViewBag.processStatus as SelectList, new { @class = "form-control borderDDL selectpicker", title = "-- الكل --", @data_live_search = "true" })
+                </div>
+            </div>
+        }
+        else if (!TempData["screenName"].ToString().Contains("vProcessRequest"))
+        {
+            @*تاريخ بدء العمليه*@
+            <div class="col-lg-6 col-md-12 col-sm-12">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">ت بدء العمليه</span>
+                <div>
+                    @Html.TextBox("dateStartProcess", "", new { @class = "form-control boorderText  date", autoComplete = "off" })
+                </div>
+            </div>
+            @* تاريخ انتهاء العمليه *@
+            <div class="col-lg-6 col-md-12 col-sm-12">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">ت انتهاء العمليه</span>
+                <div>
+                    @Html.TextBox("dateEndProcess", "", new { @class = "form-control boorderText date", autoComplete = "off" })
+                </div>
+            </div>
+        }
+        else if (TempData["screenName"].ToString().Contains("vProcessRequest")) // طليات العمليات
+        {
+            @*تاريخ بدء العمليه*@
+            <div class="col-lg-4 col-md-12 col-sm-12">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">ت بدء العمليه</span>
+                <div>
+                    @Html.TextBox("dateStartProcess", "", new { @class = "form-control boorderText date", autoComplete = "off" })
+                </div>
+            </div>
+            @* تاريخ انتهاء العمليه *@
+            <div class="col-lg-4 col-md-12 col-sm-12">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">ت انتهاء العمليه</span>
+                <div>
+                    @Html.TextBox("dateEndProcess", "", new { @class = "form-control boorderText date", autoComplete = "off" })
+                </div>
+            </div>
+            @* مقدم الاخطار *@
+            <div class="col-lg-4 col-md-12 col-sm-12">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">مقدم الاخطار</span>
+                <div>
+                    @Html.DropDownList("refContractor", ViewBag.refContractor as SelectList, "-- الكل --", new { @class = "form-control borderText" })
+                </div>
+            </div>
+        }
+    </div>
+    @* عنوان العمليه *@
+    <div class="mt-4 dr-rtl grid_box_shadow mx-3 row text-right" style="margin-top: 15px !important;">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">عنوان العمليه</span>
+            <div class="row">
+                <div class="col-lg-3 col-md-12 col-sm-12">
+                    @Html.TextBox("buildingNumberProcessSite", "", new { @class = "form-control boorderText number", data_toggle = "tooltip", title = "ارقام فقط", data_placement = "bottom", placeholder = "عقار رقم" })
+                </div>
+                <div class="col-lg-9 col-md-12 col-sm-12 mb-2 mt-1">
+                    @Html.TextBox("siteAddressProcessSite", "", new { @class = "form-control boorderText arNumSign", data_toggle = "tooltip", title = "حروف عربية فقط", data_placement = "bottom", placeholder = "شارع / حاره" })
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-lg-4 col-md-12 col-sm-12 mb-2">
+                    @Html.ListBox("govermentCodeProcessSite", ViewBag.GovermentSite as SelectList, new
+               {
+                   @class = "form-control borderDDL selectpicker",
+                   id = "govSite",
+                   title = "-- الكل --",
+                   @data_live_search = "true"@*, onchange = "getCenters('#govSite','#centerSite','#villageSite')"*@ })
+                </div>
+                <div class="col-lg-4 col-md-12 col-sm-12 mb-2">
+                    @Html.ListBox("centerCodeProcessSite", ViewBag.CenterSite as SelectList, new
+               {
+                   @class = "form-control borderDDL selectpicker",
+                   id = "centerSite",
+                   title = "-- الكل --",
+                   @data_live_search = "true"@*, onchange = "getVillage('#govSite','#centerSite','#villageSite')"*@ })
+                </div>
+                <div class="col-lg-4 col-md-12 col-sm-12 mb-2">
+                    @Html.ListBox("villageCodeProcessSite", ViewBag.VallageSite as SelectList, new { @class = "form-control borderDDL selectpicker", id = "villageSite", title = "-- الكل --", @data_live_search = "true" })
+                </div>
+            </div>
+        </div>
+
+    </div>
+    @*عنوان المخطار للمراسله*@
+    <div class="mt-4 dr-rtl grid_box_shadow mx-3 row text-right" style="margin-top: 15px !important;">
+        @* عنوان المخطار للمراسله *@
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">عنوان المخطار للمراسله</span>
+            <div class="row">
+                <div class="col-lg-3 col-md-12 col-sm-12">
+                    @Html.TextBox("buildingNumberProcessUserLettersSite", "", new { @class = "form-control boorderText number", data_toggle = "tooltip", title = "ارقام فقط", data_placement = "bottom", placeholder = "عقار رقم" })
+                </div>
+                <div class="col-lg-9 col-md-12 col-sm-12 mb-2 mt-1">
+                    @Html.TextBox("siteAddressProcessUserLettersSite", "", new { @class = "form-control boorderText arNumSign", data_toggle = "tooltip", title = "حروف عربية فقط", data_placement = "bottom", placeholder = "شارع / حاره" })
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-lg-4 col-md-12 col-sm-12 mb-2">
+                    @Html.ListBox("govermentCodeProcessUserLettersSite", ViewBag.GovermentLetterSite as SelectList, new
+               {
+                   @class = "form-control borderDDL selectpicker",
+                   id = "goverLettersSite",
+                   title = "-- الكل --",
+                   @data_live_search = "true"@*, onchange = "getCenters('#goverLettersSite','#centerLettersSite','#villageLettersSite')"*@ })
+                </div>
+                <div class="col-lg-4 col-md-12 col-sm-12 mb-2">
+                    @Html.ListBox("centerCodeProcessUserLettersSite", ViewBag.CenterLetterSite as SelectList, new
+               {
+                   @class = "form-control borderDDL selectpicker",
+                   id = "centerLettersSite",
+                   title = "-- الكل --",
+                   @data_live_search = "true"@*, onchange = "getVillage('#goverLettersSite','#centerLettersSite','#villageLettersSite')"*@ })
+                </div>
+                <div class="col-lg-4 col-md-12 col-sm-12 mb-2">
+                    @Html.ListBox("villageCodeProcessUserLettersSite", ViewBag.VallageLetterSite as SelectList, new { @class = "form-control borderDDL selectpicker", id = "villageLettersSite", title = "-- الكل --", @data_live_search = "true" })
+                </div>
+            </div>
+        </div>
+    </div>
+    @* اسم صاحب الترخيص *@@* عنوان صاحب الترخيص *@
+
+        <
+    <div class="mt-4 dr-rtl grid_box_shadow mx-3 row text-right" style="margin-top: 15px !important;">
+        @* اسم صاحب الترخيص *@
+        <div class="col-lg-6 col-md-6 col-sm-12">
+            <span class="color_main102 font-weight-bold ml-2  mx-3">اسم صاحب الترخيص</span>
+            <div>
+                @Html.TextBox("nameOwnerPermision", "", new { @class = "form-control boorderText arNum", data_toggle = "tooltip", title = "حروف عربية فقط", data_placement = "bottom" })
+            </div>
+        </div>
+        @* عنوان صاحب الترخيص *@
+        <div class="col-lg-6 col-md-6 col-sm-12">
+            <span class="color_main102 font-weight-bold ml-2  mx-3">عنوان صاحب الترخيص</span>
+            <div>
+                @Html.TextBox("addressOwnerPermision", "", new { @class = "form-control boorderText arNumSign", data_toggle = "tooltip", title = "حروف عربية فقط", data_placement = "bottom" })
+            </div>
+        </div>
+    </div>
+    if (!TempData["screenName"].ToString().Contains("vProcessRequest"))
+    {
+        @* اسم المقاول من الباطن *@@* رقم المقاول من الباطن *@@* المهمه المسنده اليه *@
+        <div class="mt-4 dr-rtl grid_box_shadow mx-3 row text-right" style="margin-top: 15px !important;">
+            @* رقم المقاول من الباطن *@
+            <div class="col-lg-5 col-md-5 col-sm-12 mt-2">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">الرقم التأمينى للمقاول من الباطن</span>
+                <div>
+                    @Html.TextBox("subContractorNum", "", new { @class = "form-control boorderText number", id = "subContractorNum", data_toggle = "tooltip", title = "ارقام فقط", data_placement = "bottom" })@*, onchange = "getRefSideContByInsurNum('sCont')"*@
+                </div>
+            </div>
+            @* اسم المقاول من الباطن *@
+            <div class="col-lg-7 col-md-7 col-sm-12 mt-2">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">اسم المقاول من الباطن</span>
+                <div>
+                    @Html.TextBox("subContractorName", "", new { @class = "form-control boorderText arabic", id = "subContractorName" })
+                </div>
+            </div>
+            @* المهمه المسنده اليه *@
+            <div class="col-lg-12 col-md-12 col-sm-12 mt-2">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">المهمه المسنده اليه</span>
+                <div>
+                    @Html.ListBox("missionSubContractor", ViewBag.processType as SelectList, new { @class = "form-control borderDDL selectpicker", title = "-- الكل --", @data_live_search = "true" })
+                </div>
+            </div>
+        </div>
+        @* اسم العامل *@@* الرقم التأمينى للعامل *@@* الرقم القومى للعامل *@@***  ***** مهنة العامل *@
+
+        <
+        <div class="mt-4 dr-rtl grid_box_shadow mx-3 row text-right" style="margin-top: 15px !important;">
+            @* الرقم التأمينى للعامل *@
+            <div class="col-lg-4 col-md-4 col-sm-12 mt-2">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">الرقم التأمينى للعامل</span>
+                <div>
+                    @Html.TextBox("WorkerInsurNum", "", new { @class = "form-control boorderText number", data_toggle = "tooltip", title = "ارقام فقط", data_placement = "bottom" })
+                </div>
+            </div>
+            @* اسم العامل *@
+            <div class="col-lg-8 col-md-8 col-sm-12">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">اسم العامل</span>
+                <div>
+                    @Html.TextBox("WorkerName", "", new { @class = "form-control boorderText arabic", data_toggle = "tooltip", title = "حروف عربية فقط", data_placement = "bottom" })
+                </div>
+            </div>
+            @* الرقم القومى للعامل *@
+            <div class="col-lg-4 col-md-4 col-sm-12 mt-2">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">الرقم القومى للعامل</span>
+                <div>
+                    @Html.TextBox("WorkerNatIDNum", "", new { @class = "form-control boorderText number", data_toggle = "tooltip", title = "ارقام فقط", data_placement = "bottom" })
+                </div>
+            </div>
+            @* مهنة العامل *@
+            <div class="col-lg-8 col-md-8 col-sm-12 mt-2">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">مهنة العامل</span>
+                <div>
+                    @Html.ListBox("careerWorker", ViewBag.careerWorker as SelectList, new { @class = "form-control borderDDL selectpicker", title = "-- الكل --", @data_live_search = "true" })
+                </div>
+            </div>
+        </div>
+    }
+
+    if (!TempData["screenName"].ToString().Contains("vContractorIndex"))
+    {
+        <div class="col-lg-12 col-md-12 col-sm-12 row mt-2 row grid_box_shadow">
+            @* مستخدمين العمليه *@
+            <div class="col-lg-7 col-md-7 col-sm-12 text-right">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">مستخدمين العمليه</span>
+                <div>
+                    @Html.DropDownList("procUser", ViewBag.procUser as SelectList, "-- الكل --", new { @class = "form-control borderDDL" })
+                </div>
+            </div>
+            @* بحث *@
+            <div class="col-lg-5  mt-2 text-left w-100">
+                <button type="submit" value="Create" onclick="loaderOpen();" id="btnSearchProcess" class=""><i class=""></i></button>
+            </div>
+        </div>
+    }
+    else
+    {
+        @* بحث *@
+        <div class="col-lg-12  mt-2 text-left w-100">
+            <button type="submit" value="Create" onclick="loaderOpen();" id="btnSearchProcess" class=""><i class=""></i></button>
+        </div>
+    }
+}
+
+<script>
+    function getCenters(gov, center, village) {
+
+        $(center).empty();
+        $(village).empty();
+
+        if ($(gov).val() == '') {
+
+            $(center).append($('<option />', {
+                value: "",
+                text: "-- المركز / القسم --"
+            }));
+
+            $(village).append($('<option />', {
+                value: "",
+                text: "-- القرية / الشياخة --"
+            }));
+
+            $(center).selectpicker('refresh');
+            $(village).selectpicker('refresh');
+        }
+        else {
+            $(village).append($('<option />', {
+                value: "",
+                text: "-- القرية / الشياخة --"
+            }));
+
+            $(village).selectpicker('refresh');
+            //$(center).selectpicker('refresh');
+
+            $.getJSON("../Process/getCenterByGovernment", { govCode: $(gov).val() },
+                   function (data) {
+
+                       if (data.length > 0) {
+
+                           $(center).append($('<option />', {
+                               value: "",
+                               text: "-- المركز / القسم --"
+                           }));
+
+                           $.each(data, function (index, data) {
+                               $(center).append($('<option />', {
+                                   value: data.centerCode,
+                                   text: data.centerIDName
+                               }));
+                           });
+
+                           $(center).selectpicker('refresh');
+                       }
+                   })
+        }
+    }
+
+    function getVillage(gov, center, village) {
+
+        $(village).empty();
+        $(village).append($('<option />', {
+            value: "",
+            text: "-- القرية / الشياخة --"
+        }));
+
+        $(village).selectpicker('refresh');
+
+        if ($(center).val() != '') {
+            $.getJSON("../Process/getVillageByCenter", { centerCode: $(center).val() },
+                   function (data) {
+                       $(village).empty();
+
+                       if (data.length > 0) {
+                           $(village).append($('<option />', {
+                               value: "",
+                               text: "-- القرية / الشياخة --"
+                           }));
+
+                           $.each(data, function (index, data) {
+                               $(village).append($('<option />', {
+                                   value: data.villageCode,
+                                   text: data.villageIDName
+                               }));
+                           });
+                           $(village).selectpicker('refresh');
+                       }
+                   })
+        }
+    }
+
+    $(document).ready(function () {
+        OpenCost();
+    });
+
+    function OpenCost() {
+        if ($('#LimitCost').prop('checked'))
+            document.getElementById("divCost").style.display = "block";
+        else
+            document.getElementById("divCost").style.display = "none";
+    }
+
+    function getRefSideContByInsurNum(refSideCont) {
+
+        var val = '';
+
+        // جهه الاسناد
+        if (refSideCont == "refSide")
+            val = $('#RefSideNum').val();
+        if (refSideCont == "mCont") // المقاول الرئيسي
+            val = $('#ContractotNum').val();
+        else if (refSideCont == "sCont")
+            val = $('#subContractorNum').val();// المقاول من باطن
+
+        if (val != '') {
+
+            $.getJSON("../Process/getRefSideContByInsurNum", { ID: val },
+           function (data) {
+
+               if (data.length == 0) {
+                   sAlert('عفوا ,هذا الرقم غير صحيح .. الرجاء التأكد من الرقم ثم إعاده كتابته بشكل صحيح.');
+
+                   // جهه اسناد
+                   if (refSideCont == 'refSide')
+                       $('#RefSideName').val('');
+                   else if (refSideCont == "mCont") //  مقاول الرئيسي
+                       $('#ContractotName').val('');
+                   else if (refSideCont == "sCont") // مقاول من باطن
+                       $('#subContractorName').val('');
+               }
+               else {
+
+                   // جهه اسناد
+                   if (refSideCont == 'refSide')
+                       $('#RefSideName').val(data[0].Text);
+                   else if (refSideCont == "mCont") //  مقاول الرئيسي
+                       $('#ContractotName').val(data[0].Text);
+                   else if (refSideCont == "sCont") // مقاول من باطن
+                       $('#subContractorName').val(data[0].Text);
+               }
+           });
+        }
+    }
+</script>

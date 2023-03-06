@@ -1,0 +1,669 @@
+﻿@using PagedList.Mvc;
+@model PagedList.PagedList<DataAccessLayer.Models.workerModel>
+@{
+    var iCount = 1;
+    var screen = "";
+    var controller = "";
+    string[] path = HttpContext.Current.Request.Url.AbsolutePath.Split('/');
+    screen = path[2];
+    controller = path[1];
+    Layout = null;
+
+    List<DataAccessLayer.CheckModuleUserPermisiom_Result> x = TempData["checkLevel2"] as List<DataAccessLayer.CheckModuleUserPermisiom_Result>;
+    if (x != null)
+    {
+        Session["checkLevel2"] = x.ToList();
+    }
+    else if (Session["checkLevel2"] != null)
+    {
+        x = Session["checkLevel2"] as List<DataAccessLayer.CheckModuleUserPermisiom_Result>;
+    }
+    var totalPage = TempData["totalPages"].ToString();
+    var pageSize = Convert.ToInt32(generalVariables.PageSize);
+}
+<title> العمال </title>
+<div class="dr-rtl  mx-3 mb-3 ">
+    @if (TempData["action"] != null)
+    {
+        if (TempData["action"].ToString() != "vContractorIndex")
+        {
+            { Html.RenderAction("_vpWorkersData", "Workers"); }
+        }
+    }
+    <div class="row justify-content-center">
+        <div class="text-center grid_box_shadow scroll-max mt-3">
+            @if (Model == null)
+            {
+                <h1 id="tblSearchNotFound">
+                    <strong>@generalVariables.WorkersNotfound</strong>
+                </h1>
+            }
+            else if (Model.Count == 0)
+            {
+                <h1 id="tblSearchNotFound">
+                    <strong>@generalVariables.WorkersNotfound</strong>
+                </h1>
+            }
+            else if (Model.Count > 0 && Model != null)
+            {
+                <table class="table" id="tbWorkers">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="color_main102">#</th>
+                            <th scope="col" class="color_main102"> اسم العامل</th>
+                            <th scope="col" class="color_main102">الرقم التامينى</th>
+                            <th scope="col" class="color_main102">الرقم القومى</th>
+                            <th scope="col" class="color_main102">تاريخ اخر حضور </th>
+                            @if (TempData["action"] == null)
+                            {
+                                <th scope="col" class="color_main102">تاريخ اخر مده </th>
+                            }
+                            <th scope="col" class="color_main102">المهنه</th>
+                            @if (TempData["action"] == null)
+                            {
+                                <th scope="col" class="color_main102">درجة المهاره </th>
+
+                            }
+                            @if (screen == "vpWorkers")
+                            {
+                                <th scope="col" class="color_main102">التأمين الصحى </th>
+                            }
+                            @if (TempData["action"] == null)
+                            {
+                                // شاشه العمال في تفاصيل العمليه في المقاول
+                                if (screen == "vWorkersShow")
+                                {
+                                    <th scope="col" class="color_main102"><i class="fas fa-cog"></i></th>
+                                }
+                                else if (x.Count > 0)
+                                {
+                                    <th scope="col" class="color_main102"><i class="fas fa-cog"></i></th>
+                                }
+                            }
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{iCount = 1; }
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <th scope="row" class="color_main102">@((Convert.ToInt32(Model.PageNumber) * Convert.ToInt32(generalVariables.PageSize)) - (Convert.ToInt32(generalVariables.PageSize) - iCount) )</th>
+                                <td class="color_main103">@(String.IsNullOrEmpty(item.sWorkerName) ? "----" : item.sWorkerName)</td>
+                                <td class="color_main103">@(String.IsNullOrEmpty(item.sWorkerInsuranceNum) ? "----" : item.sWorkerInsuranceNum )</td>
+                                <td class="color_main103">@(String.IsNullOrEmpty(item.sWorkerNationalID) ? "----" : item.sWorkerNationalID )</td>
+                                <td class="color_main103 ">@(String.IsNullOrEmpty(item.sLastAttendance) ? "----" : item.sLastAttendance )</td>
+                                @if (TempData["action"] == null)
+                                {
+                                    <td class="color_main103 ">@(String.IsNullOrEmpty(item.sLastPeriod) ? "----" : item.sLastPeriod )</td>
+                                }
+                                <td class="color_main103">@(String.IsNullOrEmpty(item.sCareerName) ? "----" : item.sCareerName )</td>
+                                @if (TempData["action"] == null)
+                                {
+                                    <td class="color_main103 ">@(String.IsNullOrEmpty(item.sSkillDegreeName) ? "----" : item.sSkillDegreeName )</td>
+                                }
+                                @if (screen == "vpWorkers")
+                                {
+                                    <td class="color_main103 ">@(String.IsNullOrEmpty(item.sMedicalStatusName) ? "----" : item.sMedicalStatusName )</td>
+                                }
+                                @if (TempData["action"] == null)
+                                {
+                                    // اعدادات العمال في تفاصيل العمليه في المقاولين
+                                    if (screen == "vWorkersShow")
+                                    {
+                                        <td class="color_main103">
+                                            <div class="color_main103 d-sm-show101 ">
+                                                <div class="dropdown-j  color_main102">
+                                                    <i class="fas fa-ellipsis-v "></i>
+                                                    <div class="dropdown-content-j" style="min-width:auto;">
+                                                        <div class="row text-left">
+                                                            <div class="col-12">
+                                                                @* المرفقات *@
+                                                                @*@if (Session["procStopActive"] != null) // عمليه موقوفه - منتهيه
+                                                                {
+                                                                    <button type="button" name="submitType" data-toggle="modal" data-target="#shareAttachmentSearchAddModal"
+                                                                            class="btn btn-sm btn-outline-primary font-weight-bold"
+                                                                            onclick="openAttachmentModel('../Attachments/_vpAttachmentAdd','../Attachments/_vpAttachmentSearch','Workers/@item.iWorkerCode/wAttachment&actionName=@path[2]&controllerName=@path[1]&screenType=4','actionName=@path[2]&controllerName=@path[1]&screenType=4','')">
+                                                                        <i class="fa fa-paperclip"></i>  المرفقات
+                                                                    </button>
+                                                                }
+                                                                else*@
+                                                                {
+                                                                    <button type="button" name="submitType" data-toggle="modal" data-target="#shareAttachmentSearchAddModal"
+                                                                            class="btn btn-sm btn-outline-primary font-weight-bold"
+                                                                            onclick="openAttachmentModel('../Attachments/_vpAttachmentAdd','../Attachments/_vpAttachmentSearch','Workers,@item.iWorkerCode,wAttachment','actionName=@path[2]&controllerName=@path[1]&screenType=4','')">
+                                                                        <i class="fa fa-paperclip"></i>  المرفقات
+                                                                    </button>
+                                                                @*}*@
+
+                                                                @* الحضور *@
+                                                                <button type="button" name="submitType" value="Search" class="btn btn-sm btn-outline-info font-weight-bold" data-toggle="modal" data-target="#sharedSepratedModal"
+                                                                        onclick="openModel('#titleSharedSepratedModal', `الحضور : @item.sWorkerName `, '#btn', 'الحضور', 'fas', 'btn btnsStyle btn-outline-info ml-3 font-weight-bold', '_vppreviousPeriod', 'workerId=@item.iWorkerCode,processId=@Request.QueryString["ProcessId"]', '#sharedSepratedModalBody')">
+                                                                    <i></i> الحضور
+                                                                </button>
+                                                                @* الهواتف *@
+                                                                <button type="button" name="submitType" value="Search" class="btn btn-sm btn-outline-dark font-weight-bold" data-toggle="modal" data-target="#sharedModal"
+                                                                        onclick="openModel('#titleSharedModal', `الهواتف : @item.sWorkerName `, '#btnSearchContractor', 'الهواتف', 'fas fa-phone', 'btn btnsStyle btn-outline-dark ml-3 font-weight-bold', '../Workers/_vpWorkerPhones', 'ID=@item.iWorkerCode', '#sharedModalBody')">
+                                                                    <i class="fas fa-phone"></i> الهواتف
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    }
+                                    else if (x.Count > 0)
+                                    {
+                                        <td class="color_main103">
+                                            <div class="color_main103 d-sm-show101 ">
+                                                <div class="dropdown-j  color_main102">
+                                                    <i class="fas fa-ellipsis-v "></i>
+                                                    <div class="dropdown-content-j" style="min-width:auto;">
+                                                        <div class="row text-left">
+                                                            <div class="col-12">
+                                                                @foreach (var code in x)
+                                                                {
+                                                                    //اعدادات العمال في تفاصيل العمليه في موظف التأمينات
+                                                                    if (screen == "_vpWorkersIndex" || screen == "vpWorkersShow")
+                                                                    {
+                                                                        if (code.functionCode == 37 || code.functionCode == 46)
+                                                                        {
+                                                                            <button type="button" name="submitType" data-toggle="modal" data-target="#shareAttachmentSearchAddModal"
+                                                                                    class="btn btn-sm btn-outline-primary font-weight-bold"
+                                                                                    onclick="openAttachmentModel('../Attachments/_vpAttachmentAdd','../Attachments/_vpAttachmentSearch','Workers/@item.iWorkerCode/wAttachment&actionName=@path[2]&controllerName=@path[1]&screenType=4','actionName=@path[2]&controllerName=@path[1]&screenType=4','')">
+                                                                                <i class="fa fa-paperclip"></i>  المرفقات
+                                                                            </button>
+                                                                        }
+
+                                                                        if (code.functionCode == 35 || code.functionCode == 45)
+                                                                        {
+                                                                            @* الحضور *@
+                                                                            @*<button type="button" name="submitType" value="Search" class="btn btn-sm btn-outline-info font-weight-bold" data-toggle="modal" data-target="#sharedModal"
+                                                                                    onclick="openModel('#titleSharedModal', 'الحضور : @item.sWorkerName', '#btn', 'الحضور', 'fas', 'btn btnsStyle btn-outline-info ml-3 font-weight-bold', '_vppreviousPeriod', 'workerId=@item.iWorkerCode,processId=@Request.QueryString["ProcessId"]', '#sharedModalBody')">
+                                                                                <i></i> الحضور
+                                                                            </button>*@
+
+                                                                            <button type="button" name="submitType" value="Search" class="btn btn-sm btn-outline-info font-weight-bold" data-toggle="modal" data-target="#sharedSepratedModal"
+                                                                                    onclick="openModel('#titleSharedSepratedModal', `الحضور : @item.sWorkerName `, '#btn', 'الحضور', 'fas', 'btn btnsStyle btn-outline-info ml-3 font-weight-bold', '_vppreviousPeriod', 'workerId=@item.iWorkerCode,processId=@Request.QueryString["ProcessId"]', '#sharedSepratedModalBody')">
+                                                                                <i></i> الحضور
+                                                                            </button>
+                                                                        }
+                                                                        if (code.functionCode == 39 || code.functionCode == 44)
+                                                                        {
+                                                                            @* الهواتف *@
+                                                                            <button type="button" name="submitType" value="Search" class="btn btn-sm btn-outline-dark font-weight-bold" data-toggle="modal" data-target="#sharedModal"
+                                                                                    onclick="openModel('#titleSharedModal', `الهواتف : @item.sWorkerName`, '#btnSearchContractor', 'الهواتف', 'fas fa-phone', 'btn btnsStyle btn-outline-dark ml-3 font-weight-bold', '_vpWorkerPhones', 'ID=@item.iWorkerCode', '#sharedModalBody')">
+                                                                                <i class="fas fa-phone"></i> الهواتف
+                                                                            </button>
+                                                                        }
+                                                                    }
+                                                                    //اعدادات العمال في موظف التأمينات
+                                                                    else if (screen == "vWorkerAddSearch" || screen == "vInsuranceEmployeeIndex" || screen == "vpWorkers")
+                                                                    {
+                                                                        if (code.functionCode == 32)
+                                                                        {
+                                                                            @* تحضير *@
+                                                                            @*<button type="button" name="submitType" value="@item.iWorkerCode" class="btn btn btn-sm btn-outline-warning font-weight-bold btnsStyle" data-toggle="modal" data-target="#sharedModal"
+                                                                                        onclick="openModel___ss('#titleSharedModal', 'تحضير : @item.sWorkerName ', '#btnAddWorkerAttend', 'تسجيل الحضور', 'fas fa-plus', 'btn btnsStyle btn-outline-info font-weight-bold', '_vpAddWorkers', '?areas=@Request.QueryString["areas"]&Offices=@Request.QueryString["Offices"]&ID=@(item.iWorkerCode)&cp=@Request.QueryString["cp"]&cd=@Request.QueryString["cd"]', '#sharedModalBody')">
+                                                                                    <i class="far fa-edit"></i> تحضير
+                                                                                </button>*@
+                                                                        }
+
+                                                                        if (code.functionCode == 33)
+                                                                        {
+                                                                            @* تفعيل - ايقاف الكارت *@
+                                                                            <a class="btn btn-sm btn-outline-success  font-weight-bold" href="@Url.Action("vCardsRequestsDeActivationIndex", "CardsRequests", new { WorkId = item.iWorkerCode, cd = 33,screen="vpWorkers" })"><i class="fas fa-sync"></i> تفعيل - ايقاف الكارت</a>
+                                                                        }
+                                                                        if (code.functionCode == 34)
+                                                                        {
+                                                                            @* العمليات *@
+                                                                            <button type="button" name="submitType" value="@item.iWorkerCode" class="btn btn-sm btn-outline-info font-weight-bold" data-toggle="modal" data-target="#sharedModal"
+                                                                                    onclick="openModel('#titleSharedModal', `عمليات  : @item.sWorkerName `, '#btn', 'العمليات', '', 'btn btnsStyle btn-outline-info ml-3 font-weight-bold', '_vpWorkerProces', 'ID=@(item.iWorkerCode)', '#sharedModalBody')">
+                                                                                <i></i> العمليات
+                                                                            </button>
+                                                                        }
+                                                                        if (code.functionCode == 36)
+                                                                        {
+                                                                            @* الاصابات *@
+                                                                            <a class="btn btn-sm btn-outline-secondary font-weight-bold" href="@Url.Action("vInjuriesIndex", "Injuries", new { wc = item.iWorkerCode, cd = 36 })"><i class="fas fa-user-injured"></i> الاصابات</a>
+
+                                                                        }
+                                                                        if (code.functionCode == 37)
+                                                                        {
+                                                                            @* المرفقات *@
+                                                                            <button type="button" name="submitType" data-toggle="modal" data-target="#shareAttachmentSearchAddModal"
+                                                                                    class="btn btn-sm btn-outline-primary font-weight-bold"
+                                                                                    onclick="openAttachmentModel('../Attachments/_vpAttachmentAdd','../Attachments/_vpAttachmentSearch','Workers/@item.iWorkerCode/wAttachment&actionName=@path[2]&controllerName=@path[1]&screenType=4','actionName=@path[2]&controllerName=@path[1]&screenType=4','')">
+                                                                                <i class="fa fa-paperclip"></i>  المرفقات
+                                                                            </button>
+                                                                        }
+
+                                                                        if (code.functionCode == 38)
+                                                                        {
+                                                                            @* الاستبعاد *@
+                                                                            <a href="#" data-toggle="tooltip" data-placement="bottom" class="btn btn-sm btn-outline-danger font-weight-bold"
+                                                                               onclick="return sAlertDel(this,'هل تريد استبعاد العامل ؟', ' استبعاد العامل ', 'إلغاء الاستبعاد','Workers','_vpWorkerCancel','IDDelete=@(item.iWorkerCode)');"><i class="fas fa-trash-alt"></i>استبعاد</a>
+                                                                        }
+                                                                        if (code.functionCode == 39)
+                                                                        {
+                                                                            @* الهواتف *@
+                                                                            <button type="button" name="submitType" value="Search" class="btn btn-sm btn-outline-dark font-weight-bold" data-toggle="modal" data-target="#sharedModal"
+                                                                                    onclick="openModel('#titleSharedModal', `الهواتف : @item.sWorkerName `, '#btnSavePhone', 'تسجيل الهاتف', 'fas fa-plus', 'btn btnsStyle btn-outline-info ml-3 font-weight-bold', '_vpWorkerPhones_', 'ID=@item.iWorkerCode', '#sharedModalBody')">
+                                                                                <i class="fas fa-phone"></i> الهواتف
+                                                                            </button>
+                                                                        }
+                                                                        if (code.functionCode == 79)
+                                                                        {
+                                                                            @* كروت العامل *@
+                                                                            <button type="button" name="submitType" value="Search" class="btn btn-sm  btn-outline-primary font-weight-bold" data-toggle="modal" data-target="#sharedModal"
+                                                                                    onclick="openModel('#titleSharedModal', `كروت العامل : @item.sWorkerName `, '#btnSearchCards', 'كروت العامل', 'fas fa-search', 'btn btnsStyle btn-outline-info ml-3 font-weight-bold', '_vpWorkerCards', 'WorkerCode=@item.iWorkerCode', '#sharedModalBody')">
+                                                                                <i class="fas fa-id-card"></i> كروت العامل
+                                                                            </button>
+                                                                        }
+                                                                    }
+                                                                }
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    }
+                                }
+                            </tr>
+                            iCount++;
+                        }
+                    </tbody>
+                </table>
+                @*pagination*@
+            if (screen == "vWorkersShow")
+            {
+                <div id="divPagination">
+                    <h5 style="text-align:center;color:#306fc2"> صفحة <strong style="color:#CA2553"> @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)</strong> من <strong>@Model.PageCount </strong> </h5>
+                    <div style="text-align:center">
+                        <div class="justify-content-lg-center pagination">
+                            @Html.PagedListPager(Model, inPage => Url.Action("vWorkersShow", new { inPage, processID = Convert.ToInt32(Request.QueryString["processID"].ToString()) }))
+                        </div>
+                    </div>
+                </div>
+            }
+            else if (screen == "vpWorkers")
+            {
+                <div id="divPagination">
+                    <h5 style="text-align:center;color:#306fc2"> صفحة <strong style="color:#CA2553"> @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)</strong> من <strong>@Model.PageCount </strong> </h5>
+                    <div style="text-align:center">
+                        <div class="justify-content-lg-center pagination">
+                            @Html.PagedListPager(Model, inPage => Url.Action("vpWorkers", "InsuranceEmployee", new { areas = Request.QueryString["areas"], inPage, processID = Request.QueryString["processID"], Offices = Request.QueryString["Offices"], cd = Request.QueryString["cd"] }))
+                        </div>
+                    </div>
+                </div>
+            }
+            else if (screen == "vpWorkersShow")
+            {
+                <div id="divPagination">
+                    <h5 style="text-align:center;color:#306fc2"> صفحة <strong style="color:#CA2553"> @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)</strong> من <strong>@Model.PageCount </strong> </h5>
+                    <div style="text-align:center">
+                        <div class="justify-content-lg-center pagination">
+                            @Html.PagedListPager(Model, inPage => Url.Action("vpWorkersShow", "InsuranceEmployee", new { inPage, processID = Request.QueryString["ProcessId"], cd4 = Request.QueryString["cd4"], Cont = Request.QueryString["Cont"] }))
+                        </div>
+                    </div>
+                </div>
+            }
+            else if (screen == "_vpWorkersIndex")  //pagination Model
+            {
+                <div style="height: 30px;" id="masterPaged">
+                    <div id="paged" class="justify-content-lg-center pagination mt-3">
+                        <div class="pagination-container">
+                        </div>
+                    </div>
+                </div>
+                }
+
+            }
+        </div>
+    </div>
+</div>
+
+@Html.Raw(TempData["msg"])
+<div class="col-sm-12 my-1 text-right mt-3">
+    @* بحث *@
+    @if (TempData["action"] == null)
+    {
+        @* بحث *@
+        <button type="button" name="submitType" value="Search" class="btn btn-sm btn-outline-info font-weight-bold" data-toggle="modal" data-target="#sharedModal"
+                onclick="openModel___ss('#titleSharedModal', 'بحث عن عامل', '#btnSearchWorkers', ' بحث', 'fas fa-search', 'btn btnsStyle btn-outline-info ml-3 font-weight-bold', '../Workers/_vpWorkersData', '?areas=@Request.QueryString["areas"]&act=@screen&contr=@controller&Offices=@Request.QueryString["Offices"]', '#sharedModalBody')">
+            <i class="fas fa-search"></i> بحث
+        </button>
+
+        @*الغاء البحث*@
+        <a class="btn btn-sm btn-default font-weight-bold " href="@Url.Action("vCancelSearchWorker", "Workers", new { areas= Request.QueryString["areas"],ProcessId = Request.QueryString["ProcessId"], Act =screen,Contr= controller, Offices = Request.QueryString["Offices"] })">الغاء البحث <span class="glyphicon"></span></a>
+    }
+
+    @if (x != null)
+    {
+        if (screen == "vInsuranceEmployeeIndex" || screen == "vpWorkers")
+        {
+            foreach (var code in x)
+            {
+                if (code.functionCode == 30)
+                {
+                    @* ارسال الى القوى العامله *@
+                    <button type="button" class="btn btn-sm btn-outline-success font-weight-bold btnsStyle" data-toggle="modal" data-target="#AddMainPowerModal"><i class="fas fa-address-book"></i> ارسال الى القوى العامله </button>
+                }
+                if (code.functionCode == 31)
+                {
+                    @* ارسال الى التأمين الصحى *@
+                    <button type="button" class="btn btn-sm btn-outline-dark font-weight-bold btnsStyle" data-toggle="modal" data-target="#AddMedicalInsuranceModal"><i class="fas fa-user-md"></i> ارسال الى التأمين الصحى </button>
+                }
+            }
+        }
+    }
+</div>
+
+@*التأمين الصحى*@
+<div class="modal" id="AddMedicalInsuranceModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header header">
+                <h5 class="modal-title color_main102" id="AddMedicalInsuranceModal">التأمين الصحى</h5>
+                <button class="close color_main102" data-dismiss="modal" style="position: absolute;left: 0;">&times;</button>
+            </div>
+            <div class="modal-body text-center " id="AddMedicalInsuranceModelBody">
+                @using (Html.BeginForm("_vpWorkerMedicalInsurance", "Workers", FormMethod.Post))
+                {
+                    <div class="mt-3 dr-rtl grid_box_shadow mx-3 mb-2 row">
+
+                        @*الرقم القومى للعامل*@
+                        <div class="col-lg-4 col-md-4 col-sm-12">
+                            <span class="color_main102 font-weight-bold ml-2 mx-3">الرقم القومى للعامل</span>
+                            <div>
+                                @Html.TextBox("AddWorkerMedical", "", new { @class = "form-control boorderText number", id = "AddWorkerMedical", required = "required", onchange = " Validate(AddWorkerMedical,'Medical')" })
+                                @Html.ValidationMessage("AddWorkerMedical", "برجاء ادخال الرقم القومى", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        @* الرقم التأمينى *@
+                        <div class="col-lg-4 col-md-4 col-sm-12">
+                            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                                الرقم التأمينى
+                            </span>
+                            <div>
+                                @Html.TextBox("WMPInsurNumMD", "", new { @class = "form-control borderText number", id = "WMPInsurNumMD", data_toggle = "tooltip", title = "ارقام فقط ", data_placement = "bottom", disabled = "disabled" })
+                            </div>
+                        </div>
+                        @* الرقم الهاتف للعامل *@
+                        <div class="col-lg-4 col-md-4 col-sm-12">
+                            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                                الرقم الهاتف
+                            </span>
+                            <div>
+                                @Html.TextBox("WMIPhoneMD", "", new { @class = "form-control borderText number", id = "WMIPhoneMD", data_toggle = "tooltip", title = "ارقام فقط ", data_placement = "bottom", onchange = "check()" })
+                            </div>
+                        </div>
+                        @*  اسم العامــــل *@
+                        <div class="col-lg-12 col-md-12 col-sm-12 mt-2">
+                            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                                اسم العامــــل
+                            </span>
+                            <div>
+                                @Html.TextBox("MPWNamMD", "", new { @class = "form-control borderText", id = "MPWNamMD", disabled = "disabled", data_toggle = "tooltip", title = "حروف عربية فقط", data_placement = "bottom" })
+                            </div>
+                        </div>
+                        @* المهنــــــــــــــــــه *@
+                        <div class="col-lg-12 col-md-12 col-sm-12 mt-2">
+                            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                                المهنــــــــــــــــــه
+                            </span>
+                            <div>
+                                @Html.TextBox("WCareerMPMD", "", new { @class = "form-control borderText", id = "WCareerMPMD", disabled = "disabled" })
+                            </div>
+                        </div>
+                        @* العنــــــــــــــــوان *@
+                        <div class="col-lg-12 col-md-12 col-sm-12 mt-2">
+                            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                                العنــــــــــــــــوان
+                            </span>
+                            <div>
+                                @Html.TextBox("WAddMPMD", "", new { @class = "form-control borderText", id = "WAddMPMD", disabled = "disabled", data_toggle = "tooltip", title = "حروف عربية فقط", data_placement = "bottom" })
+                            </div>
+                        </div>
+
+                        <div class="text-left align-self-end mb-4 col-sm-12 my-1 ">
+                            <button type="submit" class="btn btnsStyle btn-outline-info font-weight-bold"><i class="fas fa-plus"></i> ارسال العامل  </button>
+                            <button type="button" onclick="clearTextsMedical()" class="btnsStyle btn btn-outline-primary" font-weight-bold">عامل جديد<i class="fas fa fa-rotate-left	"></i></button>
+
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@*القوى العامله*@
+<div class="modal" id="AddMainPowerModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header header">
+                <h5 class="modal-title color_main102" id="AddMainPowerModal"> القوى العامله</h5>
+                <button class="close color_main102" data-dismiss="modal" style="position: absolute;left: 0;">&times;</button>
+            </div>
+            <div class="modal-body text-center " id="AddMainPowerModelBody">
+                @using (Html.BeginForm("_vpWorkerManPower", "Workers", FormMethod.Post))
+                {
+                    <div class="mt-3 dr-rtl grid_box_shadow mx-3 mb-2 row">
+
+                        @*الرقم القومى للعامل*@
+                        <div class="col-lg-4 col-md-4 col-sm-12">
+                            <span class="color_main102 font-weight-bold ml-2 mx-3">الرقم القومى للعامل</span>
+                            <div>
+                                @Html.TextBox("AddWorkerMainPower", "", new { @class = "form-control boorderText number", id = "AddWorkerMainPower", required = "required", onchange = " Validate(AddWorkerMainPower,'ManPower')" })
+                                @Html.ValidationMessage("AddWorkerMainPower", "برجاء ادخال الرقم القومى", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        @* الرقم التأمينى *@
+                        <div class="col-lg-4 col-md-4 col-sm-12">
+                            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                                الرقم التأمينى
+                            </span>
+                            <div>
+                                @Html.TextBox("WMPInsurNum", "", new { @class = "form-control borderText number", id = "WMPInsurNum", data_toggle = "tooltip", title = "ارقام فقط ", data_placement = "bottom", disabled = "disabled" })
+                            </div>
+                        </div>
+                        @*  اسم العامــــل *@
+                        <div class="col-lg-12 col-md-12 col-sm-12 mt-2">
+                            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                                اسم العامــــل
+                            </span>
+                            <div>
+                                @Html.TextBox("MPWNam", "", new { @class = "form-control borderText", id = "MPWNam", disabled = "disabled", data_toggle = "tooltip", title = "حروف عربية فقط", data_placement = "bottom" })
+                            </div>
+                        </div>
+                        @* المهنــــــــــــــــــه *@
+                        <div class="col-lg-12 col-md-12 col-sm-12 mt-2">
+                            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                                المهنــــــــــــــــــه
+                            </span>
+                            <div>
+                                @Html.TextBox("WCareerMP", "", new { @class = "form-control borderText", id = "WCareerMP", disabled = "disabled" })
+                            </div>
+                        </div>
+                        @* العنــــــــــــــــوان *@
+                        <div class="col-lg-12 col-md-12 col-sm-12 mt-2">
+                            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                                العنــــــــــــــــوان
+                            </span>
+                            <div>
+                                @Html.TextBox("WAddMP", "", new { @class = "form-control borderText", id = "WAddMP", disabled = "disabled", data_toggle = "tooltip", title = "حروف عربية فقط", data_placement = "bottom" })
+                            </div>
+                        </div>
+
+                        <div class="text-left align-self-end mb-4 col-sm-12 my-1 ">
+                            <button type="submit" class="btn btnsStyle btn-outline-info font-weight-bold"><i class="fas fa-plus"></i> ارسال العامل  </button>
+                            <button type="button" onclick="ClearTexts()" class="btnsStyle btn btn-outline-primary" font-weight-bold">عامل جديد<i class="fas fa fa-rotate-left	"></i></button>
+
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function Validate(textBox,type)
+    {
+        loaderOpen();
+        //console.log('textBox length = ', $(textBox).val().length);
+        //console.log('textBox value', $(textBox).val());
+        //console.log(' type name =',type);
+        if ($(textBox).val().length > 14)
+        {
+            if(type =="ManPower")
+                ClearTexts();
+            else
+                clearTextsMedical();
+            sAlert('برجاء ادخال الرقم القومى 14 رقم.', 2);
+            loaderClose();
+            console.log("2");
+        }
+        else if ($(textBox).val().length == 0)
+        {
+            if(type =="ManPower")
+                ClearTexts();
+            else
+                clearTextsMedical();
+            sAlert('برجاء ادخال الرقم القومى 14 رقم.', 2);
+            loaderClose();
+            console.log("3");
+        }
+        else if ( $(textBox).val().length < 14)
+        {
+            if(type =="ManPower")
+                ClearTexts();
+            else
+                clearTextsMedical();
+            sAlert('برجاء ادخال الرقم القومى 14 رقم.', 2);
+            loaderClose();
+            console.log("4");
+        }
+        else if ($(textBox).val().length == 14)
+        {
+            var x = $(textBox).val();
+            $.getJSON("../jsonFunctions/GetWorkerDetails", { Num: x},
+            function (data)
+            {
+                if (data == "Error")
+                {
+                    if(type =="ManPower")
+                        ClearTexts();
+                    else
+                        clearTextsMedical();
+                    sAlert("  عفوا هذا المواطن لا يمكن تسجيله لعدم وجود اتصال مع قواعد بيانات الهيئه ", 2);
+                }
+                else if (data == "ERR-NATIONAL")
+                {
+                    if(type =="ManPower")
+                        ClearTexts();
+                    else
+                        clearTextsMedical();
+                    sAlert(" عفوا لا يمكن تسجيل الرقم القومى ", 2);
+                }
+                else if(data=="OPEN")
+                {
+                    if(type =="ManPower")
+                        ClearTexts();
+                    else
+                        clearTextsMedical();
+                    sAlert(" عفوا لا يمكن تسجيل الرقم القومى لوجود مده مفتوحه للعامل ", 2);
+                }
+                else if (data == "CreateInsur")
+                {
+                    if (type == "ManPower")
+                        ClearTexts();
+                    else
+                        clearTextsMedical();
+                    sAlert(" برحاء انتظار حتى يتم انشاء رقم تأمينى للرقم القومى هذا", 2);
+                }
+                else
+                {
+                    if (data[0].msg != null)
+                    {
+                        sAlert(data[0].msg, 2);
+                        if(type =="ManPower")
+                            ClearTexts();
+                        else
+                            clearTextsMedical();
+                        loaderClose();
+                    }
+
+                    if(type == "Medical")
+                    {
+                        $('#WMPInsurNumMD').val(data[0].workerInsuranceNum);
+                        $('#AddWorkerMedical').val(data[0].workerNationalID);
+                        $('#MPWNamMD').val(data[0].workerName);
+                        $('#WCareerMPMD').val(data[0].careerName);
+                        $('#WAddMPMD').val(data[0].govermentName + ' , ' + data[0].centerName + ' , ' + data[0].villageName);
+                    }
+                    else
+                    {
+                        console.log("data[0]", data[0]);
+                        $('#WMPInsurNum').val(data[0].workerInsuranceNum);
+                        $('#AddWorkerMainPower').val(data[0].workerNationalID);
+                        $('#MPWNam').val(data[0].workerName);
+                        $('#WCareerMP').val(data[0].careerName);
+                        $('#WAddMP').val(data[0].govermentName + ' , ' + data[0].centerName + ' , ' + data[0].villageName);
+                    }
+                }
+                loaderClose();
+            })
+        }
+    }
+    function check()
+    {
+        if ($('#WMIPhoneMD').val().length == 11 && $('#AddWorkerMedical').val() != '' )
+        {
+            $.getJSON("../Workers/checkeWorkerPhoneNumber",{nationalID : $('#AddWorkerMedical').val() ,Number :$('#WMIPhoneMD').val() },
+                function (data)
+                {
+                    console.log('data :',data);
+                    if (data == "0")
+                    {
+                        sAlert(" انتبه هذا الرقم غير رقم العامل المسجل بالتأمينات ", 2);
+                    }
+                });
+        }
+        else if ($('#WMIPhoneMD').val().length == 11 && $('#AddWorkerMedical').val() == '' )
+        {
+            $('#workerPhone').val('');
+            sAlert('برجاء أدخال الرقم القومى', 2);
+            $('#workerPhone').css('border-color', '#dc3545');
+        }
+        else if ($('#workerPhone').val().length >= 8 && $('#workerPhone').val().length <= 11 && $('#AddWorkerMedical').val() != '' )
+        {
+            $('#workerPhone').val('');
+            sAlert('رقم الهاتف لا يقل عن 8 ارقام ولا يزيد عن 11 رقم', 2);
+            $('#workerPhone').css('border-color', '#dc3545');
+        }
+    }
+</script>
+
+<script>
+    function ClearTexts()
+    {
+        $('#AddWorkerMainPower,#WMPInsurNum,#MPWNam,#WCareerMP,#WAddMP').val('');
+    }
+    function clearTextsMedical(){
+        $('#AddWorkerMedical','#WMPInsurNumMD','#WMIPhoneMD','#MPWNamMD','#WCareerMPMD','#WAddMPMD').val('');
+    }
+</script>
+
+<script>
+    $(document).ready(function ()
+    {
+        var msg = "'عفوا ,هذا الاسم غير صحيح من فضلك تأكد من أسم العامل.'";
+        PaggingTemplate(@totalPage, 1, 'GetPageData', "'../Workers/GetWorkers'", msg, '#tbWorkers',@Convert.ToInt32(generalVariables.PageSize));
+    });
+</script>

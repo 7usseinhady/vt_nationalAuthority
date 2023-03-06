@@ -1,0 +1,36 @@
+﻿@helper GetTreeView(List<DataAccessLayer.Models.permissionAreaOfficeModel> fun, int? parentID)
+{           
+    foreach (var i in fun.Where(a => a.iParentCode.Equals(parentID)))
+    {
+          <li>
+           @{var child = fun.Where(a => a.iParentCode.Equals(i.iFunctionCode)).Count();}
+           @{ string Code = i.iFunctionCode + "-" + i.sTable;}
+           @if (child > 0 && i.sTable == "area")
+           {
+              <span class="fa fa-minus-circle collapsible collapseTree" style="color:#1b608a" >&nbsp;</span>             
+           }
+           else
+           {
+              <span style="width:15px; display:inline-block">&nbsp;</span>
+           }
+           @if (i.iCountGroup > 0 && i.sTable== "officeInsurance")
+           {
+               <input type="checkbox" id="rehab" class='chk checkbox option-input-child' onclick="ckBoxClicked(this);" value="@Code" checked />
+               <h4 style="display:inline-block;margin-right:3px;color:black"> @i.sFunctionName</h4>
+           }
+           else
+           {
+               <input type="checkbox" id="parent" class='chk checkbox option-input-child' onclick="ckBoxClicked(this);" value="@Code"/>
+               <h4 style="display:inline-block;margin-right:3px;color:black"> @i.sFunctionName</h4>
+           }
+           @if (child > 0 && i.sTable == "area")
+           {
+            <ul id="@i.sFunctionName">
+                @AreaTree.GetTreeView(fun, i.iFunctionCode)
+            </ul>
+           }
+        </li>
+    }
+}
+
+

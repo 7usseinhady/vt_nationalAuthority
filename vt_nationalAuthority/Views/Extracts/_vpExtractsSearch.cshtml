@@ -1,0 +1,92 @@
+﻿@{
+    Layout = "~/Views/Shared/_partialLayout.cshtml";
+}
+
+@using (Html.BeginForm("_vpExtractsSearch", "Extracts", FormMethod.Post))
+{
+    <div class="mt-2 dr-rtl grid_box_shadow mx-3 mb-2 ">
+        <div class="row text-right">
+            @if (Session["officeCode"] != null) // موظف التأمينات
+            {
+
+                @*  المقاول *@
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12 my-1">
+                    <span class="color_main102 font-weight-bold ml-2 mx-4">
+                        المقــــــــــــــــــــــــــاول
+                    </span>
+                    <div>
+                        @Html.ListBox("processSubContractorCode", ViewBag.contractors as SelectList, new { @class = "form-control borderDDL selectpicker", @data_live_search = "true" })
+                    </div>
+                </div>
+            }
+
+            @*  اسم المستخلص *@
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-4">
+                    اسم المســـــتخلص
+                </span>
+                <div>
+                    @Html.TextBox("extractName", "", new { @class = "form-control borderText arNumSign", data_toggle = "tooltip", title = "حروف عربية فقط", data_placement = "bottom" })
+                </div>
+            </div>
+            @*  المسلم (المندوب) *@
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-4">
+                    المسلم (المندوب)
+                </span>
+                <div>
+                    @Html.TextBox("recieverName", "", new { @class = "form-control borderText arNumSign", data_toggle = "tooltip", title = "حروف عربية فقط)", data_placement = "bottom" })
+                </div>
+            </div>
+            @*  المبلغ *@
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-4">
+                    قيمة المستخلص
+                </span>
+                <div>
+                    @Html.TextBox("budget", "", new { @class = "form-control borderText decimal", data_toggle = "tooltip", title = " ارقام فقط", data_placement = "bottom" })
+                </div>
+            </div>
+            @*  نوع المستحلص *@
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-4">
+                    نوع المستخلص
+                </span>
+                <div>
+                    @Html.ListBox("extractTypes", ViewBag.extractTypes as SelectList, new { @class = "form-control selectpicker borderDDL", title = "-- الكل --", @data_live_search = "true" })
+                </div>
+            </div>
+            @*  المهمة المنتهية *@
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-4">
+                    المهمة المنتهيــــــــة
+                </span>
+                <div>
+                    @Html.ListBox("processTypes", ViewBag.processTypes as SelectList, new { @class = "form-control selectpicker borderDDL", title = "-- الكل --", @data_live_search = "true" })
+                </div>
+            </div>
+            @*  من تاريخ*@
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-4">
+                    من تاريخ
+                </span>
+                <div>
+                    @Html.TextBox("fromDate", "", new { @class = "form-control borderText date", autocomplete = "off" })
+                </div>
+            </div>
+            @* الى تاريخ *@
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+                <span class="color_main102 font-weight-bold ml-2 mx-4">
+                    الى تاريخ
+                </span>
+                <div>
+                    @Html.TextBox("toDate", "", new { @class = "form-control borderText date", autocomplete = "off" })
+                </div>
+            </div>
+            @* اضافة / تعديل مستخلص *@
+            <div class="col-sm-12 my-1 mt-3 text-left">
+                <button type="submit" id="btnExtractSearch" onclick="loaderOpen();" class=""><i class=""></i> </button>
+            </div>
+        </div>
+    </div>
+}

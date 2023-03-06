@@ -1,0 +1,16 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    <title>المستخدمين</title>
+}
+<script src="~/Scripts/signalR/NotificationProcess.js"></script>
+<div class="mt-4">
+    <ul role="tablist" id="navBar" class="nav justify-content-start  dr-rtl mt-4 mr-lg-3 mr-md-2 mr-0">
+        <li id="1" class="nav-item tabs_box_shadow mx-1"><a class="nav-link color_main102 font-weight-bold" data_toggle="tab" href=@Url.Action("vUsersIndex", "Users",new { cp = 1})>المستخدمين</a></li>
+        <li id="2" class="nav-item tabs_box_shadow mx-1"><a class="nav-link color_main102 font-weight-bold" data_toggle="tab" href=@Url.Action("vGroupIndex", "Group")>المجموعات</a></li>
+        <li id="3" class="nav-item tabs_box_shadow mx-1"><a class="nav-link color_main102 font-weight-bold" data_toggle="tab" href=@Url.Action("vAreaOfficeIndex", "AreaOffice")>اعدادات المناطق / المكاتب</a></li>
+        <li id="3" class="nav-item tabs_box_shadow mx-1"><a class="nav-link color_main102 font-weight-bold" data_toggle="tab" href=@Url.Action("vAreaOfficeContractorIndex", "AreaOffice")>اعدادات المناطق / المكاتب للمقاولين</a></li>
+    </ul>
+</div>
+<div class="dr-rtl mx-3 mb-3">
+    @RenderBody()
+</div>

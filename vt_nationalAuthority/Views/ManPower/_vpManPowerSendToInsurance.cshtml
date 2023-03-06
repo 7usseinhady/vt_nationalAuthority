@@ -1,0 +1,85 @@
+﻿<div class="mt-3 dr-rtl grid_box_shadow mx-3 mb-2 ">
+    <div class="row text-right">
+
+        @* الرقم القومى *@
+        <div class="col-lg-6 col-md-6 col-sm-12">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                الرقم القومى
+            </span>
+            <div>
+                @Html.TextBox("WorkerNatNum", "", new { @class = "form-control borderText", data_toggle = "tooltip", title = "ارقام فقط", data_placement = "bottom", onchange = "fillDataWorker()" })
+            </div>
+        </div>
+
+        @*  من تاريخ*@
+        <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                تاريخ الأختبــــــار
+            </span>
+            <div>
+                @Html.TextBox("dateFrom", "", new { @class = "form-control borderText date"})
+            </div>
+        </div>
+
+        @*  اسم العامــــل *@
+        <div class="col-lg-12 col-md-12 col-sm-12 mt-3">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                اسم العامــــل
+            </span>
+            <div>
+                @Html.TextBox("WorkerName", "", new { @class = "form-control borderText", id = "workerName", disabled = "disabled", data_toggle = "tooltip", title = "حروف عربية فقط", data_placement = "bottom" })
+            </div>
+        </div>
+        @* المهنــــــــــــــــــه *@
+        <div class="col-lg-12 col-md-12 col-sm-12 mt-3">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                المهنــــــــــــــــــه
+            </span>
+            <div>
+                @Html.TextBox("WorkerName", "", new { @class = "form-control borderText",id="job", disabled = "disabled"})
+            </div>
+        </div>
+        @* الموقع *@
+        <div class="col-lg-12 col-md-12 col-sm-12 mt-3">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                الموقــــــــــــــــع
+            </span>
+            <div>
+                @Html.TextBox("WorkerName", "", new { @class = "form-control borderText", id = "address", disabled = "disabled", data_toggle = "tooltip", title = "الموقع", data_placement = "bottom" })
+            </div>
+        </div>
+        @* الرقم التأمينى *@
+        <div class="col-lg-6 col-md-6 col-sm-12 mt-3">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                الرقم التأمينى
+            </span>
+            <div>
+                @Html.TextBox("WorkerSecNum", "", new { @class = "form-control borderText", id = "insNum", disabled = "disabled", data_toggle = "tooltip", title = "ارقام فقط", data_placement = "bottom" })
+            </div>
+        </div>
+        @*  درجة المهـــاره *@
+        <div class="col-lg-6 col-md-6 col-sm-12 mt-3 ">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                درجة المهـــاره
+            </span>
+            <div>
+                @Html.DropDownList("MahrDegree", ViewBag.MahrDegree as SelectList, new { @class = "form-control borderDDL"})
+            </div>
+        </div>
+        <div class="col-sm-12 my-1 text-left mt-3">
+            <button type="button" id="btnSendToInsurance" class="btn btnsStyle btn-outline-info  font-weight-bold"><i class="fas fa-plus"></i></button>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function fillDataWorker() {
+
+        console.log('fillDataWorker');
+        $('#insNum').val('123654789');
+        $('#workerName').val('احمد على محمد طه خلف');
+        $('#job').val('سباك');
+        $('#address').val('3 عثمان ابن عفان - جزيره العرب - المهندسين');
+    }
+</script>

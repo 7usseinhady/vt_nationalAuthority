@@ -1,0 +1,7 @@
+﻿@{
+    Layout = "~/Views/Shared/_contractorLayout.cshtml";
+    <title>مقاولين من باطن</title>
+}
+<div>
+    @{Html.RenderAction("_vpContractors", "Contractor", new { ProcessId = Session["processCode"].ToString(), inPage = Request.QueryString["inPage"]==null?1 : Convert.ToInt32( Request.QueryString["inPage"].ToString())});}
+</div>

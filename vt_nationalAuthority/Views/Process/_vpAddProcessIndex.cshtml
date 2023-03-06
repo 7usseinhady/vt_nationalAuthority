@@ -1,0 +1,774 @@
+﻿@model  DataAccessLayer.Requests.processRequest
+@{
+    Layout = "~/Views/Shared/_partialLayout.cshtml";
+    string[] path = HttpContext.Current.Request.Url.AbsolutePath.Split('/');
+    var screen = path[2];
+}
+
+@using (Html.BeginForm("_vpAddProcessIndex", "Process", FormMethod.Post, new { @id = "issueform", @class = "needs-validation", @novalidate = "novalidate" }))
+{
+    var bnIsLimited = false;
+
+    if (Model.OModel != null)
+    {
+        bnIsLimited = Model.OModel.bnIsLimited == null ? false : (Model.OModel.bnIsLimited == true ? true : false);
+    }
+
+    @Html.HiddenFor(model => model.OModel.iProcessCode)
+    @Html.HiddenFor(model => model.OModel.sIpInsert)
+
+    @* رقم الوارد *@ @* رقم العمليه *@  @* اسم العمليه *@    @* نوع العمليه *@    @*   الرقم التامينى لجهة الاسناد - المقاول الرئيسي *@@*  جهة الاسناد - المقاول الرئيسي *@
+    <div class="mt-2 dr-rtl grid_box_shadow mx-3 text-right row">
+        @* رقم الوارد *@
+        <div class="col-lg-3 col-md-12 col-sm-12">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">رقم الوارد</span>
+            <div>
+                @Html.TextBoxFor(model => model.OModel.sIncommingNumber, new { @class = "form-control boorderText number", disabled = "disabled" })
+            </div>
+        </div>
+        @* اسم العمليه *@
+        <div class="col-lg-9 col-md-12 col-sm-12">
+            <span class="color_main102 font-weight-bold ml-2  mx-3">اسم العمليه</span>
+            <div>
+                @Html.TextBoxFor(model => model.OModel.sProcessName, new { @class = "form-control boorderText arNumSign", id = "txtProcessName", name = "txtProcessName", data_toggle = "tooltip", title = "حروف عربية وارقام ورموز فقط", data_placement = "bottom", required = "required" })
+            </div>
+            <div>
+                @Html.ValidationMessageFor(model => model.OModel.sProcessName, "", new { @class = "d-flex justify-content-center" })
+            </div>
+        </div>
+        @* رقم العمليه *@
+        <div class="col-lg-3 col-md-12 col-sm-12">
+            <span class="color_main102 font-weight-bold ml-2  mx-3">رقم العمليه</span>
+            <div>
+                @Html.TextBoxFor(model => model.OModel.sProcessNumber, new { @class = "form-control boorderText number", disabled = "disabled" })
+            </div>
+        </div>
+        @* نوع العمليه *@
+        <div class="col-lg-9 col-md-12 col-sm-12">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">نوع العمليه</span>
+            <div>
+                @Html.DropDownListFor(model => model.OModel.iProcessTypeCode, ViewBag.processType as SelectList, "-- نوع العمليه --", new { @class = "form-control borderDDL selectpicker", @data_live_search = "true", required = "required" })
+            </div>
+            <div>
+                @Html.ValidationMessageFor(model => model.OModel.iProcessTypeCode, "", new { @class = "d-flex justify-content-center" })
+            </div>
+        </div>
+        @*المقاول الرئيسي*@
+        @if (Convert.ToBoolean(TempData["referanceSideContractor"]))
+        {
+            @* الكيان القانونى لجهة الاسناد *@
+            <div class="col-lg-6 col-md-6 col-sm-12 mt-3">
+                <span class="color_main102 font-weight-bold ml-2 mx-3 ">الكيان القانونى لجهة الاسناد</span>
+                <div>
+                    @Html.DropDownList("legalEntityRefSide", ViewBag.legalEntity as SelectList, " -- اختر -- ", new { @class = "form-control borderDDL selectpicker", onchange = "getRefSideContByInsurNumLegalEntity('#legalEntityRefSide','#referanceSidNum','#txtRefSide','#OModel_inReferenceSideCode')", id = "legalEntityRefSide", @data_live_search = "true", required = "required" })
+                </div>
+            </div>
+            @* الرقم التامينى لجهة الاسناد *@
+            <div class="col-lg-6 col-md-6 col-sm-12 mt-3">
+                <span class="color_main102 font-weight-bold ml-2 mx-3 ">الرقم التأمينى لجهة الاسناد</span>
+                <div>
+                    @Html.TextBoxFor(model => model.OModel.sReferanceSideNum, new { @class = "form-control boorderText number", id = "referanceSidNum", data_toggle = "tooltip", title = "ارقام فقط", data_placement = "bottom", onchange = "getRefSideContByInsurNumLegalEntity('#legalEntityRefSide','#referanceSidNum','#txtRefSide','#OModel_inReferenceSideCode')", required = "required" })
+                </div>
+                <div>
+                    @Html.ValidationMessageFor(model => model.OModel.sReferanceSideNum, "", new { @class = "d-flex justify-content-center" })
+                </div>
+            </div>
+            @*  بحث *@
+            @*<div class="col-lg-2 col-md-2 col-sm-12 mt-auto">
+                <button type="button" class="btn btn-outline-primary font-weight-bold" onclick="GetPageData(1, '#legalEntityRefSide', '#referanceSidNum', '#txtRefSide')"><i class="fas fa-search"></i> بحث</button>
+            </div>*@
+            @*  جهة الاسناد - المقاول الرئيسي *@
+            <div class="col-lg-12 col-md-12 col-sm-12 mt-2">
+                <span class="color_main102 font-weight-bold ml-2 mx-3"> جهه الاسناد</span>
+                <div class="d-inline-flex mt-1 w-100">
+                    @Html.HiddenFor(model => model.OModel.inReferenceSideCode)
+                    @Html.TextBoxFor(model => model.OModel.sReferanceSideName, new { @class = "form-control boorderText arNum", id = "txtRefSide", required = "required", disabled = "disabled" })
+                </div>
+            </div>
+        }
+        else // جهة الاسناد
+        {
+            @* الكيان القانونى للمقاول الرئيسي *@
+            <div class="col-lg-6 col-md-6 col-sm-12 mt-3">
+                <span class="color_main102 font-weight-bold ml-2 mx-3 ">الكيان القانونى للمقاول الرئيسي </span>
+                <div>
+                    @Html.DropDownList("legalEntityCont", ViewBag.legalEntity as SelectList, " -- اختر -- ", new { @class = "form-control borderDDL selectpicker", onchange = "getRefSideContByInsurNumLegalEntity('#legalEntityCont','#contNum','#txtCont','#OModel_inContractorCode')", id = "legalEntityCont", @data_live_search = "true", required = "required" })
+                </div>
+            </div>
+            @*   الرقم التامينى لجهة الاسناد - المقاول الرئيسي *@
+            <div class="col-lg-6 col-md-6 col-sm-12 mt-3">
+                <span class="color_main102 font-weight-bold ml-2 mx-3 "> الرقم التأمينى للمقاول الرئيسي </span>
+                <div>
+                    @Html.TextBoxFor(model => model.OModel.sContractorNum, new { @class = "form-control boorderText number", id = "contNum", data_toggle = "tooltip", title = "ارقام فقط", data_placement = "bottom", onchange = "getRefSideContByInsurNumLegalEntity('#legalEntityCont','#contNum','#txtCont','#OModel_inContractorCode')", required = "required" })
+                </div>
+                <div>
+                    @Html.ValidationMessageFor(model => model.OModel.sContractorNum, "", new { @class = "d-flex justify-content-center" })
+                </div>
+            </div>
+            @*  المقاول الرئيسي *@
+            <div class="col-lg-12 col-md-12 col-sm-12 mt-2">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">اسم المقاول</span>
+                <div class="d-inline-flex mt-1 w-100">
+                    @Html.HiddenFor(model => model.OModel.inContractorCode)
+                    @Html.TextBoxFor(model => model.OModel.sContractorName, new { @class = "form-control boorderText arNum", id = "txtCont", required = "required", disabled = "disabled" })
+                </div>
+            </div>
+        }
+        @* المنطقة *@
+        <div class="col-lg-6 col-md-6 col-sm-12">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                المنطقة
+            </span>
+            <div>
+                @Html.DropDownListFor(model => model.OModel.iAreaCode, ViewBag.areas as SelectList, " -- المنطقة -- ", new { @class = "form-control borderDDL selectpicker", id = "areaAccept", onchange = "officesByArea();", @data_live_search = "true", required = "required" })
+            </div>
+            <div>
+                @Html.ValidationMessageFor(model => model.OModel.iAreaCode, "", new { @class = "d-flex justify-content-center" })
+            </div>
+        </div>
+        @* المكتب *@
+        <div class="col-lg-6 col-md-6 col-sm-12">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                المكتب
+            </span>
+            <div>
+                @Html.DropDownListFor(model => model.OModel.iOfficeCode, ViewBag.Offices as SelectList, " -- المكتب -- ", new { @class = "form-control borderDDL selectpicker", id = "officeAccept", @data_live_search = "true", required = "required" })
+            </div>
+            <div>
+                @Html.ValidationMessageFor(model => model.OModel.iOfficeCode, "", new { @class = "d-flex justify-content-center" })
+            </div>
+        </div>
+
+        @if (screen.Contains("vProcessShowIndex"))
+        {
+        @* حالة العمليه *@
+        <div class="col-lg-6 col-md-6 col-sm-12">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">حالة العمليه</span>
+            <div>
+                @Html.DropDownList("OperationStatus", ViewBag.OperationStatus as SelectList, "-- حالة العمليه --", new { @class = "form-control borderDDL selectpicker", @data_live_search = "true" })
+            </div>
+        </div>
+        @*رقم العمليه*@
+        <div class="col-lg-6 col-md-6 col-sm-12 mt-2">
+            <span class="color_main102 font-weight-bold ml-2 mx-3 ">رقم العمليه</span>
+            <div>
+                @Html.TextBox("OperationNumber", "", new { @class = "form-control boorderText number", data_toggle = "tooltip", title = "ارقام فقط", data_placement = "bottom" })
+            </div>
+        </div>
+        }
+    </div>
+    @* نوع المستند *@@* محدد المده *@@*القيمه الكليه للعمليه*@@*تاريخ بدء العمليه*@@**ت*** تاريخ انتهاء العمليه *@@* تاريخ المستند *@
+    <div class="mt-4 dr-rtl grid_box_shadow mx-3 row text-right" style="margin-top: 15px !important;">
+        @*تاريخ بدء العمليه*@
+        <div class="col-lg-3 col-md-12 col-sm-12">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">ت بدء العمليه</span>
+            <div>
+                @Html.TextBoxFor(model => model.OModel.sDateStartProcess, new { @class = "form-control boorderText date", autocomplete = "off", required = "required", id = "txtDateStart" })
+            </div>
+            <div>
+                @Html.ValidationMessageFor(model => model.OModel.sDateStartProcess, "", new { @class = "d-flex justify-content-center" })
+            </div>
+        </div>
+        @* تاريخ انتهاء العمليه *@
+        <div class="col-lg-3 col-md-12 col-sm-12">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">ت انتهاء العمليه</span>
+            <div>
+                @Html.TextBoxFor(model => model.OModel.sDateEndProcess, new { @class = "form-control boorderText date", autocomplete = "off", id = "txtDateEnd" })
+            </div>
+        </div>
+        @* محدد المده *@@*القيمه الكليه للعمليه*@
+        <div class="col-lg-6 col-md-12 col-sm-12 col-12 my-1 mt-3 row">
+            @* محدد المده *@
+            <div class="col-lg-5 col-12">
+                <div class="row">
+                    <div>
+                        @Html.CheckBox("bnIsLimited", bnIsLimited, new { @class = "option-input-child checkbox", onclick = "OpenCost()", id = "LimitCost" })
+                    </div>
+                    <div class="mt-1 mr-1">
+                        <label class="color_main102 font-weight-bold ml-2" for="LimitCost">محدده المده</label>
+                    </div>
+                </div>
+                <div class="row mb-4"></div>
+            </div>
+            @*القيمه الكليه للعمليه*@
+            <div class="col-lg-7 col-12" id="divCost">
+                <div>
+                    <span class="color_main102 font-weight-bold ml-2 mx-3" style="font-size: 15px;">القيمه الكليه للعمليه</span>
+                </div>
+                <div>
+                    @Html.TextBoxFor(model => model.OModel.dnFullBudget, new { @class = "form-control boorderText decimal", data_toggle = "tooltip", title = "القيمه الكليه للعمليه", data_placement = "bottom", placeholder = "1,000,000" })
+                </div>
+            </div>
+        </div>
+        @* نوع المستند *@
+        <div class="col-lg-6 col-md-12 col-sm-12">
+            <span class="color_main102 font-weight-bold mb-1 mx-3">نوع المستند</span>
+            <div>
+                @Html.DropDownListFor(model => model.OModel.inDocumentTypeCode, ViewBag.documentType as SelectList, "-- نوع المستند --", new { @class = "form-control borderDDL selectpicker", @data_live_search = "true" })
+            </div>
+        </div>
+        @* تاريخ المستند *@
+        <div class="col-lg-6 col-md-12 col-sm-12">
+            <span class="color_main102 font-weight-bold mb-1 mx-3">تاريخ المستند</span>
+            <div>
+                @Html.TextBoxFor(model => model.OModel.sDateDocument, new { @class = "form-control boorderText date", autocomplete = "off", id = "txtDateDocument" })
+            </div>
+        </div>
+    </div>
+        @* عنوان العمليه *@
+        <div class="mt-4 dr-rtl grid_box_shadow mx-3 row text-right" style="margin-top: 15px !important;">
+            @* عنوان العمليه *@
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">عنوان العمليه</span>
+                <div class="row">
+                    <div class="col-lg-3 col-md-12 col-sm-12">
+                        @Html.TextBoxFor(model => model.oProcessSiteModel.inBuildingNumberProcessSite, new { @class = "form-control boorderText number", data_toggle = "tooltip", title = "ارقام فقط", data_placement = "bottom", placeholder = "عقار رقم" })
+                    </div>
+                    <div class="col-lg-9 col-md-12 col-sm-12 mb-2 mt-1">
+                        @Html.TextBoxFor(model => model.oProcessSiteModel.sSiteAddressProcessSite, new { @class = "form-control boorderText arNumSign", data_toggle = "tooltip", title = "حروف عربية و ارقام ورموز فقط", data_placement = "bottom", placeholder = "شارع / حاره" })
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-lg-4 col-md-12 col-sm-12 mb-2">
+                        @Html.DropDownListFor(model => model.oProcessSiteModel.inGovermentCodeProcessSite, ViewBag.GovermentSite as SelectList, "-- المحافظة --", new { @class = "form-control borderDDL selectpicker", id = "govSite", @data_live_search = "true", placeholder = "محافظة", onchange = "getCenters('#govSite','#centerSite','#villageSite')" })
+                    </div>
+                    <div class="col-lg-4 col-md-12 col-sm-12 mb-2">
+                        @Html.DropDownListFor(model => model.oProcessSiteModel.inCenterCodeProcessSite, ViewBag.CenterSite as SelectList, "-- المركز / القسم --", new { @class = "form-control borderDDL selectpicker", id = "centerSite", @data_live_search = "true", placeholder = "قسم / مركز", onchange = "getVillage('#govSite','#centerSite','#villageSite')" })
+                    </div>
+                    <div class="col-lg-4 col-md-12 col-sm-12 mb-2">
+                        @Html.DropDownListFor(model => model.oProcessSiteModel.inVillageCodeProcessSite, ViewBag.VallageSite as SelectList, "-- القرية / الشياخة --", new { @class = "form-control borderDDL selectpicker", id = "villageSite", @data_live_search = "true", placeholder = "شياخة / قرية" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        @* عنوان المخطار للمراسله *@
+        <div class="mt-4 dr-rtl grid_box_shadow mx-3 row col-12 text-right" style="margin-top: 15px !important;">
+            @* عنوان المخطار للمراسله *@
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">عنوان المخطار للمراسله</span>
+                <div class="row">
+                    <div class="col-lg-3 col-md-12 col-sm-12">
+                        @Html.TextBoxFor(model => model.oProcessUserLettersSiteModel.inBuildingNumberProcessUserLettersSite, new { @class = "form-control boorderText number", data_toggle = "tooltip", title = "ارقام فقط", data_placement = "bottom", placeholder = "عقار رقم" })
+                    </div>
+                    <div class="col-lg-9 col-md-12 col-sm-12 mb-2 mt-1">
+                        @Html.TextBoxFor(model => model.oProcessUserLettersSiteModel.sSiteAddressProcessUserLettersSite, new { @class = "form-control boorderText arNumSign", data_toggle = "tooltip", title = "حروف عربية و ارقام ورموز فقط", data_placement = "bottom", placeholder = "شارع / حاره" })
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-lg-4 col-md-12 col-sm-12 mb-2">
+                        @Html.DropDownListFor(model => model.oProcessUserLettersSiteModel.inGovermentCodeProcessUserLettersSite, ViewBag.GovermentLetterSite as SelectList, "-- المحافظة --", new { @class = "form-control borderDDL selectpicker", id = "goverLettersSite", @data_live_search = "true", title = "-- المحافظة --", onchange = "getCenters('#goverLettersSite','#centerLettersSite','#villageLettersSite')" })
+                    </div>
+                    <div class="col-lg-4 col-md-12 col-sm-12 mb-2">
+                        @Html.DropDownListFor(model => model.oProcessUserLettersSiteModel.inCenterCodeProcessUserLettersSite, ViewBag.CenterLetterSite as SelectList, "-- المركز / القسم --", new { @class = "form-control borderDDL selectpicker", id = "centerLettersSite", @data_live_search = "true", title = "-- المركز / القسم --", onchange = "getVillage('#goverLettersSite','#centerLettersSite','#villageLettersSite')" })
+                    </div>
+                    <div class="col-lg-4 col-md-12 col-sm-12 mb-2">
+                        @Html.DropDownListFor(model => model.oProcessUserLettersSiteModel.inVillageCodeProcessUserLettersSite, ViewBag.VallageLetterSite as SelectList, "-- القرية / الشياخة --", new { @class = "form-control borderDDL selectpicker", id = "villageLettersSite", @data_live_search = "true", title = "-- القرية / الشياخة --" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        @* اسم صاحب الترخيص *@@* عنوان صاحب الترخيص *@
+        <div class="mt-4 dr-rtl grid_box_shadow mx-3 row col-12 text-right" style="margin-top: 15px !important;">
+            @* اسم صاحب الترخيص *@
+            <div class="col-lg-6 col-md-6 col-sm-12">
+                <span class="color_main102 font-weight-bold ml-2  mx-3">اسم صاحب الترخيص</span>
+                <div>
+                    @Html.TextBoxFor(model => model.OModel.sNameOwnerPermision, new { @class = "form-control boorderText arNum", data_toggle = "tooltip", title = "حروف عربية و ارقام فقط", data_placement = "bottom" })
+                </div>
+            </div>
+            @* عنوان صاحب الترخيص *@
+            <div class="col-lg-6 col-md-6 col-sm-12">
+                <span class="color_main102 font-weight-bold ml-2  mx-3">عنوان صاحب الترخيص</span>
+                <div>
+                    @Html.TextBoxFor(model => model.OModel.sAaddressOwnerPermision, new { @class = "form-control boorderText arNumSign", data_toggle = "tooltip", title = "حروف عربية و ارقام ورموز فقط", data_placement = "bottom" })
+                </div>
+            </div>
+        </div>
+        @*اضافه - تعديل العمليه *@
+if (screen.Contains("vContractorIndex") || screen.Contains("_vpAddProcessIndex"))
+{
+    <div class="m mt-3 text-left w-100">
+        <button type="submit" value="Create" id="btnAddEditProcess" onclick="loaderOpen();" class=""><i class=""></i> </button>
+    </div>
+
+    }
+}
+<script>
+
+    function getCenters(gov, center, village) {
+
+        $(center).empty();
+        $(village).empty();
+
+        if ($(gov).val() == '') {
+
+            $(center).append($('<option />', {
+                value: "",
+                text: "-- المركز / القسم --"
+            }));
+
+            $(village).append($('<option />', {
+                value: "",
+                text: "-- القرية / الشياخة --"
+            }));
+
+            $(center).selectpicker('refresh');
+            $(village).selectpicker('refresh');
+        }
+        else {
+            $(village).append($('<option />', {
+                value: "",
+                text: "-- القرية / الشياخة --"
+            }));
+
+            $(village).selectpicker('refresh');
+            //$(center).selectpicker('refresh');
+
+            $.getJSON("../Process/getCenterByGovernment", { govCode: $(gov).val() },
+                   function (data) {
+
+                       if (data.length > 0) {
+
+                           $(center).append($('<option />', {
+                               value: "",
+                               text: "-- المركز / القسم --"
+                           }));
+
+                           $.each(data, function (index, data) {
+                               $(center).append($('<option />', {
+                                   value: data.centerCode,
+                                   text: data.centerIDName
+                               }));
+                           });
+
+                           $(center).selectpicker('refresh');
+                       }
+                   })
+        }
+    }
+
+    function getVillage(gov, center, village) {
+
+        $(village).empty();
+        $(village).append($('<option />', {
+            value: "",
+            text: "-- القرية / الشياخة --"
+        }));
+
+        $(village).selectpicker('refresh');
+
+        if ($(center).val() != '') {
+            $.getJSON("../Process/getVillageByCenter", { centerCode: $(center).val() },
+                   function (data) {
+                       $(village).empty();
+
+                       if (data.length > 0) {
+                           $(village).append($('<option />', {
+                               value: "",
+                               text: "-- القرية / الشياخة --"
+                           }));
+
+                           $.each(data, function (index, data) {
+                               $(village).append($('<option />', {
+                                   value: data.villageCode,
+                                   text: data.villageIDName
+                               }));
+                           });
+                           $(village).selectpicker('refresh');
+                       }
+                   })
+        }
+    }
+
+    $(document).ready(function () {
+        OpenCost();
+    });
+
+    function OpenCost() {
+        if ($('#LimitCost').prop('checked'))
+            document.getElementById("divCost").style.display = "block";
+        else
+            document.getElementById("divCost").style.display = "none";
+    }
+
+    // Find Referance Side OR Contractors By Insurance Number
+    function getRefSideContByInsurNum(value) {
+
+        var select = $(".ddlRefSideCont");
+        select.empty();
+
+        $.getJSON("../Process/getRefSideContByInsurNum", { ID: $(value).prop('value') },
+       function (data) {
+           if (data.length == 0) {
+               select.append($('<option />', {
+                   value: '',
+                   text: "---  عفوا , الرجاء كتابة الرقم التأمينى صحيحاً.  ---"
+               }));
+           }
+           else {
+
+               if (data.length == 1)
+                   select.append('<option value="' + data[0].Value + '" selected="selected">' + data[0].Text + '</option>');
+               else {
+
+                   select.append($('<option />', {
+                       value: '',
+                       text: "---  اختر  ---"
+                   }));
+
+                   $.each(data, function (index, data) {
+                       select.append($('<option />', {
+                           value: data.Value,
+                           text: data.Text
+                       }));
+                   });
+               }
+           }
+       });
+    }
+
+    function getRefSideContByInsurNum(btn, refSideCont) {
+
+        var val = $(btn).val();
+
+        $('#txtRefSide,#txtCont,#OModel_inContractorCode,#OModel_inReferenceSideCode').val('');
+
+        if (val != '') {
+            $.getJSON("../Process/getRefSideContByInsurNum", { ID: val },
+           function (data) {
+
+               if (data.length == 0) {
+                   sAlert('عفوا ,هذا الرقم غير صحيح .. الرجاء التأكد من الرقم ثم إعاده كتابته بشكل صحيح.');
+                   $('#txtRefSide,#txtCont,#referanceSidNum,#contNum,#OModel_inContractorCode,#OModel_inReferenceSideCode').val('');
+               }
+               else {
+                   // جهه اسناد
+                   if (refSideCont == 'refSide') {
+                       $('#txtRefSide').val(data[0].Text);
+                       $('#txtCont').val('');
+                       $('#OModel_inReferenceSideCode').val(data[0].Value);
+                   }
+                   else // مقاول
+                   {
+                       $('#txtRefSide').val('');
+                       $('#txtCont').val(data[0].Text);
+                       $('#OModel_inContractorCode').val(data[0].Value);
+                   }
+               }
+           });
+        }
+    }
+
+    // Find Insurance Number By Referance Side OR Contractors
+    function getInsurNumByRefSideCont(value) {
+
+        var val = $(value).val();
+        $('.referanceSideContNum').val('');
+
+        if (val != '') {
+            $.getJSON("../Process/getInsurNumByRefSideCont", { ID: val },
+           function (data) {
+               if (data.length != 0) {
+                   $('.referanceSideContNum').val(data);
+               }
+           });
+        }
+    }
+
+    //filter area to get office
+    function officesByArea() {
+        var areaAccept = $('#areaAccept').val();
+
+        if (areaAccept == '')
+            $('#officeAccept').empty();
+        else {
+            $.getJSON("../Process/getOfficesByAreaContractor", { areaCode: areaAccept },
+                   function (data) {
+                       var offices = $("#officeAccept");
+                       $(offices).empty();
+
+                       if (data.length > 0) {
+                           $(offices).append($('<option />', {
+                               value: "",
+                               text: "-- اختر --"
+                           }));
+
+                           $.each(data, function (index, data) {
+                               $(offices).append($('<option />', {
+                                   value: data.officeInsuranceCode,
+                                   text: data.officeIdName
+                               }));
+                           });
+                           $(offices).selectpicker('refresh');
+                       }
+                   })
+        }
+    }
+</script>
+<script>
+    $(function () {
+        $('#btnAddEditProcess').click(function (event) {
+            loaderClose();
+
+            if ($('#txtDateEnd').val() != '') {
+                var startDate = new Date($('#txtDateStart').val());
+                var endDate = new Date($('#txtDateEnd').val());
+                var currentDate = new Date();
+
+                //if (endDate.setHours(0, 0, 0, 0) < currentDate.setHours(0, 0, 0, 0)) {
+                //    event.preventDefault();
+                //    sAlert('عفوا , غير مسموح بتسجيل عمليه منتهيه.', 1);
+                //    loaderClose();
+                //}
+                //else
+                if (startDate.setHours(0, 0, 0, 0) > endDate.setHours(0, 0, 0, 0)) {
+                    event.preventDefault();
+                    sAlert('برجاء ادخال تاريخ بدء العمليه اقل من او تساوى تاريخ نهايه العمليه', 2);
+                    loaderClose();
+                }
+            }
+        });
+    });
+</script>
+
+@*<div class="m mt-3 text-left w-100">
+    <button type="submit" value="Create" id="btnAddEditProcess" onclick="loaderOpen();" class=""><i class=""></i></button>
+</div>*@
+@* } *@
+<script>
+
+    function getCenters(gov, center, village) {
+
+        $(center).empty();
+        $(village).empty();
+
+        if ($(gov).val() == '') {
+
+            $(center).append($('<option />', {
+                value: "",
+                text: "-- المركز / القسم --"
+            }));
+
+            $(village).append($('<option />', {
+                value: "",
+                text: "-- القرية / الشياخة --"
+            }));
+
+            $(center).selectpicker('refresh');
+            $(village).selectpicker('refresh');
+        }
+        else {
+            $(village).append($('<option />', {
+                value: "",
+                text: "-- القرية / الشياخة --"
+            }));
+
+            $(village).selectpicker('refresh');
+            //$(center).selectpicker('refresh');
+
+            $.getJSON("../Process/getCenterByGovernment", { govCode: $(gov).val() },
+                   function (data) {
+
+                       if (data.length > 0) {
+
+                           $(center).append($('<option />', {
+                               value: "",
+                               text: "-- المركز / القسم --"
+                           }));
+
+                           $.each(data, function (index, data) {
+                               $(center).append($('<option />', {
+                                   value: data.centerCode,
+                                   text: data.centerIDName
+                               }));
+                           });
+
+                           $(center).selectpicker('refresh');
+                       }
+                   })
+        }
+    }
+
+    function getVillage(gov, center, village) {
+
+        $(village).empty();
+        $(village).append($('<option />', {
+            value: "",
+            text: "-- القرية / الشياخة --"
+        }));
+
+        $(village).selectpicker('refresh');
+
+        if ($(center).val() != '') {
+            $.getJSON("../Process/getVillageByCenter", { centerCode: $(center).val() },
+                   function (data) {
+                       $(village).empty();
+
+                       if (data.length > 0) {
+                           $(village).append($('<option />', {
+                               value: "",
+                               text: "-- القرية / الشياخة --"
+                           }));
+
+                           $.each(data, function (index, data) {
+                               $(village).append($('<option />', {
+                                   value: data.villageCode,
+                                   text: data.villageIDName
+                               }));
+                           });
+                           $(village).selectpicker('refresh');
+                       }
+                   })
+        }
+    }
+
+    $(document).ready(function () {
+        OpenCost();
+    });
+
+    function OpenCost() {
+        if ($('#LimitCost').prop('checked'))
+            document.getElementById("divCost").style.display = "block";
+        else
+            document.getElementById("divCost").style.display = "none";
+    }
+
+    // Find Referance Side OR Contractors By Insurance Number
+    function getRefSideContByInsurNum(value) {
+
+        var select = $(".ddlRefSideCont");
+        select.empty();
+
+        $.getJSON("../Process/getRefSideContByInsurNum", { ID: $(value).prop('value') },
+       function (data) {
+           if (data.length == 0) {
+               select.append($('<option />', {
+                   value: '',
+                   text: "---  عفوا , الرجاء كتابة الرقم التأمينى صحيحاً.  ---"
+               }));
+           }
+           else {
+
+               if (data.length == 1)
+                   select.append('<option value="' + data[0].Value + '" selected="selected">' + data[0].Text + '</option>');
+               else {
+
+                   select.append($('<option />', {
+                       value: '',
+                       text: "---  اختر  ---"
+                   }));
+
+                   $.each(data, function (index, data) {
+                       select.append($('<option />', {
+                           value: data.Value,
+                           text: data.Text
+                       }));
+                   });
+               }
+           }
+       });
+    }
+
+    function getRefSideContByInsurNum(btn, refSideCont) {
+
+        var val = $(btn).val();
+
+        $('#txtRefSide,#txtCont,#OModel_inContractorCode,#OModel_inReferenceSideCode').val('');
+
+        if (val != '') {
+            $.getJSON("../Process/getRefSideContByInsurNum", { ID: val },
+           function (data) {
+
+               if (data.length == 0) {
+                   sAlert('عفوا ,هذا الرقم غير صحيح .. الرجاء التأكد من الرقم ثم إعاده كتابته بشكل صحيح.');
+                   $('#txtRefSide,#txtCont,#referanceSidNum,#contNum,#OModel_inContractorCode,#OModel_inReferenceSideCode').val('');
+               }
+               else {
+                   // جهه اسناد
+                   if (refSideCont == 'refSide') {
+                       $('#txtRefSide').val(data[0].Text);
+                       $('#txtCont').val('');
+                       $('#OModel_inReferenceSideCode').val(data[0].Value);
+                   }
+                   else // مقاول
+                   {
+                       $('#txtRefSide').val('');
+                       $('#txtCont').val(data[0].Text);
+                       $('#OModel_inContractorCode').val(data[0].Value);
+                   }
+               }
+           });
+        }
+    }
+
+    // Find Insurance Number By Referance Side OR Contractors
+    function getInsurNumByRefSideCont(value) {
+
+        var val = $(value).val();
+        $('.referanceSideContNum').val('');
+
+        if (val != '') {
+            $.getJSON("../Process/getInsurNumByRefSideCont", { ID: val },
+           function (data) {
+               if (data.length != 0) {
+                   $('.referanceSideContNum').val(data);
+               }
+           });
+        }
+    }
+
+    //filter area to get office
+    function officesByArea() {
+        var areaAccept = $('#areaAccept').val();
+
+        if (areaAccept == '')
+            $('#officeAccept').empty();
+        else {
+            $.getJSON("../Process/getOfficesByAreaContractor", { areaCode: areaAccept },
+                   function (data) {
+                       var offices = $("#officeAccept");
+                       $(offices).empty();
+
+                       if (data.length > 0) {
+                           $(offices).append($('<option />', {
+                               value: "",
+                               text: "-- اختر --"
+                           }));
+
+                           $.each(data, function (index, data) {
+                               $(offices).append($('<option />', {
+                                   value: data.officeInsuranceCode,
+                                   text: data.officeIdName
+                               }));
+                           });
+                           $(offices).selectpicker('refresh');
+                       }
+                   })
+        }
+    }
+</script>
+<script>
+    $(function () {
+        $('#btnAddEditProcess').click(function (event) {
+            loaderClose();
+
+            if ($('#txtDateEnd').val() != '') {
+                var startDate = new Date($('#txtDateStart').val());
+                var endDate = new Date($('#txtDateEnd').val());
+                var currentDate = new Date();
+
+                //if (endDate.setHours(0, 0, 0, 0) < currentDate.setHours(0, 0, 0, 0)) {
+                //    event.preventDefault();
+                //    sAlert('عفوا , غير مسموح بتسجيل عمليه منتهيه.', 1);
+                //    loaderClose();
+                //}
+                //else
+                if (startDate.setHours(0, 0, 0, 0) > endDate.setHours(0, 0, 0, 0)) {
+                    event.preventDefault();
+                    sAlert('برجاء ادخال تاريخ بدء العمليه اقل من او تساوى تاريخ نهايه العمليه', 2);
+                    loaderClose();
+                }
+            }
+        });
+    });
+</script>

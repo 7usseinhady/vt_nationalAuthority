@@ -1,0 +1,288 @@
+﻿@model DataAccessLayer.Requests.processUsersRequest
+@{
+    Layout = "~/Views/Shared/InsuranceEmployeeLayout.cshtml";
+    List<DataAccessLayer.Models.processUsersModel> lMainUsers = TempData["lMainUsers"] as List<DataAccessLayer.Models.processUsersModel>;
+    List<DataAccessLayer.Models.processUsersModel> lSubUsers = TempData["lSubUsers"] as List<DataAccessLayer.Models.processUsersModel>;
+    <title>مستخدمين العملية</title>
+
+    List<DataAccessLayer.CheckModuleUserPermisiom_Result> x = TempData["checkLevel2"] as List<DataAccessLayer.CheckModuleUserPermisiom_Result>;
+    if (x != null)
+    {
+        Session["checkLevel2"] = x.ToList();
+    }
+    else if (Session["checkLevel2"] != null)
+    {
+        x = Session["checkLevel2"] as List<DataAccessLayer.CheckModuleUserPermisiom_Result>;
+    }
+}
+
+@* header *@
+<div class="mt-3">
+    <div>
+        @* Back btn  *@
+        <div class="col-lg-12 col-md-12 col-sm-12 mb-3" style="text-align: right;">
+            <div class="dr-rtl grid_box_shadow mt-2 font-weight-bold">
+                <div style="direction: rtl;">
+                    <span style="margin-right:5px;" class="bTable"> @TempData["sScreenName"].ToString() &nbsp; >>  &nbsp; مستخدمين العمليه  </span>
+                    &nbsp;
+                    <a href="@Url.Action("_vpBack", "ProcessUsers")" class="iconColor">
+                        <span class="fas fa-backward" data-placement="bottom" data-toggle="tooltip" title="عوده"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* منطقه *@@* مكتب *@@* رقم العملية *@@* اسم العملية *@
+<div class="mt-3 dr-rtl mx-3 mb-2 ">
+    <div class="row text-right grid_box_shadow col-12">
+        @* منطقه *@
+        <div class="col-lg-3 col-md-3 col-sm-12 col-12 my-1">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                منطقه :<span class="color_main103 font-weight-bold ml-2 mx-3">@TempData["sAreaID"].ToString()</span>
+            </span>
+        </div>
+        @* مكتب *@
+        <div class="col-lg-3 col-md-3 col-sm-12 col-12 my-1">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                مكتب :<span class="color_main103 font-weight-bold ml-2 mx-3">@TempData["sOfficeID"].ToString()</span>
+            </span>
+        </div>
+        @* رقم العملية *@
+        <div class="col-lg-3 col-md-3 col-sm-12 col-12 my-1">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                رقم العملية :<span class="color_main103 font-weight-bold ml-2 mx-3">@TempData["sProcessNumber"].ToString()</span>
+            </span>
+        </div>
+        @* اسم العملية *@
+        <div class="col-lg-3 col-md-3 col-sm-12 col-12 my-1">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                اسم العملية :<span class="color_main103 font-weight-bold ml-2 mx-3">@TempData["sProcessName"].ToString()</span>
+            </span>
+        </div>
+    </div>
+</div>
+
+@* Table *@
+<div class="font102">
+    <div class="row">
+        @* المقاولين الرئيسين *@
+        <div class="col-lg-6 col-md-6 col-sm-12">
+            @using (Html.BeginForm("vProcessUserDelete", "ProcessUsers", new { mainSubContractor = true }, FormMethod.Post))
+            {
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                    </div>
+                    @* table *@
+                    <div class="col-md-12 col-sm-12">
+                        <div class="dr-rtl grid_box_shadow mt-2 container">
+                            @*المقاولين الرئيسين*@
+                            <div class="border-bottom mb-2 " style="text-align: right;">
+                                <h5 class="text_color102"> <i class="fas fa-user iconColor"></i> المقاولين الرئيسين</h5>
+                            </div>
+                            @* المقاولين الرئيسين *@
+                            <div class="col-lg-12 col-md-12 col-sm-12 mt-2 row d-inline-flex">
+                                <div class="col-lg-9 mb-2">
+                                    <div>
+                                        @Html.DropDownList("mainUser", ViewBag.usersMainContractor as SelectList, new { @class = "form-control borderDDL selectpicker", title = " -- اختر مقاول رئيسي -- ", @data_live_search = "true", required = "required" })
+                                    </div>
+                                </div>
+                                @*اضافة*@@* حذف *@@* عوده *@
+                                <div class="col-lg-3 text-left">
+
+                                    @* مقاول *@
+                                    @if (Session["officeCode"] == null)
+                                    {
+                                        @*اضافة*@
+                                        <button type="submit" value="mainContractor" name="submit" class="btn btn-outline-info font-weight-bold btn-sm" data-toggle="tooltip" title="اضافة" data-placement="bottom">
+                                            <i class="fas fa-plus" aria-hidden="true"></i>
+                                        </button>
+
+                                        @* حذف *@
+                                        <button type="submit" id="mainContractorDelete" value="Delete" class="btn btn-sm btn-outline-danger font-weight-bold" data-placement="bottom" data-toggle="tooltip" title="حذف"><i class="fas fa-trash-alt" aria-hidden="true"></i></button>
+
+                                    }
+                                    else if (x != null)
+                                    {
+                                        foreach (var code in x)
+                                        {
+                                            if (code.functionCode == 69)
+                                            {
+                                                @*اضافة*@
+                                                <button type="submit" value="mainContractor" name="submit" class="btn btn-outline-info font-weight-bold btn-sm" data-toggle="tooltip" title="اضافة" data-placement="bottom">
+                                                    <i class="fas fa-plus" aria-hidden="true"></i>
+                                                </button>
+                                            }
+
+                                            if (code.functionCode == 70)
+                                            {
+                                                @* حذف *@
+                                                <button type="submit" id="mainContractorDelete" value="Delete" class="btn btn-sm btn-outline-danger font-weight-bold" data-placement="bottom" data-toggle="tooltip" title="حذف"><i class="fas fa-trash-alt" aria-hidden="true"></i></button>
+                                            }
+                                        }
+                                    }
+
+                                    @* عوده *@
+                                    <a href="@Url.Action("_vpBack", "ProcessUsers")" class="btn btn-sm btn-outline-secondary font-weight-bold">
+                                        <span class="fas fa-backward" data-placement="bottom" data-toggle="tooltip" title="عوده"></span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="col-md-12 col-sm-12">
+                                    <table>
+                                        <tbody style="display: grid;">
+                                            @foreach (var item in lMainUsers)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        <label class="mb-0">
+                                                            @Html.CheckBox("chkMainContractors", false, new { @class = "option-input-child checkbox", value = item.iProcessUserCode })
+                                                            <span class="align-top"> &nbsp; @item.sUserName</span>
+                                                        </label>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        @* مقاولين من باطن *@
+        <div class="col-lg-6 col-md-6 col-sm-12">
+            @using (Html.BeginForm("vProcessUserDelete", "ProcessUsers", new { mainSubContractor = false }, FormMethod.Post))
+            {
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 ml-3">
+                        <div class="dr-rtl grid_box_shadow mt-2 container">
+                            @*المقاولين من باطن*@
+                            <div class="border-bottom mb-2 " style="text-align:right">
+                                <h5 class="text_color102"> <i class="fas fa-users iconColor"></i>  المقاولين من باطن  </h5>
+                            </div>
+                            @*  المقاولين من باطن  *@
+                            <div class="col-lg-12 col-md-12 col-sm-12 mt-2 d-inline-flex">
+                                <div class="col-lg-9 col-md-9 col-sm-12">
+                                    <div>
+                                        @Html.DropDownList("subUser", ViewBag.usersSubContractor as SelectList, new { @class = "form-control borderDDL selectpicker", title = " -- اختر مقاول من باطن -- ", @data_live_search = "true", required = "required" })
+                                    </div>
+                                </div>
+
+                                @*اضافة*@@* حذف *@@* عوده *@
+                                <div class="col-lg-3 text-left">
+                                    @* مقاول *@
+                                    @if (Session["officeCode"] == null)
+                                    {
+                                        @*اضافة*@
+                                        <button type="submit" id="subContractor" value="subContractor" name="submit" class="btn btn-outline-info font-weight-bold btn-sm" data-toggle="tooltip" title="اضافة" data-placement="bottom">
+                                            <i class="fas fa-plus" aria-hidden="true"></i>
+                                        </button>
+
+                                        @* حذف *@
+                                        <button type="submit" id="subContractorDelete" value="Delete" class="btn btn-sm btn-outline-danger font-weight-bold" data-placement="bottom" data-toggle="tooltip" title="حذف"><i class="fas fa-trash-alt" aria-hidden="true"></i></button>
+
+                                    }
+                                    else if (x != null)
+                                    {
+                                        foreach (var code in x)
+                                        {
+                                            if (code.functionCode == 69)
+                                            {
+                                                @*اضافة*@
+                                                <button type="submit" id="subContractor" value="subContractor" name="submit" class="btn btn-outline-info font-weight-bold btn-sm" data-toggle="tooltip" title="اضافة" data-placement="bottom">
+                                                    <i class="fas fa-plus" aria-hidden="true"></i>
+                                                </button>
+                                            }
+
+                                            if (code.functionCode == 70)
+                                            {
+                                                @* حذف *@
+                                                <button type="submit" id="subContractorDelete" value="Delete" class="btn btn-sm btn-outline-danger font-weight-bold" data-placement="bottom" data-toggle="tooltip" title="حذف"><i class="fas fa-trash-alt" aria-hidden="true"></i></button>
+                                            }
+                                        }
+                                    }
+
+
+                                    @* عوده *@
+                                    <a href="@Url.Action("_vpBack", "ProcessUsers")" class="btn btn-sm btn-outline-secondary font-weight-bold">
+                                        <span class="fas fa-backward" data-placement="bottom" data-toggle="tooltip" title="عوده"></span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                @* Users *@
+                                <div class="col-md-12 col-sm-12">
+                                    @* table *@
+                                    <table>
+                                        <tbody style="display:grid">
+                                            @foreach (var item in lSubUsers)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        <label class="mb-0">
+                                                            @Html.CheckBox("chkSubContractors", false, new { @class = "option-input-child checkboxe", value = item.iProcessUserCode })
+                                                            <span class="align-top">&nbsp; @item.sUserName</span>
+                                                        </label>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@* buttons setting *@
+<div class="text-right fixed_btn w-100">
+    <div class="text-right fixed_btn w-100 bg-white">
+        @* اضافة مستخدم *@
+        <button type="button" name="submitType" value="Save" class="btn btn-outline-info font-weight-bold" data-toggle="modal" data-target="#sharedModal"
+                onclick="openModel('#titleSharedModal', 'اضافه مستخدم', '#btnUsers', ' اضافة مستخدم', 'fas fa-plus', 'btn btn-outline-info font-weight-bold', '_vpUsersAdd', '', '#sharedModalBody')">
+            <i class="fas fa-plus"></i> اضافة مستخدم
+        </button>
+    </div>
+</div>
+
+@Html.Raw(TempData["msg"])
+
+<script>
+
+    $(document).ready(function () {
+        // حذف مقاول من الباطن
+        $('#subContractorDelete').click(function () {
+            var Active = $("#chkSubContractors").is(":checked");
+            if (Active == false) {
+                sAlert("عفوا , يجب اختيار مقاول  من الباطن أولا  ", 2);
+                event.preventDefault();
+                return false;
+            }
+            $('#subUser').removeAttr('required');
+        });
+        // حذف مقاول رئيسي
+        $('#mainContractorDelete').click(function () {
+            var Active = $("#chkMainContractors").is(":checked");
+            if (Active == false) {
+                sAlert("عفوا , يجب اختيار مقاول  رئيسي أولا  ", 2);
+                event.preventDefault();
+                return false;
+            }
+            $('#mainUser').removeAttr('required');
+        });
+    });
+
+</script>
+<script>
+    $(function () {
+        $('.selectpicker').selectpicker();
+    });
+</script>

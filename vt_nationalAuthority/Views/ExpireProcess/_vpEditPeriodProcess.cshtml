@@ -1,0 +1,82 @@
+﻿@model  DataAccessLayer.Requests.processRequest
+@{
+    Layout = "~/Views/Shared/_partialLayout.cshtml";
+}
+
+@using (Html.BeginForm("_vpEditPeriodProcess", "ExpireProcess", FormMethod.Post))
+{
+    @Html.HiddenFor(model => model.OModel.iProcessCode)
+    @Html.Hidden("areas", TempData["areas"])
+    @Html.Hidden("Offices", TempData["Offices"])
+
+    <div class="mt-2 dr-rtl grid_box_shadow mx-3 text-right row">
+        @* رقم العملية *@
+        <div class="col-lg-4 col-md-4 col-sm-12">
+            <span class="color_main102 font-weight-bold ml-2 mx-3 " id="SpInsurNumber">رقم العملية</span>
+            <div>
+                @Html.TextBoxFor(model => model.OModel.sProcessNumber, new { @class = "form-control boorderText number", disabled = "disabled" })
+            </div>
+        </div>
+        @*تاريخ بدء العمليه*@
+        <div class="col-lg-4 col-md-4 col-sm-12">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">تاريخ  بدء العمليه</span>
+            <div>
+                @Html.TextBoxFor(model => model.OModel.sDateStartProcess, "{0:yyyy-MM-dd}", new { @class = "form-control boorderText date", disabled = "disabled", id = "txtDateStart" })
+            </div>
+        </div>
+        @* تاريخ انتهاء العمليه *@
+        <div class="col-lg-4 col-md-4 col-sm-12">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">تاريخ انتهاء العمليه</span>
+            <div>
+                @Html.TextBoxFor(model => model.OModel.sDateEndProcessRequired, "{0:yyyy-MM-dd}", new { @class = "form-control boorderText date", id = "txtDateEnd", autoComplete = "off", required = "required" })
+            </div>
+            <div>
+                @Html.ValidationMessageFor(model => model.OModel.sDateEndProcessRequired, "", new { @class = "d-flex justify-content-center" })
+            </div>
+        </div>
+
+        @* اسم العمليه *@
+        <div class="col-lg-12 col-md-12 col-sm-12 mt-2">
+            <span class="color_main102 font-weight-bold ml-2  mx-3">اسم العمليه</span>
+            <div>
+                @Html.TextBoxFor(model => model.OModel.sProcessName, new { @class = "form-control boorderText", disabled = "disabled" })
+            </div>
+        </div>
+        @* نوع العمليه *@
+        <div class="col-lg-6 col-md-6 col-sm-12 mt-2">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">نوع العمليه</span>
+            <div>
+                @Html.TextBoxFor(model => model.OModel.sProcessTypeName, new { @class = "form-control boorderText", disabled = "disabled" })
+            </div>
+        </div>
+        @* موقع العملية *@
+        <div class="col-lg-6 col-md-6 col-sm-12 mt-2">
+            <span class="color_main102 font-weight-bold ml-2 mx-3 " id="SpInsurNumber">موقع العملية</span>
+            <div>
+                @Html.TextBoxFor(model => model.OModel.sFullSiteAddress, new { @class = "form-control boorderText", disabled = "disabled" })
+            </div>
+        </div>
+
+        @* تعديل المده *@
+        <div class="col-lg-12 col-md-12 align-self-end col-sm-12 my-1 text-left mt-3">
+            <button type="submit" id="btnEditProcess" onclick="loaderOpen();"><i class=""></i>  </button>
+        </div>
+    </div>
+}
+
+<script>
+    $(function () {
+        $('#btnEditProcess').click(function (event) {
+            loaderClose();
+            if ($('#txtDateEnd').val() != '') {
+                var startDate = new Date($('#txtDateStart').val());
+                var endDate = new Date($('#txtDateEnd').val());
+
+                if (startDate > endDate) {
+                    event.preventDefault();
+                    sAlert('برجاء ادخال تاريخ بدء العمليه اقل من او تساوى تاريخ نهايه العمليه', 2);
+                }
+            }
+        });
+    });
+</script>

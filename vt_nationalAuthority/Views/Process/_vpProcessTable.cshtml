@@ -1,0 +1,659 @@
+﻿@using PagedList.Mvc;
+@model PagedList.PagedList<DataAccessLayer.Models.processModel>
+@{
+    var screen = "";
+    string[] path = HttpContext.Current.Request.Url.AbsolutePath.Split('/');
+    screen = path[2];
+    var fullPath = "";
+    var iCount = 1;
+
+    List<DataAccessLayer.CheckModuleUserPermisiom_Result> x = TempData["checkLevel2"] as List<DataAccessLayer.CheckModuleUserPermisiom_Result>;
+    if (x != null)
+    {
+        Session["checkLevel2"] = x.ToList();
+    }
+    else if (Session["checkLevel2"] != null)
+    {
+        x = Session["checkLevel2"] as List<DataAccessLayer.CheckModuleUserPermisiom_Result>;
+    }
+}
+<div class="dr-rtl grid_box_shadow mb-3 row justify-content-center">
+    @if (screen == "vProcessRequest") // طلبات العمليات
+    {
+        fullPath = "../Process/vProcessRequest";
+        @Html.Hidden("screenName", "../Process/vProcessRequest")
+    }
+    else if (screen == "vExpireProcess") // العمليات الموشكه على الانتهاء
+    {
+        fullPath = "../ExpireProcess/vExpireProcess";
+        @Html.Hidden("screenName", "../ExpireProcess/vExpireProcess")
+    }
+    else if (screen == "vContractorIndex") // عمليات المقاولين
+    {
+        fullPath = "../Contractor/vContractorIndex";
+        @Html.Hidden("screenName", "../Contractor/vContractorIndex")
+    }
+    else if (screen == "vProcessShowIndex") // عمليات موظف التأمينات
+    {
+        fullPath = "../Process/vProcessShowIndex";
+        @Html.Hidden("screenName", "../Process/vProcessShowIndex")
+    }
+
+    <div class="text-center scroll-max">
+        @if (Model == null)
+        {
+            <h1 id="tblSearchNotFound">
+                <strong>@generalVariables.ProcessNotFound</strong>
+            </h1>
+        }
+        else if (Model.Count == 0)
+        {
+            <h1 id="tblSearchNotFound">
+                <strong>@generalVariables.ProcessNotFound</strong>
+            </h1>
+        }
+        else if (Model.Count > 0)
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col" class="color_main102 hidCol">#</th>
+                        @*اى حاجه غير طلبات العمليات*@
+                        @if (!screen.Contains("vProcessRequest"))
+                        {
+                        <th scope="col" class="color_main102">منطقه</th>
+                        <th scope="col" class="color_main102">مكتب</th>
+                        <th scope="col" class="color_main102">رقم الوارد</th>
+                        <th scope="col" class="color_main102">رقم العمليه</th>
+                        }
+                        <th scope="col" class="color_main102">اسم العمليه</th>
+                        <th scope="col" class="color_main102">نوع العمليه</th>
+                        <th scope="col" class="color_main102">المقاول الرئيسي</th>
+                        @if (Session["contractor"] == null || !Session["contractor"].ToString().Contains("جهه الاسناد : "))
+                        {
+                        <th scope="col" class="color_main102">جهة الاسناد</th>
+                        }
+                        <th scope="col" class="color_main102">تاريخ بدء العمليه</th>
+                        <th scope="col" class="color_main102">تاريخ نهايه العمليه</th>
+                        <th scope="col" class="color_main102">مبنده</th>
+                        <th scope="col" class="color_main102">المبلغ الاجمالى</th>
+                        @if (screen == "vContractorIndex")
+                        {
+                        <th scope="col" class="color_main102"><i class="fas fa-cog"></i></th>
+                        }
+                        else if (x.Count > 0)
+                        {
+                        <th scope="col" class="color_main102"><i class="fas fa-cog"></i></th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @{iCount = 1; }
+                    @foreach (var item in Model)
+                    {
+                        <tr style="color:@item.sColor">
+                            <th scope="row" class="@(item.inProcessUser == 0? "badge colo mt-2 color-num" : "")">@((Convert.ToInt32(Model.PageNumber) * Convert.ToInt32(generalVariables.PageSize)) - (Convert.ToInt32(generalVariables.PageSize) - iCount) )</th>
+                            @*اى حاجه غير طلبات العمليات*@
+                            @if (!screen.Contains("vProcessRequest"))
+                            {
+                                <td>@item.sAreaIDName</td> @*اسم المنطقه*@
+                                <td>@item.sOfficeIDName</td> @*اسم المكتب*@
+                                <td>@item.sIncommingNumber</td> @*رقم الوارد*@
+                                <td>@item.sProcessNumber</td> @*رقم العمليه*@
+                            }
+                            <td>@item.sProcessName</td> @*اسم العمليه*@
+                            <td>@item.sProcessTypeName</td> @*اسم نوع العمليه*@
+                            <td>@item.sContractorName</td> @* المقاول الرئيسي*@
+                            @if (Session["contractor"] == null || !Session["contractor"].ToString().Contains("جهه الاسناد : "))
+                            {
+                                <td>@item.sReferanceSideName</td>  @*جهة الاسناد*@
+                            }
+                            <td>@Html.DisplayFor(modelItem => item.sDateStartProcess, "{0:yyyy-MM-dd}")</td>  @*تاريخ بدء العمليه (المقايسه)*@
+                            <td>@Html.DisplayFor(modelItem => item.sDateEndProcess, "{0:yyyy-MM-dd}")</td>  @*تاريخ نهايه العمليه (المقايسه)*@
+                            <td>@item.sMoband</td> @*مبنده - غير مبنده*@
+                            @* القيمه الكليه للعمليه (المقايسه)*@
+                            @if (item.dnFullBudget == null)
+                            {
+                                <td>لم يتم التحديد بعد.</td>
+                            }
+                            else
+                            {
+                                <td>@item.dnFullBudget</td>
+                            }
+
+                            @* طلبات العمليات*@
+                            @if (screen.Contains("vProcessRequest"))
+                            {
+                                if (x != null)
+                                {
+                                    if (x.Count > 0)
+                                    {
+                                        <td>
+                                            <div class="d-sm-show101 ">
+                                                <div class="dropdown-j">
+                                                    <i class="fas fa-ellipsis-v"></i>
+                                                    <div class="dropdown-content-j" style="min-width: auto;">
+                                                        <div class="row text-left">
+                                                            <div class="col-12">
+                                                                @foreach (var Code in x)
+                                                                {
+                                                                    if (Code.functionCode == 21)
+                                                                    {
+                                                                        @*  تفاصيل العمليه *@
+                                                                        <button type="button" name="submitType"
+                                                                                class="btn btn-sm btn-outline-secondary aDetStyle font-weight-bold btnsStyle"
+                                                                                onclick="openModel('#titleSharedModal', ` تفاصيل العمليه : @item.sProcessName`, '', '', 'fas fa-plus', 'btn btnsStyle btn-outline-info ml-3 font-weight-bold', '../Process/_vpProcessDetail', 'inProcessCode=@item.iProcessCode', '#sharedModalBody')"
+                                                                                data-toggle="modal" data-target="#sharedModal">
+                                                                            <i class="far fa-list-alt"></i>  تفاصيل العمليه
+                                                                        </button>
+                                                                    }
+                                                                    if (Code.functionCode == 22 && item.sMoband != "غير مبنده")
+                                                                    {
+                                                                        @* مقاولين من الباطن *@
+                                                                        <button type="button" name="submitType" value="1"
+                                                                                class="btn btn-sm btn-outline-success font-weight-bold btnsStyle"
+                                                                                onclick="openModel('#titleSharedModal', `اضافة مقاولين من الباطن : @item.sProcessName`, '#btnAddEditContractors', ' اضافه مقاولين من الباطن', 'fas fa-plus font-weight-bold', 'btn btn-outline-info font-weight-bold', '../InsuranceEmployee/ProcessReqContractors', 'ProcessId=@item.iProcessCode', '#sharedModalBody')"
+                                                                                data-toggle="modal" data-target="#sharedModal">
+                                                                            <i class="far fa-id-badge"></i>   مقاولين من الباطن
+                                                                        </button>
+                                                                    }
+                                                                    if (Code.functionCode == 23)
+                                                                    {
+                                                                        @* المرفقات *@
+                                                                        <button type="button" name="submitType" data-toggle="modal" data-target="#shareAttachmentSearchAddModal"
+                                                                                class="btn btn-sm btn-outline-primary font-weight-bold"
+                                                                                onclick="openAttachmentModel('../Attachments/_vpAttachmentAdd','../Attachments/_vpAttachmentSearch','Processes,@item.iProcessCode,pAttachments','actionName=@path[2]&controllerName=@path[1]&screenType=2','')">
+                                                                            <i class="fa fa-paperclip"></i>  المرفقات
+                                                                        </button>
+                                                                    }
+                                                                    if (Code.functionCode == 24)
+                                                                    {
+                                                                        @* ملاحظات من التأمينات *@
+                                                                        <button type="button" name="submitType" value="1"
+                                                                                class="btn btn-sm btn-outline-dark font-weight-bold btnsStyle"
+                                                                                onclick="openModel___ss('#titleSharedModal', `ملاحظات من التأمينات : @item.sProcessName`, '#btnSaveNotes', ' اضافة  ملاحظات من التأمين', 'fas fa-plus font-weight-bold', 'btn btn-outline-info font-weight-bold', '../InsuranceEmployee/_vpProcessNotes', '?processID=@item.iProcessCode&areas=@Request.QueryString["areas"]&Offices=@Request.QueryString["Offices"]&Screen=processRequest', '#sharedModalBody')"
+                                                                                data-toggle="modal" data-target="#sharedModal">
+                                                                            <i class="far fa-id-badge"></i>  ملاحظات من التأمينات
+                                                                        </button>
+                                                                    }
+                                                                    if (Code.functionCode == 25)
+                                                                    {
+                                                                        @*قبول الطلب*@
+                                                                        <button type="button" name="submitType" value="1"
+                                                                                class="btn btn-sm btn-outline-success font-weight-bold btnsStyle"
+                                                                                onclick="openModel___ss('#titleSharedModal', `قبول طلب : @item.sProcessName`, '#btnAcceptprocess', ' قبول الطلب', 'fas fa-check', 'btn btnsStyle btn-outline-success font-weight-bold', '../Process/_vpAcceptProcess', '?processCode=@item.iProcessCode&areas=@Request.QueryString["areas"]&Offices=@Request.QueryString["Offices"]', '#sharedModalBody')"
+                                                                                data-toggle="modal" data-target="#sharedModal">
+                                                                            <i class="fas fa-check"></i>  قبول الطلب
+                                                                        </button>
+                                                                    }
+
+                                                                    if (Code.functionCode == 78)
+                                                                    {
+                                                                        @* المستخدمين *@
+                                                                        <a class="btn btn-sm btn-outline-primary font-weight-bold btnsStyle" href="@Url.Action("vProcessUser", "ProcessUsers", new { pc = item.iProcessCode,cd = 61,sn = 2 })"><i class="fas fa-users"></i> المستخدمين</a>
+                                                                    }
+                                                                    if (Code.functionCode == 82)
+                                                                    {
+                                                                        @* الاستبعاد *@
+                                                                        <a href="#" data-toggle="tooltip" data-placement="bottom" class="btn btn-sm btn-outline-danger font-weight-bold"
+                                                                           onclick="return sAlertDel(this,'هل تريد استبعاد طلب العمليه ؟', ' استبعاد طلب طلب العمليه ', 'إلغاء الاستبعاد','Process','_vpProcessCancel','IDDelete=@(item.iProcessCode)&areas=@Request.QueryString["areas"]&Offices=@Request.QueryString["Offices"]');"><i class="fas fa-trash-alt"></i>استبعاد</a>
+
+                                                                    }
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    }
+                                }
+                            }
+                            else if (screen == "vProcessShowIndex" || screen == "vInsuranceEmployeeIndex")/* عمليات الموظف*/
+                            {
+                                if (x.Count > 0)
+                                {
+                                    <td>
+                                        <div class="d-sm-show101 ">
+                                            <div class="dropdown-j">
+                                                <i class="fas fa-ellipsis-v "></i>
+                                                <div class="dropdown-content-j" style="min-width: auto;">
+                                                    <div class="row text-left">
+                                                        <div class="col-12">
+                                                            @foreach (var Code in x)
+                                                            {
+                                                                if (Code.functionCode == 12)
+                                                                {
+                                                                    @* تفاصيل *@
+                                                                    <a class="btn btn-sm btn-outline-secondary aDetStyle font-weight-bold btnsStyle" href="@Url.Action("vProcessDetailsInsurEmp", "InsuranceEmployee", new { ProcessId = item.iProcessCode, cd = Code.functionCode })"><i class="far fa-list-alt"></i> تفاصيل</a>
+                                                                }
+
+                                                                if (Code.functionCode == 61)
+                                                                {
+                                                                    @* المستخدمين *@
+                                                                    <a class="btn btn-sm btn-outline-primary font-weight-bold btnsStyle" href="@Url.Action("vProcessUser", "ProcessUsers", new { pc = item.iProcessCode,cd = 61 ,sn=1})"><i class="fas fa-users"></i> المستخدمين</a>
+                                                                }
+
+                                                                if (Code.functionCode == 13)
+                                                                {
+                                                                    @* اعتراض *@
+                                                                    <button type="button" name="submitType" value="1"
+                                                                            class="btn btn-sm btn-outline-danger font-weight-bold btnsStyle"
+                                                                            onclick="openModel('#titleSharedModal', `اعتراض  : @item.sProcessName`, '#btnOpposition', 'تسجيل اعتراض', 'fas fa-plus font-weight-bold', 'btn btn-outline-info font-weight-bold', '../InsuranceEmployee/_vpOpposition', 'processID=@item.iProcessCode', '#sharedModalBody')"
+                                                                            data-toggle="modal" data-target="#sharedModal">
+                                                                        <i class="fas fa-arrows-alt"></i> اعتراض
+                                                                    </button>
+                                                                }
+
+                                                                //if (Code.functionCode == 14 && item.sColor == "green") //العمليه ساريه
+                                                                if (Code.functionCode == 14) //العمليه ساريه
+                                                                {
+                                                                    @* المرفقات *@
+                                                                    <button type="button" name="submitType" data-toggle="modal" data-target="#shareAttachmentSearchAddModal"
+                                                                            class="btn btn-sm btn-outline-primary font-weight-bold"
+                                                                            onclick="openAttachmentModel('../Attachments/_vpAttachmentAdd','../Attachments/_vpAttachmentSearch','Processes,@item.iProcessCode,pAttachments','actionName=@path[2]&controllerName=@path[1]&screenType=1','')">
+                                                                        <i class="fa fa-paperclip"></i>  المرفقات
+                                                                    </button>
+                                                                }
+                                                                @*else if (Code.functionCode == 14) // العمليه موقوفه - منتهيه
+                                                                {
+                                                                    <button type="button" name="submitType"
+                                                                            class="btn btn-sm btn-outline-primary font-weight-bold"
+                                                                            onclick="openAttachmentSearchOrAdd('#titleSharedAttachmentSearchModal',`مرفقات : @item.sProcessName `, '', '../Attachments/_vpAttachmentSearch', 'Processes/@item.iProcessCode/pAttachments','actionName=@path[2]&controllerName=@path[1]&notActive=@item.sColor','#divDisplaySharedSearchAttchment')"
+                                                                            data-toggle="modal" data-target="#shareAttachmentSearchModal">
+                                                                        <i class="fa fa-paperclip"></i>  المرفقات
+                                                                    </button>
+                                                                }*@
+
+                                                                if (Code.functionCode == 15)
+                                                                {
+                                                                    @* تسجيل الحد الأدني - الأقصي *@
+                                                                    <button type="button" name="submitType" value="1"
+                                                                            class="btn btn-sm btn-outline-success font-weight-bold btnsStyle"
+                                                                            onclick="openModel___ss('#titleSharedModal', `   تسجيل الحد الأدني - الأقصي للعمليه : @item.sProcessName `, '#btnMinMax', '', 'fas fa-plus font-weight-bold', 'btn btn-outline-success font-weight-bold btnsStyle', '_vpMinMax', '?processID=@item.iProcessCode&areas=@Request.QueryString["areas"]&notActive=@item.sColor&Offices=@Request.QueryString["Offices"]', '#sharedModalBody')"
+                                                                            data-toggle="modal" data-target="#sharedModal">
+                                                                        <i></i> تسجيل الحد الأدني - الأقصي
+                                                                    </button>
+                                                                }
+                                                                if (Code.functionCode == 16)
+                                                                {
+                                                                    @* ايقاف العملية *@
+                                                                    <a class="btn btn-sm btn-outline-danger font-weight-bold btnsStyle" href="@Url.Action("vProcessStop", "processStop", new { pc = item.iProcessCode ,cd = 16,sn = 1})"><i class="fas fa-sync"></i>  ايقاف العمليه</a>
+                                                                }
+
+                                                                if (Code.functionCode == 80)
+                                                                {
+                                                                    @* ملاحظات من التأمينات *@
+                                                                    <button type="button" name="submitType" value="1"
+                                                                            class="btn btn-sm btn-outline-dark font-weight-bold btnsStyle"
+                                                                            onclick="openModel___ss('#titleSharedModal', `ملاحظات من التأمينات : @item.sProcessName`, '#btnSaveNotes', ' اضافة  ملاحظات من التأمين', 'fas fa-plus font-weight-bold', 'btn btn-outline-info font-weight-bold', '../InsuranceEmployee/_vpProcessNotes', '?processID=@item.iProcessCode&areas=@Request.QueryString["areas"]&Offices=@Request.QueryString["Offices"]&Screen=process', '#sharedModalBody')"
+                                                                            data-toggle="modal" data-target="#sharedModal">
+                                                                        <i class="far fa-id-badge"></i>  ملاحظات من التأمينات
+                                                                    </button>
+                                                                }
+                                                            }
+
+                                                            @if ((Convert.ToInt32(Session["uc"]) == 7 || Convert.ToInt32(Session["uc"]) == 2188))
+                                                            {
+                                                                //تعديل العمليه
+                                                                <button type="button" name="submitType"
+                                                                        class="btn btn-sm btn-outline-warning font-weight-bold"
+                                                                        onclick="openModel('#titleSharedModal', 'تعديل العميله : @item.sProcessName', '#btnAddEditProcess', ' تعديل العمليه', 'fas fa-edit font-weight-bold', 'btn btn-sm btn-outline-warning font-weight-bold', '../Process/_vpAddProcessIndex', 'referanceSideContractorNum=true,inProcessCode=@item.iProcessCode,inPage=@Request.QueryString["inPage"],screenName=1', '#sharedModalBody')"
+                                                                        data-toggle="modal" data-target="#sharedModal">
+                                                                    <i class="fas fa-edit font-weight-bold"></i>  تعديل
+                                                                </button>
+
+                                                                @* الاسترجاع لطلبات العمليات *@
+                                                                <a href="#" data-toggle="tooltip" data-placement="bottom" class="btn btn-sm btn-outline-danger font-weight-bold"
+                                                                   onclick="return sAlertDel(this,'هل تريد استرجاع هذه العمليه ؟', 'الاسترجاع لطلبات العمليات ', 'إلغاء الاسترجاع','Process','vBackProcessToProcessRequest','procCode=@(item.iProcessCode)&areas=@(Request.QueryString["areas"])&Offices=@(Request.QueryString["Offices"])');"><i class="fas fa-undo-alt"></i> الاسترجاع لطلبات العمليات </a>
+
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                }
+                            }
+                            else /* المقاولين*/
+                            {
+                                if (item.sRegisterBySelf != "3" && item.sRegisterBySelf != "333") // مايكونش مقاول من باطن مسجل لنفسه او حد سجله ومش جاى من الهيئه ال WSDL
+                                {
+                                    <td>
+                                        <div class="d-sm-show101 ">
+                                            <div class="dropdown-j">
+                                                <i class="fas fa-ellipsis-v "></i>
+                                                <div class="dropdown-content-j" style="min-width: auto;">
+                                                    <div class="row text-left">
+                                                        <div class="col-12">
+                                                            @* المقاول الرئيسي *@
+                                                            @*تم تسجيل العمليه عن طريق المقاول الرئيسي بنفسه (ولسه ماتمش الموافقه عليها )*@
+                                                            @if (item.sRegisterBySelf == "1")
+                                                            {
+                                                                //تعديل العمليه
+                                                                <button type="button" name="submitType"
+                                                                        class="btn btn-sm btn-outline-warning font-weight-bold"
+                                                                        onclick="openModel('#titleSharedModal', `تعديل العميله : @item.sProcessName`, '#btnAddEditProcess', ' تعديل العمليه', 'fas fa-edit font-weight-bold', 'btn btn-sm btn-outline-warning font-weight-bold', '../Process/_vpAddProcessIndex', 'referanceSideContractorNum=true,inProcessCode=@item.iProcessCode,inPage=@Request.QueryString["inPage"]', '#sharedModalBody')"
+                                                                        data-toggle="modal" data-target="#sharedModal">
+                                                                    <i class="fas fa-edit font-weight-bold"></i>  تعديل
+                                                                </button>
+
+                                                                if (item.sProcessNotes == "0" && item.sProcessOpposition == "0")
+                                                                {
+                                                                    // حذف فى حاله ان متسجل ملاحظات من التأمينات - اعتراض / اعفاء للعمليه
+                                                                    <a href="#" data-toggle="tooltip" data-placement="bottom" class="btn btn-sm btn-outline-danger font-weight-bold"
+                                                                       onclick="return sAlertDel(this,'هل تريد حذف هذه العمليه بجميع المقاولين بها ؟', 'حذف العمليه', 'إلغاء الحذف','Process','_vpDeleteProcess','IDDelete=@item.iProcessCode&inPage=@Request.QueryString["inPage"]');"><i class="fas fa-trash-alt"></i> حذف </a>
+                                                                }
+
+                                                                //اعتراض
+                                                                <button type="button" name="submitType" value="1"
+                                                                        class="btn btn-sm btn-outline-danger font-weight-bold btnsStyle"
+                                                                        onclick="openModel('#titleSharedModal', `اعتراض - اعفاء : @item.sProcessName`, '#btnOpposition', 'تسجيل', 'fas fa-plus font-weight-bold', 'btn btn-outline-info font-weight-bold', '../Contractor/_vpOpposition', 'processID=@item.iProcessCode&notActive=@item.sContractorFax', '#sharedModalBody')"
+                                                                        data-toggle="modal" data-target="#sharedModal">
+                                                                    <i class="fas fa-arrows-alt"></i> اعتراض - اعفاء
+                                                                </button>
+
+
+                                                                //if (item.sContractorFax == "green")
+                                                                //{
+                                                                    @* المرفقات *@
+                                                                    <button type="button" name="submitType" data-toggle="modal" data-target="#shareAttachmentSearchAddModal"
+                                                                            class="btn btn-sm btn-outline-primary font-weight-bold"
+                                                                            onclick="openAttachmentModel('../Attachments/_vpAttachmentAdd','../Attachments/_vpAttachmentSearch','Processes,@item.iProcessCode,pAttachments','actionName=@path[2]&controllerName=@path[1]&screenType=2','')">
+                                                                        <i class="fa fa-paperclip"></i>  المرفقات
+                                                                    </button>
+                                                                @*}
+                                                                else  // العمليه موقوفه - منتهيه
+                                                                {
+                                                                    <button type="button" name="submitType"
+                                                                            class="btn btn-sm btn-outline-primary font-weight-bold"
+                                                                            onclick="openAttachmentSearchOrAdd('#titleSharedAttachmentSearchModal', `مرفقات : @item.sProcessName `, '', '../Attachments/_vpAttachmentSearch', 'Processes/@item.iProcessCode/pAttachments','actionName=@path[2]&controllerName=@path[1]&notActive=@item.sContractorFax','#divDisplaySharedSearchAttchment')"
+                                                                            data-toggle="modal" data-target="#shareAttachmentSearchModal">
+                                                                        <i class="fa fa-paperclip"></i>  المرفقات
+                                                                    </button>
+                                                                }*@
+
+                                                                // ملاحظات من التأمينات
+                                                                <button type="button" name="submitType" value="1"
+                                                                        class="btn btn-sm btn-outline-dark font-weight-bold btnsStyle"
+                                                                        onclick="openModel('#titleSharedModal', ` ملاحظات من التأمينات : @item.sProcessName`, '#btnSaveNotes', ' اضافة  ملاحظات من التأمين', 'fas fa-plus font-weight-bold', 'btn btn-outline-info font-weight-bold', '_vpProcessNotes', 'processID=@item.iProcessCode', '#sharedModalBody')"
+                                                                        data-toggle="modal" data-target="#sharedModal">
+                                                                    <i class="far fa-id-badge"></i>  ملاحظات من التأمينات
+                                                                </button>
+                                                            }
+
+                                                            @*تم تسجيل العمليه عن مستخدم اخر ولم يتم الموافقه بعد (جهه الاسناد)*@
+                                                            else if (item.sRegisterBySelf == "111")
+                                                            {
+                                                                //اعتراض
+                                                                <button type="button" name="submitType" value="1"
+                                                                        class="btn btn-sm btn-outline-danger font-weight-bold btnsStyle"
+                                                                        onclick="openModel('#titleSharedModal',`اعتراض - اعفاء : @item.sProcessName`, '#btnOpposition', 'تسجيل', 'fas fa-plus font-weight-bold', 'btn btn-outline-info font-weight-bold', '../Contractor/_vpOpposition', 'processID=@item.iProcessCode&notActive=@item.sContractorFax', '#sharedModalBody')"
+                                                                        data-toggle="modal" data-target="#sharedModal">
+                                                                    <i class="fas fa-arrows-alt"></i> اعتراض - اعفاء
+                                                                </button>
+
+
+                                                                //if (item.sContractorFax == "green")
+                                                                //{
+                                                                    @* المرفقات *@
+                                                                    <button type="button" name="submitType" data-toggle="modal" data-target="#shareAttachmentSearchAddModal"
+                                                                            class="btn btn-sm btn-outline-primary font-weight-bold"
+                                                                            onclick="openAttachmentModel('../Attachments/_vpAttachmentAdd','../Attachments/_vpAttachmentSearch','Processes,@item.iProcessCode,pAttachments','actionName=@path[2]&controllerName=@path[1]&screenType=2','')">
+                                                                        <i class="fa fa-paperclip"></i>  المرفقات
+                                                                    </button>
+                                                                @*}
+                                                                else  // العمليه موقوفه - منتهيه
+                                                                {
+                                                                    <button type="button" name="submitType"
+                                                                            class="btn btn-sm btn-outline-primary font-weight-bold"
+                                                                            onclick="openAttachmentSearchOrAdd('#titleSharedAttachmentSearchModal', `مرفقات : @item.sProcessName `, '', '../Attachments/_vpAttachmentSearch', 'Processes/@item.iProcessCode/pAttachments','actionName=@path[2]&controllerName=@path[1]&notActive=@item.sContractorFax','#divDisplaySharedSearchAttchment')"
+                                                                            data-toggle="modal" data-target="#shareAttachmentSearchModal">
+                                                                        <i class="fa fa-paperclip"></i>  المرفقات
+                                                                    </button>
+                                                                }*@
+
+                                                                // ملاحظات من التأمينات
+                                                                <button type="button" name="submitType" value="1"
+                                                                        class="btn btn-sm btn-outline-dark font-weight-bold btnsStyle"
+                                                                        onclick="openModel('#titleSharedModal', `ملاحظات من التأمينات : @item.sProcessName`, '#btnSaveNotes', ' اضافة  ملاحظات من التأمين', 'fas fa-plus font-weight-bold', 'btn btn-outline-info font-weight-bold', '_vpProcessNotes', 'processID=@item.iProcessCode', '#sharedModalBody')"
+                                                                        data-toggle="modal" data-target="#sharedModal">
+                                                                    <i class="far fa-id-badge"></i>  ملاحظات من التأمينات
+                                                                </button>
+                                                            }
+
+                                                            @*عمليه مسجله عند الهيئه*@
+                                                            else if (item.sRegisterBySelf == "1111")
+                                                            {
+                                                                // تفاصيل العمليه
+                                                                <a class="btn btn-sm btn-outline-secondary aDetStyle font-weight-bold btnsStyle" href="@Url.Action("vProcessIndex", "Process", new { ProcessId = item.iProcessCode })" data-toggle="tooltip" title="Users" data-placement="bottom"><i class="far fa-list-alt"></i> تفاصيل</a>
+
+                                                                //المقاولين من باطن
+                                                                <button type="button" name="submitType" value="1"
+                                                                        class="btn btn-sm btn-outline-success font-weight-bold btnsStyle"
+                                                                        onclick="openModel('#titleSharedModal', ` مقاولين من الباطن : @item.sProcessName`, '#btnAddEditContractors', ' اضافة مقاولين من الباطن', 'fas fa-plus font-weight-bold', 'btn btn-outline-info font-weight-bold', '_vpContractors', 'processID=@item.iProcessCode', '#sharedModalBody')"
+                                                                        data-toggle="modal" data-target="#sharedModal">
+                                                                    <i class="far fa-id-badge"></i>   مقاولين من الباطن
+                                                                </button>
+
+                                                                // العمال
+                                                                <button type="button" name="submitType" value="1"
+                                                                        class="btn btn-sm btn-outline-info font-weight-bold btnsStyle"
+                                                                        onclick="openModel('#titleSharedModal', `العمال : @item.sProcessName`, '#btnAddEditContractors', ' العمال', 'fas fa-plus font-weight-bold', 'btn btn-outline-info font-weight-bold', '../Contractor/WrokersProcess', 'processID=@item.iProcessCode', '#sharedModalBody')"
+                                                                        data-toggle="modal" data-target="#sharedModal">
+                                                                    <i class="fas fa-users"></i> العمال
+                                                                </button>
+
+                                                                //اعتراض
+                                                                <button type="button" name="submitType" value="1"
+                                                                        class="btn btn-sm btn-outline-danger font-weight-bold btnsStyle"
+                                                                        onclick="openModel('#titleSharedModal', `اعتراض - اعفاء : @item.sProcessName`, '#btnOpposition', 'تسجيل', 'fas fa-plus font-weight-bold', 'btn btn-outline-info font-weight-bold', '../Contractor/_vpOpposition', 'processID=@item.iProcessCode&notActive=@item.sContractorFax', '#sharedModalBody')"
+                                                                        data-toggle="modal" data-target="#sharedModal">
+                                                                    <i class="fas fa-arrows-alt"></i> اعتراض - اعفاء
+                                                                </button>
+
+
+
+                                                                //if (item.sContractorFax == "green")
+                                                                //{
+                                                                    @* المرفقات *@
+                                                                    <button type="button" name="submitType" data-toggle="modal" data-target="#shareAttachmentSearchAddModal"
+                                                                            class="btn btn-sm btn-outline-primary font-weight-bold"
+                                                                            onclick="openAttachmentModel('../Attachments/_vpAttachmentAdd','../Attachments/_vpAttachmentSearch','Processes,@item.iProcessCode,pAttachments','actionName=@path[2]&controllerName=@path[1]&screenType=1','')">
+                                                                        <i class="fa fa-paperclip"></i>  المرفقات
+                                                                    </button>
+                                                                @*}
+                                                                else  // العمليه موقوفه - منتهيه
+                                                                {
+                                                                    <button type="button" name="submitType"
+                                                                            class="btn btn-sm btn-outline-primary font-weight-bold"
+                                                                            onclick="openAttachmentSearchOrAdd('#titleSharedAttachmentSearchModal', 'مرفقات : @item.sProcessName ', '', '../Attachments/_vpAttachmentSearch', 'Processes/@item.iProcessCode/pAttachments','actionName=@path[2]&controllerName=@path[1]&notActive=@item.sContractorFax','#divDisplaySharedSearchAttchment')"
+                                                                            data-toggle="modal" data-target="#shareAttachmentSearchModal">
+                                                                        <i class="fa fa-paperclip"></i>  المرفقات
+                                                                    </button>
+                                                                }*@
+
+                                                                // ملاحظات من التأمينات
+                                                                <button type="button" name="submitType" value="1"
+                                                                        class="btn btn-sm btn-outline-dark font-weight-bold btnsStyle"
+                                                                        onclick="openModel('#titleSharedModal', `ملاحظات من التأمينات : @item.sProcessName`, '#btnSaveNotes', ' اضافة  ملاحظات من التأمين', 'fas fa-plus font-weight-bold', 'btn btn-outline-info font-weight-bold', '_vpProcessNotes', 'processID=@item.iProcessCode', '#sharedModalBody')"
+                                                                        data-toggle="modal" data-target="#sharedModal">
+                                                                    <i class="far fa-id-badge"></i>  ملاحظات من التأمينات
+                                                                </button>
+
+                                                                @* المستخدمين *@
+                                                                <a class="btn btn-sm btn-outline-primary font-weight-bold btnsStyle" href="@Url.Action("vProcessUser", "ProcessUsers", new { pc = item.iProcessCode,cd = 61 ,sn=3})"><i class="fas fa-users"></i> المستخدمين</a>
+
+                                                            }
+
+                                                            @*المقاول من باطن*@
+                                                            else if (item.sRegisterBySelf == "3333")
+                                                            {
+                                                                // تفاصيل العمليه
+                                                                <a class="btn btn-sm btn-outline-secondary aDetStyle font-weight-bold btnsStyle" href="@Url.Action("vProcessIndex", "Process", new { ProcessId = item.iProcessCode })" data-toggle="tooltip" title="Users" data-placement="bottom"><i class="far fa-list-alt"></i> تفاصيل</a>
+
+                                                                // العمال
+                                                                <button type="button" name="submitType" value="1"
+                                                                        class="btn btn-sm btn-outline-info font-weight-bold btnsStyle"
+                                                                        onclick="openModel('#titleSharedModal', `العمال : @item.sProcessName`, '#btnAddEditContractors', ' العمال', 'fas fa-plus font-weight-bold', 'btn btn-outline-info font-weight-bold', '../Contractor/WrokersProcess', 'processID=@item.iProcessCode', '#sharedModalBody')"
+                                                                        data-toggle="modal" data-target="#sharedModal">
+                                                                    <i class="fas fa-users"></i> العمال
+                                                                </button>
+
+                                                                ////if (item.sContractorFax == "green")
+                                                                ////{
+                                                                    @* المرفقات *@
+                                                                    <button type="button" name="submitType" data-toggle="modal" data-target="#shareAttachmentSearchAddModal"
+                                                                            class="btn btn-sm btn-outline-primary font-weight-bold"
+                                                                            onclick="openAttachmentModel('../Attachments/_vpAttachmentAdd','../Attachments/_vpAttachmentSearch','Processes,@item.iProcessCode,pAttachments','actionName=@path[2]&controllerName=@path[1]&screenType=1','')">
+                                                                        <i class="fa fa-paperclip"></i>  المرفقات
+                                                                    </button>
+                                                                @*}
+                                                                else  // العمليه موقوفه - منتهيه
+                                                                {
+                                                                    <button type="button" name="submitType"
+                                                                            class="btn btn-sm btn-outline-primary font-weight-bold"
+                                                                            onclick="openAttachmentSearchOrAdd('#titleSharedAttachmentSearchModal', `مرفقات : @item.sProcessName `, '', '../Attachments/_vpAttachmentSearch', 'Processes/@item.iProcessCode/pAttachments','actionName=@path[2]&controllerName=@path[1]&notActive=@item.sContractorFax','#divDisplaySharedSearchAttchment')"
+                                                                            data-toggle="modal" data-target="#shareAttachmentSearchModal">
+                                                                        <i class="fa fa-paperclip"></i>  المرفقات
+                                                                    </button>
+                                                                }*@
+
+                                                                @* المستخدمين *@
+                                                                <a class="btn btn-sm btn-outline-primary font-weight-bold btnsStyle" href="@Url.Action("vProcessUser", "ProcessUsers", new { pc = item.iProcessCode,cd = 61 ,sn=3})"><i class="fas fa-users"></i> المستخدمين</a>
+
+                                                            }
+
+                                                            @* جهه الاسناد *@
+                                                            @*تم تسجيل العمليه عن طريق جهه الاسناد بنفسها (ولسه ماتمش الموافقه عليها )*@
+                                                            else if (item.sRegisterBySelf == "2")
+                                                            {
+                                                                //تعديل العمليه
+                                                                <button type="button" name="submitType"
+                                                                        class="btn btn-sm btn-outline-warning font-weight-bold"
+                                                                        onclick="openModel('#titleSharedModal', `تعديل العميله  : @item.sProcessName`, '#btnAddEditProcess', ' تعديل العمليه', 'fas fa-edit font-weight-bold', 'btn btnsStyle btn-outline-warning ml-3 font-weight-bold', '../Process/_vpAddProcessIndex', 'referanceSideContractorNum=false,inProcessCode=@item.iProcessCode,inPage=@Request.QueryString["inPage"]', '#sharedModalBody')"
+                                                                        data-toggle="modal" data-target="#sharedModal">
+                                                                    <i class="fas fa-edit font-weight-bold"></i>  تعديل
+                                                                </button>
+
+                                                                // حذف فى حاله ان متسجل ملاحظات من التأمينات - اعتراض / اعفاء للعمليه
+                                                                if (item.sProcessNotes == "0" && item.sProcessOpposition == "0")
+                                                                {
+                                                                    <a href="#" data-toggle="tooltip" data-placement="bottom" class="btn btn-sm btn-outline-danger font-weight-bold"
+                                                                       onclick="return sAlertDel(this,'هل تريد حذف هذه العمليه ؟', 'حذف العمليه', 'إلغاء الحذف','Process','_vpDeleteProcess','IDDelete=@item.iProcessCode&inPage=@Request.QueryString["inPage"]');"><i class="fas fa-trash-alt"></i> حذف </a>
+                                                                }
+
+                                                                //if (item.sContractorFax == "green")
+                                                                //{
+                                                                    <button type="button" name="submitType" data-toggle="modal" data-target="#shareAttachmentSearchAddModal"
+                                                                            class="btn btn-sm btn-outline-primary font-weight-bold"
+                                                                            onclick="openAttachmentModel('../Attachments/_vpAttachmentAdd','../Attachments/_vpAttachmentSearch','Processes,@item.iProcessCode,pAttachments','actionName=@path[2]&controllerName=@path[1]&screenType=2','')">
+                                                                        <i class="fa fa-paperclip"></i>  المرفقات
+                                                                    </button>
+                                                                @*}
+                                                                else  // العمليه موقوفه - منتهيه
+                                                                {
+                                                                    <button type="button" name="submitType"
+                                                                            class="btn btn-sm btn-outline-primary font-weight-bold"
+                                                                            onclick="openAttachmentSearchOrAdd('#titleSharedAttachmentSearchModal', `مرفقات : @item.sProcessName `, '', '../Attachments/_vpAttachmentSearch', 'Processes/@item.iProcessCode/pAttachments','actionName=@path[2]&controllerName=@path[1]&notActive=@item.sContractorFax','#divDisplaySharedSearchAttchment')"
+                                                                            data-toggle="modal" data-target="#shareAttachmentSearchModal">
+                                                                        <i class="fa fa-paperclip"></i>  المرفقات
+                                                                    </button>
+                                                                }*@
+
+                                                                // ملاحظات من التأمينات
+                                                                <button type="button" name="submitType" value="1"
+                                                                        class="btn btn-sm btn-outline-dark font-weight-bold btnsStyle"
+                                                                        onclick="openModel('#titleSharedModal', `ملاحظات من التأمينات : @item.sProcessName`, '#btnSaveNotes', ' اضافة  ملاحظات من التأمين', 'fas fa-plus font-weight-bold', 'btn btn-outline-info font-weight-bold', '_vpProcessNotes', 'processID=@item.iProcessCode', '#sharedModalBody')"
+                                                                        data-toggle="modal" data-target="#sharedModal">
+                                                                    <i class="far fa-id-badge"></i>  ملاحظات من التأمينات
+                                                                </button>
+                                                            }
+
+                                                            @*تم تسجيل العمليه عن طريق جهه الاسناد بنفسها (وتم الموافقه عليها )*@
+                                                            @*تم تسجيل العمليه عن مستخدم اخر (المقاول الرئيسي)*@
+                                                            @*عمليه مسجله عند الهيئه*@
+                                                            else if (item.sRegisterBySelf == "22" || item.sRegisterBySelf == "222" || item.sRegisterBySelf == "2222")
+                                                            {
+                                                                //بيانات العمليه
+                                                                <button type="button" name="submitType"
+                                                                        class="btn btn-sm btn-outline-secondary aDetStyle font-weight-bold btnsStyle"
+                                                                        onclick="openModel('#titleSharedModal', `بيانات العميله : @item.sProcessName`, '#btnAddEditProcess', ' بيانات العمليه', 'fas fa-plus', 'btn btnsStyle btn-outline-info ml-3 font-weight-bold', '../Process/_vpAddProcessIndex', 'referanceSideContractorNum=false,inProcessCode=@item.iProcessCode', '#sharedModalBody','#btnAddEditProcess')"
+                                                                        data-toggle="modal" data-target="#sharedModal">
+                                                                    <i class="far fa-list-alt"></i>  بيانات العملية
+                                                                </button>
+
+                                                                //اعتراض
+                                                                <button type="button" name="submitType" value="1"
+                                                                        class="btn btn-sm btn-outline-danger font-weight-bold btnsStyle"
+                                                                        onclick="openModel('#titleSharedModal', `اعتراض - اعفاء : @item.sProcessName`, '#btnOpposition', 'تسجيل', 'fas fa-plus font-weight-bold', 'btn btn-outline-info font-weight-bold', '../Contractor/_vpOpposition', 'processID=@item.iProcessCode&notActive=@item.sContractorFax', '#sharedModalBody')"
+                                                                        data-toggle="modal" data-target="#sharedModal">
+                                                                    <i class="fas fa-arrows-alt"></i> اعتراض - اعفاء
+                                                                </button>
+
+                                                                if (item.sProcessNumber == "--------")
+                                                                {
+                                                                    // المرفقات
+                                                                    // العمليات
+                                                                    <button type="button" name="submitType" data-toggle="modal" data-target="#shareAttachmentSearchAddModal"
+                                                                            class="btn btn-sm btn-outline-primary font-weight-bold"
+                                                                            onclick="openAttachmentModel('../Attachments/_vpAttachmentAdd','../Attachments/_vpAttachmentSearch','Processes,@item.iProcessCode,pAttachments','actionName=@path[2]&controllerName=@path[1]&screenType=1','')">
+                                                                        <i class="fa fa-paperclip"></i>  المرفقات
+                                                                    </button>
+                                                                }
+                                                                else 
+                                                                {// طلبات العمليات
+                                                                    <button type="button" name="submitType" data-toggle="modal" data-target="#shareAttachmentSearchAddModal"
+                                                                            class="btn btn-sm btn-outline-primary font-weight-bold"
+                                                                            onclick="openAttachmentModel('../Attachments/_vpAttachmentAdd','../Attachments/_vpAttachmentSearch','Processes,@item.iProcessCode,pAttachments','actionName=@path[2]&controllerName=@path[1]&screenType=2','')">
+                                                                        <i class="fa fa-paperclip"></i>  المرفقات
+                                                                    </button>
+                                                                }
+                                                                @*else  // العمليه موقوفه - منتهيه
+                                                                {
+                                                                    <button type="button" name="submitType"
+                                                                            class="btn btn-sm btn-outline-primary font-weight-bold"
+                                                                            onclick="openAttachmentSearchOrAdd('#titleSharedAttachmentSearchModal', `مرفقات : @item.sProcessName `, '', '../Attachments/_vpAttachmentSearch', 'Processes/@item.iProcessCode/pAttachments','actionName=@path[2]&controllerName=@path[1]&notActive=@item.sContractorFax','#divDisplaySharedSearchAttchment')"
+                                                                            data-toggle="modal" data-target="#shareAttachmentSearchModal">
+                                                                        <i class="fa fa-paperclip"></i>  المرفقات
+                                                                    </button>
+                                                                }*@
+
+                                                                // ملاحظات من التأمينات
+                                                                <button type="button" name="submitType" value="1"
+                                                                        class="btn btn-sm btn-outline-dark font-weight-bold btnsStyle"
+                                                                        onclick="openModel('#titleSharedModal', `ملاحظات من التأمينات : @item.sProcessName`, '#btnSaveNotes', ' اضافة  ملاحظات من التأمين', 'fas fa-plus font-weight-bold', 'btn btn-outline-info font-weight-bold', '_vpProcessNotes', 'processID=@item.iProcessCode', '#sharedModalBody')"
+                                                                        data-toggle="modal" data-target="#sharedModal">
+                                                                    <i class="far fa-id-badge"></i>  ملاحظات من التأمينات
+                                                                </button>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                }
+
+                            }
+                        </tr>
+
+                        iCount++;
+                    }
+                </tbody>
+
+            </table>
+
+            <div id="divPagination">
+                @*pagination*@
+                <h5 style="text-align:center;color:#306fc2"> صفحة <strong style="color:#CA2553"> @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)</strong> من <strong>@Model.PageCount </strong> </h5>
+                <div style="text-align:center">
+                    <div class="justify-content-lg-center pagination">
+                        @Html.PagedListPager(Model, inPage => Url.Action(fullPath, new { areas = Request.QueryString["areas"], inPage, Offices = Request.QueryString["Offices"] }))
+                    </div>
+                </div>
+            </div>
+                        }
+    </div>
+</div>

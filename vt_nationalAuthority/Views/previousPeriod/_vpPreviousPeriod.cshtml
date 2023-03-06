@@ -1,0 +1,72 @@
+﻿<div class="mt-2 dr-rtl mb-2 row justify-content-center">
+    <div class="text-center scroll-max grid_box_shadow">
+        <table class="table w-100">
+            @* thead *@
+            <thead>
+                <tr>
+                    <th scope="col" class="color_main102">#</th>
+                    <th scope="col" class="color_main102">الشهر</th>
+                    <th scope="col" class="color_main102">العام</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @for (int i = 0; i < 10; i++)
+                {
+                    <tr>
+                        <th scope="row" class="color_main102">@(i + 1)</th>
+
+                        @if (i == 1 || i == 4 || i == 5)
+                        {
+                            <td>نوفمبر</td>
+                        }
+                        else
+                        {
+                            <td>ديسمبر</td>
+                        }
+
+                        <td>2019</td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+        @* pagination *@
+        <div>
+            <nav class="pagination-outer font102">
+                <ul class="pagination">
+                    @* « First *@
+                    <li class="page-item">
+                        <a href="#" class="page-link hvr-bob">
+                            <span aria-hidden="true">«</span>
+                        </a>
+                    </li>
+                    @* < Previous *@
+                    <li class="page-item">
+                        <a href="#" class="page-link hvr-bob">
+                            <span aria-hidden="true"><</span>
+                        </a>
+                    </li>
+                    <li class="page-item active"><a class="page-link hvr-bob" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link hvr-bob hTable" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link hvr-bob hTable" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link hvr-bob hTable" href="#">4</a></li>
+                    <li class="page-item"><a class="page-link hvr-bob hTable" href="#">5</a></li>
+                    @* Next > *@
+                    <li class="page-item">
+                        <a href="#" class="page-link hvr-bob" aria-label="Next">
+                            <span aria-hidden="true">></span>
+                        </a>
+                    </li>
+                    @* Last » *@
+                    <li class="page-item">
+                        <a href="#" class="page-link hvr-bob" aria-label="Last">
+                            <span aria-hidden="true">»</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+        </div>
+    </div>
+</div>

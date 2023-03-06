@@ -1,0 +1,463 @@
+﻿      #divMain {
+            /*margin: 40px 110px;*/
+            width: 1200px;
+            /* margin-top: 5px; */
+            padding-right: 15px;
+            padding-left: 15px;
+            margin-right: auto;
+            margin-left: auto;
+        }
+
+        #years {
+            margin-left: 460px;
+            margin-top: 60px;
+        }
+
+        #divWeekDays {
+            width: 66%;
+            margin-left: 125px;
+            margin-top: -5px;
+        }
+
+        #divDaysMonth {
+            margin-top: -640px;
+            z-index: 50;
+            width: 65%;
+            margin-left: 205px;
+            /*text-align: center;*/
+        }
+
+        #day_1 {
+            /*margin-right: 8px !important;*/
+        }
+
+        .ulDaysMonthEnglish {
+            margin-top: 645px;
+        }
+
+            .ulDaysMonthEnglish > li {
+                text-align: center;
+                width: 94.94px;
+                height: 90px;
+                /*margin-right: 10px;*/
+            }
+
+        #navBar > li {
+            position: relative;
+            display: inline-block;
+            padding: 10px;
+            font-weight: 400;
+            font-size: medium;
+            text-align: center;
+            width: 12%;
+        }
+
+/* modal */
+#calenderModel {
+    background-color: #EEF0F2;
+    position: relative;
+    /*height:766px;*/
+}
+
+/* (arabic - english ) language button */
+#arLanguage, #enLanguage {
+    font-size: 22px;
+    background: none;
+    position: relative;
+    z-index: 1;
+}
+
+    #arLanguage:hover, #enLanguage:hover {
+        background: none;
+        box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+    }
+
+#arLanguage {
+    margin-left: 89%;
+}
+
+#enLanguage {
+    margin-left: 85%;
+    font-family: 'Kavivanar';
+}
+
+/*definitions*/
+.enDefinitions, .arDefinitions {
+    white-space: pre-line;
+    display: block;
+    color: black;
+    font-size: 13px;
+    background-color: ghostwhite;
+    position: absolute;
+    border-radius: 6px;
+    padding: 5px 10px 9px 20px;
+    border: 1px solid white;
+    top: 145px;
+    left: 122px;
+}
+
+    .enDefinitions:hover, .arDefinitions:hover {
+        box-shadow: 0 0px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+    }
+
+.arDefinitions {
+    direction: rtl;
+}
+
+    .enDefinitions img, .arDefinitions img {
+        width: 10px;
+        height: 10px;
+    }
+
+.imgNormalDay {
+    background: #EEF0F2;
+}
+
+.imgHoliday {
+    background: #DDDDDD;
+    /*opacity: 0.3;*/
+}
+
+.imgMaamoria {
+    background: #FFFFC0;
+}
+
+.imgAbsence {
+    background: #FF6961;
+}
+
+.imgPremission {
+    background: #FFD48E;
+}
+
+/*month and year*/
+.superYear {
+    text-align: center;
+    font-family: 'Kavivanar';
+    font-size: 36px;
+    width: 217px;
+    background-color: #EEEFF2;
+    margin: 12px 326px;
+    overflow: hidden;
+    z-index: 5;
+}
+
+/*week days*/
+#divWeekDays {
+    text-align: center;
+    margin-top: -7px;
+    margin-left: -147px;
+    font-family: 'Kavivanar';
+}
+
+    #divWeekDays > h3 {
+        display: inline-block;
+        font-size: 27px;
+    }
+
+#day_000 {
+    margin: 0 152PX;
+}
+
+#day_111 {
+    margin: 0px 0 0 -110px;
+}
+
+#day_222 {
+    margin: 0px 0 0 39px;
+}
+
+#day_333, #day_444 {
+    margin: 0 0 0 40px;
+}
+
+#day_555 {
+    margin: 0 0 0 46px;
+}
+
+#day_666 {
+    margin-left: 57px;
+}
+
+#day_777, #day_888 {
+    /*margin-left: 110PX;*/
+    padding-left: 45px;
+    /* margin-left: -178px; */
+    margin-left: 10px;
+}
+
+#day_999 {
+    padding-left: 45px;
+    /* margin-left: -31px; */
+    margin-right: 31px;
+}
+
+#day_101010 {
+    padding-left: 45px;
+    margin-right: 38px;
+    margin-left: -40px;
+}
+
+#day_111111 {
+    margin-right: -58px;
+}
+
+#day_121212 {
+    /*margin-right: 9px;
+    margin-left: 10px;*/
+    margin-right: -43px;
+    margin-left: 107px;
+}
+
+#day_131313 {
+    /*margin-right: -31PX;
+        margin-left: 10px;*/
+    margin-right: -94PX;
+    margin-left: 100px;
+}
+
+/*days month*/
+
+#divDaysMonth {
+    width: 80%;
+    margin: auto;
+    position: relative;
+    /*margin-bottom: 55px;*/
+}
+
+    #divDaysMonth li {
+        text-decoration: none;
+        font-size: 20px;
+        /*text-align: center;*/
+        border-radius: 50%;
+        background-color: #EEF0F2; /*antiquewhite;*/
+        border-color: white;
+            /*margin-top: 664px;*/
+    }
+
+.ulDaysMonthArabic {
+    direction: rtl;
+}
+
+.ulDaysMonthEnglish {
+    direction: ltr;
+    margin-left: 13px;
+}
+
+.calendarLi, .absence, .holiday, .permission, .attendance, .mamoryia {
+    text-decoration: none;
+    display: inline-block !important;
+    border-radius: 50%;
+    border: 1px solid black;
+    padding: 10px 12px;
+    font-size: 20px;
+    position: relative;
+    z-index: 2;
+}
+
+    .calendarLi:hover, .absence:hover, .holiday:hover, .permission:hover, .attendance:hover, .mamoryia:hover {
+        z-index: 3;
+    }
+
+        .calendarLi:hover span, .absence:hover span, .holiday:hover span, .permission:hover span, .attendance:hover span .mamoryia:hover span {
+            display: block;
+            color: black;
+            width: 200px;
+            white-space: pre-line;
+            font-size: 11px;
+            text-decoration: none;
+            position: absolute;
+            border-radius: 6px;
+            top: 42px;
+            left: -50px;
+            padding: 5px 0px;
+            /*transform:translateY(-100%);*/
+        }
+
+/*.mamoryia {
+    background-color: #FFFFC0 !important;
+    background: -moz-linear-gradient(right, #FFFFC0 0%, #FFFFC0 50%,#EEF0F2 51%,#EEF0F2 100%);  FF3.6+ 
+    background: -webkit-gradient(linear, right top, right bottom, color-stop(0%,#FFFFC0 ), color-stop(50%,#FFFFC0), color-stop(51%,#EEF0F2), color-stop(100%,#EEF0F2));  Chrome,Safari4+ 
+    background: -webkit-linear-gradient(right, #FFFFC0 0%,#FFFFC0 50%,#EEF0F2 51%,#EEF0F2 100%);  Chrome10+,Safari5.1+ 
+    background: -o-linear-gradient(right, #FFFFC0 0%,#FFFFC0 50%,#EEF0F2 51%,#EEF0F2 100%);  Opera 11.10+ 
+    background: -ms-linear-gradient(right, #FFFFC0 0%,#FFFFC0 50%,#EEF0F2 51%,#EEF0F2 100%);  IE10+ 
+    background: linear-gradient(to right, #FFFFC0 0%,#FFFFC0 50%,#EEF0F2 51%,#EEF0F2 100%);  W3C 
+}*/
+
+/*.permission {
+    
+    background: linear-gradient(to left, #FFD48E 0%,#FFD48E 50%, #EEF0F2 51%,#EEF0F2 100%);
+}*/
+
+.holiday {
+    /*background-color: #DDDDDD !important;*/
+    /*opacity: 0.3;*/
+    border: none;
+}
+
+.absence {
+    /*background-color: #FF6961 !important;*/
+}
+
+/*paragraph*/
+
+.calendarPragraph {
+    margin: 0;
+    font-size: 14px;
+    /*padding-left: 17px;*/
+    text-align: center;
+}
+
+/*tooltip*/
+._tooltip, .tooltipHolidy, .tooltipAbsence, .tooltipPermission, .tooltipAttendance , .tooltipMamoryia {
+    display: none;
+}
+
+    ._tooltip::after, ._tooltip::before, .tooltipHolidy::after, .tooltipHolidy::before,
+    .tooltipAbsence::after, .tooltipAbsence::before, .tooltipPermission::after, .tooltipPermission::before,
+    .tooltipMamoryia::after, .tooltipMamoryia::before,.tooltipAttendance::after, .tooltipAttendance::before {
+        position: absolute;
+        content: '';
+        width: 0px;
+        height: 0px;
+        position: absolute;
+        top: -11%;
+        left: 41.5%;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+    }
+
+    ._tooltip::after, ._tooltip::before {
+        border-bottom: 10px solid #DDDDDD;
+    }
+
+    .tooltipHolidy::after, .tooltipHolidy::before {
+        /*border-bottom: 10px solid #DDDDDD;*/
+    }
+
+    .tooltipAbsence::after, .tooltipAbsence::before {
+        /*border-bottom: 10px solid #FF6961;*/
+    }
+
+    .tooltipPermission::after, .tooltipPermission::before {
+        /*border-bottom: 10px solid #FFD48E;*/
+    }
+
+    .tooltipMamoryia::after, .tooltipMamoryia::before {
+        /*border-bottom: 10px solid #FFFFC0;*/
+    }
+
+._tooltip {
+    background-color: #DDDDDD !important;
+}
+
+.tooltipHolidy {
+    /*background-color: #DDDDDD !important;*/
+    /*opacity: 0 !important;*/
+}
+
+.tooltipAbsence {
+    /*background-color: #FF6961 !important;*/
+    color: white !important;
+}
+
+.tooltipPermission {
+    /*background: #FFD48E !important;*/
+}
+
+.tooltipMamoryia {
+    /*background-color: #FFFFC0 !important;*/
+}
+
+/* nextMonth , prevMonth */
+
+.enMonthBefore, .enMonthAfter, .arMonthAfter, .arMonthBefore, .yearBefore, .yearAfter {
+    display: block;
+    color: black;
+    font-size: 18px;
+    background-color: #EEF0F2;
+    position: absolute;
+    border-radius: 6px;
+    border: 1px solid white;
+    top: 223px;
+    /*left: 250px;*/
+    left: 275px;
+    z-index: 4;
+}
+
+.enMonthBefore, .arMonthAfter, .yearBefore {
+    margin-left: 272px; /*380px;*/
+}
+
+.enMonthAfter, .arMonthBefore, .yearAfter {
+    margin-left: 560px; /*380px;*/
+}
+
+
+
+    .enMonthAfter:hover, .enMonthBefore:hover, .arMonthAfter:hover, .arMonthBefore:hover, .yearBefore:hover, .yearAfter:hover
+    /*#search:hover*/ {
+        box-shadow: 0 0px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+    }
+
+#divTenYear {
+    /*margin: 8px 50px 8px 209px;*/
+    width: 470px; /*218px;*/
+    margin-bottom: 20px;
+    margin: 8px 355px;
+}
+
+.tenYears {
+    margin: 6px;
+    padding: 20px;
+    font-size: 18px;
+    border-radius: 50%;
+    width: 144px;
+    font-family: 'Kavivanar';
+}
+
+#divTwelveMonth {
+    width: 500px;
+    margin: 8px 330px;
+}
+
+.twelveMonth {
+    border-radius: 50%;
+    width: 140px;
+    margin: 9px 12px 9px 14px;
+    padding: 14px;
+    font-family: 'Kavivanar';
+}
+
+
+
+/* search */
+.divSearch {
+    right: 115px;
+    top: 170px;
+    position: absolute;
+    z-index: 6;
+}
+
+.search {
+    display: inline-block;
+    float: left;
+    width: 67px;
+    text-align: center;
+    margin: -28px 0px 0px 4px;
+}
+
+#search {
+    margin-top: -25px;
+}
+
+#daySearch {
+    /*margin-right: 35px;*/
+    margin-left: 145px;
+}
+
+
+/* font-family: 'Kavivanar';*/
+/*#divDaysMonth*/
+/*z-index: 6*/
+

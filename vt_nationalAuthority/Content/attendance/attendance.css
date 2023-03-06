@@ -1,0 +1,214 @@
+﻿.twelveMonth {
+    /*border-radius: 50% !important;*/
+    width: 140px;
+    margin: 9px 12px 9px 14px;
+    padding: 14px !important;
+    /*font-family: 'Kavivanar';*/
+    font-size: x-large;
+    /*background-color: #a2a9ab36;*/ 
+    border: none;
+}
+
+.monthDisabled {
+    color: #9E9E9E;
+    /*background-color: #ffffffdb;*/
+    box-shadow: inset 2px 3px 4px 0px #9e9e9e85;
+    color: none;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+    .monthDisabled:hover {
+    }
+
+.monthPrevious {
+    color: #47acc5;
+    background-color: #ffffffdb;
+    box-shadow: 0px 5px 9px 0px #4eb2ca40;
+}
+
+.twelveMonth.active, .tenYears.active {
+    color: #47acc5;
+    /*background-color: #60bed4db;*/
+    border: 2px solid #2193b0;
+    box-shadow: 0px 5px 9px 3px #77c7da4d;
+}
+
+.tenYears {
+    width: 470px;
+    margin: 7px;
+    padding: 20px !important;
+    font-size: 27px !important;
+    /*border-radius: 50% !important;*/
+    width: 144px;
+}
+
+#divTenYear {
+    width: 98%;
+    text-align: center;
+}
+
+.tenYears {
+    border: none;
+        
+}
+
+/*days month*/
+
+#divDaysMonth {
+    text-align: center;
+    display: block;
+    width: 100%;
+    /*width: 80%;
+        margin: auto;
+        position: relative;*/
+    /*margin-bottom: 55px;*/
+}
+
+    #divDaysMonth li {
+        text-decoration: none;
+        font-size: 20px;
+        /*text-align: center;*/
+        border-radius: 50%;
+        background-color: #EEF0F2; /*antiquewhite;*/
+        border-color: white;
+        /*margin-top: 664px;*/
+    }
+
+.ulDaysMonth {
+    /*width: 56%;*/
+    width: 385px;
+    text-align: center;
+    direction: ltr;
+    margin-left: 13px;
+    direction: inherit;
+}
+
+.calendarLi {
+    text-decoration: none;
+    display: inline-block !important;
+    border-radius: 50%;
+    border: 1px solid black;
+    padding: 10px 12px;
+    font-size: 20px;
+    position: relative;
+    z-index: 2;
+}
+
+    .calendarLi:hover { 
+        z-index: 3;
+    }
+
+        .calendarLi:hover span {
+            display: block;
+            color: black;
+            width: 200px;
+            white-space: pre-line;
+            font-size: 11px;
+            text-decoration: none;
+            position: absolute;
+            border-radius: 6px;
+            top: 42px;
+            left: -50px;
+            padding: 5px 0px;
+            /*transform:translateY(-100%);*/
+        }
+
+/*tooltip*/
+._tooltip {
+    display: none;
+}
+
+    ._tooltip::after, ._tooltip::before {
+        position: absolute;
+        content: '';
+        width: 0px;
+        height: 0px;
+        position: absolute;
+        top: -11%;
+        left: 41.5%;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+    }
+
+/*month and year*/
+.superYear {
+    text-align: center;
+    /*font-family: 'Kavivanar';*/
+    font-size: 25px !important;
+    width: 217px;
+    background-color: #EEEFF2;
+    margin: 12px 326px;
+    overflow: hidden;
+    z-index: 5;
+}
+
+
+    .day-header {
+        color: #fffefe;
+        font-weight: 500;
+        padding: 10px 6px;
+    }
+
+    .day {
+        /*display:inline-flex;*/
+    }
+
+    #tblDays {
+        box-shadow: 0px 4px 10px #00000047;
+        border-radius: 9px;
+    }
+
+        #tblDays thead {
+            color: #fff;
+            background-color: #2193b0;
+        }
+
+            #tblDays thead tr {
+                border-radius: 9px;
+            }
+
+        #tblDays thead, #tblDays tbody {
+            /*display: contents;*/
+        }
+
+    .day {
+        color: color: #2193b0;
+    }
+
+    .day-content {
+        /*background-color: #2193b0;*/
+        /*color: #fff;*/
+        border-radius: 50%;
+        /* margin: 4px; */
+        /* padding: 5px 10px 5px 11px; */
+        box-shadow: 0 2px 6px #2193b070;
+        border: unset;
+    }
+
+        .day-content.active {
+            background-color: #2193b0;
+            color: #fff;
+            border-radius: 50%;
+            /* margin: 4px; */
+            /* padding: 5px 10px 5px 11px; */
+            box-shadow: 0 2px 6px #2193b070;
+            border: unset;
+        }
+
+
+    .disabledDay {
+        pointer-events: none;
+        background-color: #ffffff;
+        color: #9E9E9E;
+        box-shadow: inset 0 2px 6px #0000004d;
+    }
+
+    .previousDay, .previousDay:hover {
+        color: #2193b0;
+        box-shadow: 0 2px 6px #2193b070;
+    }
+
+    #tblDays tbody tr:first-of-type {
+        direction: ltr;
+    }

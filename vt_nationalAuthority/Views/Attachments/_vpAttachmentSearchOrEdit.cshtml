@@ -1,0 +1,155 @@
+﻿@{
+    Layout = "~/Views/Shared/_partialLayout.cshtml";
+}
+
+@using (Html.BeginForm("_vpAttachmentSearchOrEdit", "Attachments", FormMethod.Post))
+{
+    @Html.Hidden("uc", TempData["uc"])
+    @Html.Hidden("docuFullName", TempData["docuFullName"])
+    @Html.Hidden("docName", TempData["docName"])
+    @Html.Hidden("attachTypeCode", TempData["attachTypeCode"])
+
+    <div class="mt-3 dr-rtl grid_box_shadow mx-3 mb-2">
+        <div class="row">
+            @* مقاول *@
+            @if ((Session["contractor"] != null))
+            {
+                @* اسم المرفقات *@
+                <div class="col-lg-8 col-md-8 col-sm-12 col-12 my-1 text-right ">
+                    <span class="color_main102 font-weight-bold ml-2 mx-3">
+                        اسم المرفقات
+                    </span>
+                    <div>
+                        @if (TempData["docName"] != null)
+                        {
+                            @Html.TextBox("attachmentName", (string)TempData["docName"], new { @class = "form-control borderText arabic", @data_live_search = "true", data_toggle = "tooltip", title = "حروف عربية فقط", data_placement = "bottom", required = "required" })
+                        }
+                        else
+                        {
+                            @Html.TextBox("attachmentName", "", new { @class = "form-control borderText arabic", @data_live_search = "true", data_toggle = "tooltip", title = "حروف عربية فقط", data_placement = "bottom" })
+                        }
+                    </div>
+                </div>
+                @* نوع المرفق *@
+                <div class="col-lg-4 col-md-4 col-sm-12 col-12 my-1 text-right ">
+                    <span class="color_main102 font-weight-bold ml-2 mx-3">
+                        نوع المرفق
+                    </span>
+                    <div>
+                        @if (TempData["attachTypeCode"] != null)
+                        {
+                            @Html.DropDownList("attachmentType", ViewBag.attachmentType as SelectList, "--  الكل --", new { @class = "form-control borderDDL", @data_live_search = "true", required = "required", id = "attachmentType" })
+                        }
+                        else
+                        {
+                            @Html.DropDownList("attachmentType", ViewBag.attachmentType as SelectList, "--  الكل --", new { @class = "form-control borderDDL", @data_live_search = "true", id = "attachmentType" })
+                        }
+                    </div>
+                </div>
+            }
+            else // موظف تأمينات
+            {
+                if (TempData["docName"] == null)
+                {
+                    // اسم المرفقات
+                    <div class="col-lg-8 col-md-8 col-sm-12 col-12 my-1 text-right ">
+                        <span class="color_main102 font-weight-bold ml-2 mx-3">
+                            اسم المرفقات
+                        </span>
+                        <div>
+                            @if (TempData["docName"] != null)
+                        {
+                                @Html.TextBox("attachmentName", (string)TempData["docName"], new { @class = "form-control borderText arabic", @data_live_search = "true", data_toggle = "tooltip", title = "حروف عربية فقط", data_placement = "bottom", required = "required" })
+                            }
+                            else
+                            {
+                                @Html.TextBox("attachmentName", "", new { @class = "form-control borderText arabic", @data_live_search = "true", data_toggle = "tooltip", title = "حروف عربية فقط", data_placement = "bottom" })
+                            }
+                        </div>
+                    </div>
+                    @* نوع المرفق *@
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-12 my-1 text-right ">
+                        <span class="color_main102 font-weight-bold ml-2 mx-3">
+                            نوع المرفق
+                        </span>
+                        <div>
+                            @if (TempData["attachTypeCode"] != null)
+                        {
+                                @Html.DropDownList("attachmentType", ViewBag.attachmentType as SelectList, "--  الكل --", new { @class = "form-control borderDDL", @data_live_search = "true", required = "required", id = "attachmentType" })
+                            }
+                            else
+                            {
+                                @Html.DropDownList("attachmentType", ViewBag.attachmentType as SelectList, "--  الكل --", new { @class = "form-control borderDDL", @data_live_search = "true", id = "attachmentType" })
+                            }
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    @* اسم المرفقات *@
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-12 my-1 text-right ">
+                        <span class="color_main102 font-weight-bold ml-2 mx-3">
+                            اسم المرفقات
+                        </span>
+                        <div>
+                            @if (TempData["docName"] != null)
+                            {
+                                @Html.TextBox("attachmentName", (string)TempData["docName"], new { @class = "form-control borderText arabic", @data_live_search = "true", data_toggle = "tooltip", title = "حروف عربية فقط", data_placement = "bottom", required = "required" })
+                            }
+                            else
+                            {
+                                @Html.TextBox("attachmentName", "", new { @class = "form-control borderText arabic", @data_live_search = "true", data_toggle = "tooltip", title = "حروف عربية فقط", data_placement = "bottom" })
+                            }
+                        </div>
+                    </div>
+                    @* نوع المرفق *@
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1 text-right ">
+                        <span class="color_main102 font-weight-bold ml-2 mx-3">
+                            نوع المرفق
+                        </span>
+                        <div>
+                            @if (TempData["attachTypeCode"] != null)
+                        {
+                                @Html.DropDownList("attachmentType", ViewBag.attachmentType as SelectList, "--  اختر --", new { @class = "form-control borderDDL", @data_live_search = "true", required = "required", id = "attachmentType" })
+                            }
+                            else
+                            {
+                                @Html.DropDownList("attachmentType", ViewBag.attachmentType as SelectList, "--  الكل --", new { @class = "form-control borderDDL", @data_live_search = "true", id = "attachmentType" })
+                            }
+                        </div>
+                    </div>
+                    @* مقاول - جهه اسناد *@
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1 text-right ">
+                        <span class="color_main102 font-weight-bold ml-2 mx-3">
+                            مقاول - جهه اسناد
+                        </span>
+                        <div>
+                            @if (TempData["attachTypeCode"] != null) // Edit
+                        {
+                                @Html.DropDownList("contRefSide", ViewBag.contRefSide as SelectList, "--  اختر --", new { @class = "form-control borderDDL", @data_live_search = "true", required = "required", id = "contRefSide" })
+                            }
+                            else
+                            {
+                                @Html.DropDownList("contRefSide", ViewBag.contRefSide as SelectList, "--  الكل --", new { @class = "form-control borderDDL", @data_live_search = "true", id = "contRefSide" })
+                            }
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+
+        @* بحث / تعديل مرفق *@
+        <div class="col-sm-12 my-1 text-left">
+            <button type="submit" id="btnAttachmentSearchOrEdit" class=""><i class=""></i></button>
+        </div>
+    </div>
+}
+<script>
+    $(function () {
+
+        if (@TempData["attachTypeCode"] != null)
+        {
+            $('#attachmentType').val(@TempData["attachTypeCode"]);
+        }
+    });
+</script>

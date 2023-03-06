@@ -1,0 +1,14 @@
+﻿@{
+    if (Session["officeCode"] == null) // مقاول
+    {
+        Layout = "~/Views/Shared/_contractorLayout.cshtml";
+    }
+    else
+    { // موظف تأمينات
+        Layout = "~/Views/Shared/insuranceempprocessdetailslayout.cshtml";
+    }
+    <title>المرفقات</title>
+}
+<div>
+    @{Html.RenderAction("_vpAttachmentIndex", "Attachments");}
+</div>

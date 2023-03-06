@@ -1,0 +1,288 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="changeFilderName" xml:space="preserve">
+    <value>&lt;script&gt;sAlert('الرجاء تغيير اسم المرفق او نوع المرفق',2);&lt;/script&gt;</value>
+  </data>
+  <data name="DeleteDone" xml:space="preserve">
+    <value>&lt;script&gt;sAlert('تم الحذف بنجاح',0);&lt;/script&gt;</value>
+  </data>
+  <data name="DeleteNotDone" xml:space="preserve">
+    <value>&lt;script&gt;sAlert('عفوا , لم يتم الحذف لارتباطه بعناصر اخرى',1);&lt;/script&gt;</value>
+  </data>
+  <data name="EditDone" xml:space="preserve">
+    <value>&lt;script&gt;sAlert('تم التعديل بنجاح',0);&lt;/script&gt;</value>
+  </data>
+  <data name="EditNotDone" xml:space="preserve">
+    <value>&lt;script&gt;sAlert('عفوا , هذا العنصر موجود سابقاً',1);&lt;/script&gt;</value>
+  </data>
+  <data name="ExtractAccept" xml:space="preserve">
+    <value>&lt;script&gt;sAlert('تم التأكيد على المستخلص بنجاح.',0);&lt;/script&gt;</value>
+  </data>
+  <data name="ExtractNotAccept" xml:space="preserve">
+    <value>&lt;script&gt;sAlert('عفوا , لم يتم التأكيد على المستخلص ',1);&lt;/script&gt;</value>
+  </data>
+  <data name="ExtractNotPaid" xml:space="preserve">
+    <value>&lt;script&gt;sAlert('عفوأ , لم يتم التأكيد على الاشتراك .',1);&lt;/script&gt;</value>
+  </data>
+  <data name="ExtractPaid" xml:space="preserve">
+    <value>&lt;script&gt;sAlert('تم التأكيد على الاشتراك بنجاح.',0);&lt;/script&gt;</value>
+  </data>
+  <data name="NotAllowOperation" xml:space="preserve">
+    <value>&lt;script&gt;sAlert('عفوا ,لا يمكنك ادخال / تعديل البيانات', 1);&lt;/script&gt;</value>
+  </data>
+  <data name="NotesNotFound" xml:space="preserve">
+    <value>لم يتم تسجيل ملاحظات حتى الان</value>
+  </data>
+  <data name="PageSize" xml:space="preserve">
+    <value>10</value>
+  </data>
+  <data name="Permission" xml:space="preserve">
+    <value>&lt;script&gt;sAlert('عفوا , ليس لديك الصلاحية.', 1);&lt;/script&gt;</value>
+  </data>
+  <data name="ProcessAccept" xml:space="preserve">
+    <value>&lt;script&gt;sAlert('تم الموافقة على الطلب بنجاح.',0);&lt;/script&gt;</value>
+  </data>
+  <data name="ProcessNotAccept" xml:space="preserve">
+    <value>&lt;script&gt;sAlert('عفوا , لم يتم الموافقة على الطلب',1);&lt;/script&gt;</value>
+  </data>
+  <data name="SaveDone" xml:space="preserve">
+    <value>&lt;script&gt;sAlert('تم الحفظ بنجاح',0);&lt;/script&gt;</value>
+  </data>
+  <data name="SaveNotDone" xml:space="preserve">
+    <value>&lt;script&gt;sAlert('عفوا , هذا العنصر موجود سابقاً',1);&lt;/script&gt;</value>
+  </data>
+  <data name="SearchCancel" xml:space="preserve">
+    <value>&lt;script&gt;sAlert('تم إلغاء البحث بنجاح.',0);&lt;/script&gt;</value>
+  </data>
+  <data name="SearchNotFound" xml:space="preserve">
+    <value>لا توجد نتائج</value>
+  </data>
+  <data name="UserNotAcess" xml:space="preserve">
+    <value>&lt;script&gt;sAlert('عفوا , المستخدم ليس لديه صلاحيه',1);&lt;/script&gt;</value>
+  </data>
+  <data name="NationalID" xml:space="preserve">
+    <value>&lt;script&gt;sAlert('عفوا , يوجد خطأ في الرقم القومى',1);&lt;/script&gt;</value>
+  </data>
+  <data name="CardRequestError" xml:space="preserve">
+    <value>&lt;script&gt;sAlert('عفوا , يجب ادخال عمال اولا',1);&lt;/script&gt;</value>
+  </data>
+  <data name="WorkerAttendanceFound" xml:space="preserve">
+    <value>&lt;script&gt;sAlert('عفوا , هناك عمال مسجلين بهذه الفتره ',2);&lt;/script&gt;</value>
+  </data>
+  <data name="UserNotFound" xml:space="preserve">
+    <value>&lt;script&gt;sAlert('عفوا , يجب اختيار المقاول اولا',1);&lt;/script&gt;</value>
+  </data>
+  <data name="UserLoginFailed" xml:space="preserve">
+    <value>&lt;script&gt;sAlert('يوجد خطأ فى اسم المستخدم او كلمة السر',1);&lt;/script&gt;</value>
+  </data>
+  <data name="UserNotActive" xml:space="preserve">
+    <value>&lt;script&gt;sAlert('عفوا..هذا الحساب غير فعال',1);&lt;/script&gt;</value>
+  </data>
+  <data name="SaveWithoutImage" xml:space="preserve">
+    <value>&lt;script&gt;sAlert('عفوا , تم الحفظ بنجاح ولكن امتداد الصوره لابد ان يكون من نوع  jpg,jpeg,png,tiff',2);&lt;/script&gt;</value>
+  </data>
+  <data name="AttendInsuranceNotSent" xml:space="preserve">
+    <value>&lt;script&gt;sAlert('عفوا , لم يتم ارسال الحضور للتأمينات ',2);&lt;/script&gt;</value>
+  </data>
+  <data name="AttachmentsNotFound" xml:space="preserve">
+    <value>لم يتم رفع مرفقات حتى الان</value>
+  </data>
+  <data name="CardsRequestNotFound" xml:space="preserve">
+    <value>لم يتم تسجيل طلبات كروت بعد</value>
+  </data>
+  <data name="ContractorsMissionNotFound" xml:space="preserve">
+    <value>لم يتم تسجيل مهام حتى الان</value>
+  </data>
+  <data name="ContractorsNotFound" xml:space="preserve">
+    <value>لم يتم تسجيل مقاولين حتى الان</value>
+  </data>
+  <data name="ExtractsNotFound" xml:space="preserve">
+    <value>لم يتم تسجيل مستخلصات حتى الان</value>
+  </data>
+  <data name="ProcessNotFound" xml:space="preserve">
+    <value>لا توجد عمليات</value>
+  </data>
+  <data name="WorkerProcessNotFound" xml:space="preserve">
+    <value>لم يتم تحضير هذا العامل حتى الان</value>
+  </data>
+  <data name="WorkersNotfound" xml:space="preserve">
+    <value>لم يتم تسجيل عمال حتى الان</value>
+  </data>
+  <data name="WorkersPhoneNotFound" xml:space="preserve">
+    <value>لم يتم تسجيل هاتف حتى الان</value>
+  </data>
+  <data name="AttachmentTypeNotFound" xml:space="preserve">
+    <value>لم يتم تسجيل نوع مرفق حتى الان</value>
+  </data>
+  <data name="CardRequestDeActivation" xml:space="preserve">
+    <value>عفوا هذا العامل ليس لديه كارت ليتم تفعيله او ايقافه</value>
+  </data>
+  <data name="ProcessStopNotFound" xml:space="preserve">
+    <value>لم يتم تسجيل ايقاف لهذه العمليه حتى الان</value>
+  </data>
+  <data name="WorkerCardsNotFound" xml:space="preserve">
+    <value>هذا العامل ليس لديه كروت</value>
+  </data>
+  <data name="WorkerInjuries" xml:space="preserve">
+    <value>لم يتم تسجيل اصابات بعد</value>
+  </data>
+  <data name="GroupNotFound" xml:space="preserve">
+    <value>لم يتم تسجيل مجموعات حتى الان</value>
+  </data>
+  <data name="NotificationNotFound" xml:space="preserve">
+    <value>لا توجد اشعارات جديده</value>
+  </data>
+  <data name="SubContractorAccept" xml:space="preserve">
+    <value>&lt;script&gt;sAlert('تم قبول هذا المقاول بنجاح ',0);&lt;/script&gt;</value>
+  </data>
+  <data name="SubContractorNotAccept" xml:space="preserve">
+    <value>&lt;script&gt;sAlert('عفوا , لم يتم قبول هذا المقاول الرجاء المحاوله مره اخرى ',2);&lt;/script&gt;</value>
+  </data>
+  <data name="WorkerCardsNotSave" xml:space="preserve">
+    <value>لم يتم تسجيل حالة  ايقاف / تفعيل كارت حتى الان</value>
+  </data>
+  <data name="passwordChangeDone" xml:space="preserve">
+    <value>&lt;script&gt;sAlert('تم تغيير كلمه المرور بنجاح ',0);&lt;/script&gt;</value>
+  </data>
+  <data name="passwordChangeNotDone" xml:space="preserve">
+    <value>&lt;script&gt;sAlert('عفوا, لما يتم تغيير كلمه المرور , الرجاء المحاوله مره اخرى ',2);&lt;/script&gt;</value>
+  </data>
+  <data name="passwordNotEqual" xml:space="preserve">
+    <value>&lt;script&gt;sAlert('الرجاء جعل الكلمه المرور الجديده تطابق تأكيد كلمه المرور الجديده ',2);&lt;/script&gt;</value>
+  </data>
+  <data name="passwordWrong" xml:space="preserve">
+    <value>&lt;script&gt;sAlert('عفوا , كلمه المرور الحاليه خاطئه , الرجاء كتابه كلمه المرور الصحيحه',1);&lt;/script&gt;</value>
+  </data>
+  <data name="RefSideContNotFound" xml:space="preserve">
+    <value>لا توجد جهات اسناد - مقاولين</value>
+  </data>
+  <data name="processCancel" xml:space="preserve">
+    <value>تم استبعاد العمليه</value>
+  </data>
+  <data name="processCancelNot" xml:space="preserve">
+    <value>لم يتم استبعاد العمليه</value>
+  </data>
+  <data name="BackProcessDone" xml:space="preserve">
+    <value>&lt;script&gt;sAlert('تم استرجاع العمليه لطلبات العمليات بنجاح.',0);&lt;/script&gt;</value>
+  </data>
+  <data name="BackProcessNotDone" xml:space="preserve">
+    <value>&lt;script&gt;sAlert('عفوا , الرجاء المحاوله مره اخرى ',2);&lt;/script&gt;</value>
+  </data>
+</root>

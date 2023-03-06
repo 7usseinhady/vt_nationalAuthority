@@ -1,0 +1,173 @@
+﻿@{
+    <link href="~/Content/css/theme.css" rel="stylesheet" />
+    Layout = "~/Views/Shared/InsuranceEmployeeLayout.cshtml";
+    <title>الاحصائيات</title>
+
+}
+
+<div class="animsition dr-rtl">
+    <div class="page-wrapper">
+        <!-- PAGE CONTAINER-->
+        <!-- MAIN CONTENT-->
+        <div class="section__content section__content--p30">
+            <div class="container-fluid">
+                <!--Top                     Charts                               Content-->
+                <div class="row m-t-25">
+                    @* عدد العمال الحضور اليوم *@
+                    <div class="col-lg-3 col-md-12 col-sm-12">
+                        <div class="overview-item overview-item--c1">
+                            <div class="overview__inner">
+                                <div class="overview-box clearfix">
+                                    <div class="icon">
+                                        <i class="zmdi zmdi-account-o"></i>
+                                    </div>
+                                    <div class="text">
+                                        <h2>10,368</h2>
+                                        <span>عدد العمال الحضور اليوم</span>
+                                    </div>
+                                </div>
+                                <div class="overview-chart">
+                                    <canvas id="widgetChart1"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @* عدد العمال لهذا الشهر *@
+                    <div class="col-lg-3 col-md-12 col-sm-12">
+                        <div class="overview-item overview-item--c2">
+                            <div class="overview__inner">
+                                <div class="overview-box clearfix">
+                                    <div class="icon">
+                                        <i class="zmdi zmdi-shopping-cart"></i>
+                                    </div>
+                                    <div class="text">
+                                        <h2>388,688</h2>
+                                        <span>عدد العمال لهذا الشهر</span>
+                                    </div>
+                                </div>
+                                <div class="overview-chart">
+                                    <canvas id="widgetChart2"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @* عدد العمليات الحالية *@
+                    <div class="col-lg-3 col-md-12 col-sm-12">
+                        <div class="overview-item overview-item--c3">
+                            <div class="overview__inner">
+                                <div class="overview-box clearfix">
+                                    <div class="icon">
+                                        <i class="zmdi zmdi-calendar-note"></i>
+                                    </div>
+                                    <div class="text">
+                                        <h2>1,086</h2>
+                                        <span>عدد العمليات الحالية</span>
+                                    </div>
+                                </div>
+                                <div class="overview-chart">
+                                    <canvas id="widgetChart3"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @* عدد العمليات المنتهية*@
+                    <div class="col-lg-3 col-md-12 col-sm-12">
+                        <div class="overview-item overview-item--c4">
+                            <div class="overview__inner">
+                                <div class="overview-box clearfix">
+                                    <div class="icon">
+                                        <i class="zmdi zmdi-money"></i>
+                                    </div>
+                                    <div class="text">
+                                        <h2>6,386</h2>
+                                        <span>عدد العمليات المنتهية</span>
+                                    </div>
+                                </div>
+                                <div class="overview-chart">
+                                    <canvas id="widgetChart4"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End OF Top Charts                         ........................................-->
+                <!-- Reoprts       Chart ..............................................................-->
+                <div class="row">
+                    @* عدد العمال *@
+                    <div class="col-lg-6 col-md-12 col-sm-12">
+                        <div class="au-card recent-report">
+                            <div class="au-card-inner  dr-rtl">
+                                <h3 class="title-2 text-right">عدد العمال</h3>
+                                <div class="chart-info">
+                                    <div class="chart-info__left">
+                                        <div class="chart-note">
+                                            <span class="dot dot--blue"></span>
+                                            <span>القوى العاملة</span>
+                                        </div>
+                                        <div class="chart-note mr-0">
+                                            <span class="dot dot--green"></span>
+                                            <span>التأمين الصحى</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--End Of Reoprts       Chart ..............................................................-->
+                                <!-- Storage.....................Chart ..............................................................-->
+                                <div class="recent-report__chart">
+                                    <canvas id="recent-rep-chart"></canvas>
+                                </div>
+                                <!--End Of Storage.....................Chart ..............................................................-->
+                            </div>
+                        </div>
+                    </div>
+                    @* الكروت *@
+                    <div class="col-lg-6 col-md-12 col-sm-12">
+                        <div class="au-card chart-percent-card">
+                            <div class="au-card-inner text-right">
+                                <h3 class="title-2 tm-b-5">الكروت</h3>
+                                <div class="row no-gutters">
+                                    <div class="col-xl-6" style="text-align:right">
+                                        <div class="chart-note-wrap">
+                                            <div class="chart-note mr-0 d-block" style="color: #00b5e9;">
+                                                <span class="dot dot--blue"></span>
+                                                <span> ارسال الطلب</span>
+                                                <span> 55</span>
+                                            </div>
+                                            <div class="chart-note mr-0 d-block" style="color: #ec600d;">
+                                                <span class="dot dot--orange"></span>
+                                                <span>تم استلام الطلب</span>
+                                                <span>20</span>
+                                            </div>
+                                            <div class="chart-note mr-0 d-block" style="color: #9553ba;">
+                                                <span class="dot dot--purple"></span>
+                                                <span>جارى الطباعه</span>
+                                                <span>100</span>
+                                            </div>
+                                            <div class="chart-note mr-0 d-block" style="color: #00ad5f;">
+                                                <span class="dot dot--green"></span>
+                                                <span>تم التسليم</span>
+                                                <span>150</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6">
+                                        <div class="percent-chart">
+                                            <canvas id="percent-chart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- END MAIN CONTENT-->
+            <!-- END PAGE CONTAINER-->
+        </div>
+    </div>
+    @Scripts.Render("~/bundles/chart")
+    <script src="~/Scripts/jquery/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/Charts/chartmain.js"></script>
+    <script src="~/Scripts/Charts/Chart.bundle.min.js"></script>*
+    <!-- Main JS-->
+</div>

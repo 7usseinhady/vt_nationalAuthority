@@ -1,0 +1,121 @@
+﻿@{
+    Layout = "~/Views/Shared/_partialLayout.cshtml";
+}
+@using (Html.BeginForm("_vpSubContractorByUser", "Process", FormMethod.Post))
+{
+    @Html.Hidden("processCode", "dd")
+    <div class="grid_box_shadow">
+        @* رقم العمليه *@
+        <div class="col-lg-6 col-md-12 col-sm-12 text-center">
+            <label class="color_main102 font-weight-bold ml-2">رقم العمليه</label>
+            <div>
+                @Html.TextBox("processNum", "", new { @class = "form-control boorderText number", id = "txtProcessNum", data_toggle = "tooltip", title = "رقم العمليه", data_placement = "bottom", onchange = "GetData(-1)", required = "required" })
+            </div>
+            <div id="divMessageRequired" style="display:none;">
+                @Html.ValidationMessage("processNum", "الرجاء ادخال رقم العملية صحيحا (مكون من 13 رقم)", new { @class = "d-flex justify-content-center text-danger" })
+            </div>
+        </div>
+        @*  اسم العمليه *@
+        <div class="col-lg-12 col-md-12 col-sm-12 mt-3 text-center">
+            <span class="color_main102 font-weight-bold ml-2">
+                اسم العمليه
+            </span>
+            <div>
+                @Html.TextBox("processName", "", new { @class = "form-control borderText arNumSign", id = "txtProcessName", disabled = "disabled" })
+            </div>
+        </div>
+        @*  اسم المقاول الرئيسي *@
+        <div class="col-lg-12 col-md-12 col-sm-12 mt-3 text-center">
+            <span class="color_main102 font-weight-bold ml-2">
+                اسم المقاول الرئيسي
+            </span>
+            <div>
+                @Html.TextBox("mainContract", "", new { @class = "form-control borderText arabic", id = "txtMainContract", disabled = "disabled" })
+            </div>
+        </div>
+        @*  اسم جهة الاسناد *@
+        <div class="col-lg-12 col-md-12 col-sm-12 mt-3 text-center">
+            <span class="color_main102 font-weight-bold ml-2">
+                اسم جهة الاسناد
+            </span>
+            <div>
+                @Html.TextBox("referenceSide", "", new { @class = "form-control borderText arabic", id = "txtReferenceSide", disabled = "disabled" })
+            </div>
+        </div>
+        <div class="text-left" style="margin-top: 5%;margin-right: -4%">
+            <button type="submit" id="btnAddSubContractorByUser" onclick="loaderOpen();" class=""><i class=""></i>  </button>
+        </div>
+    </div>
+}
+
+<script>
+    var count = 0;
+    // Find Main Data Of Process By Process Number
+    function GetData(number) {
+        count = 0;
+
+        $('#btnAddSubContractorByUser').css('display', 'none');
+        $('#txtProcessName').val('');
+        $('#txtMainContract').val('');
+        $('#txtReferenceSide').val('');
+        $('#processCode').val('');
+
+        if ($('#txtProcessNum').val().length != 13) {
+            sAlert('الرجاء ادخال رقم العملية صحيحا (مكون من 13 رقم)');
+            loaderClose();
+            $('#divMessageRequired').css("display", "inline-flex");
+            $('#txtProcessNum').css("border-color", "#dc3545");
+        }
+        else if ($('#txtProcessNum').val().length == 13) {
+            $('#divMessageRequired').css("display", "none");
+            $('#txtProcessNum').css("border-color", "");
+            $.getJSON("../Process/getMainProcessByProcessNum", { ID: $('#txtProcessNum').val() },
+           function (data) {
+
+               if (data.iProcessCode != 0) {
+                   $('#btnAddSubContractorByUser').css('display', 'inline-block');
+                   $('#processCode').val(data.iProcessCode);
+                   $('#txtProcessName').val(data.sProcessName);
+                   $('#txtMainContract').val(data.sContractorName);
+                   $('#txtReferenceSide').val(data.sReferanceSideName);
+
+                   if (number != -1) //  لما ادوس على تسجيل مقاول من باطن
+                       count = 1;
+               }
+               else {
+                   $('#btnAddSubContractorByUser').css('display', 'none');
+                   $('#processCode,#txtProcessName,#txtMainContract,#txtReferenceSide').val('');
+                   sAlert(data.sAddressOwnerPerm, 2);
+               }
+
+           });
+        }
+    }
+
+    $('#btnAddSubContractorByUser').click(function (event) {
+
+        if (count == 0) {
+            event.preventDefault();
+            $('#divMessageRequired').css("display", "none");
+            $('#txtProcessNum').css("border-color", "");
+        }
+
+        if ($('#txtProcessNum').val().length != 13) {
+            sAlert('الرجاء ادخال رقم العملية صحيحا (مكون من 13 رقم)');
+            loaderClose();
+            $('#divMessageRequired').css("display", "none");
+            $('#txtProcessNum').css("border-color", "");
+        }
+        else if ($('#txtProcessNum').val().length == 13) {
+
+            if (count != 0) {
+                $('#btnAddSubContractorByUser').submit();
+
+                count++;
+            }
+        }
+        if (count == 0)
+            GetData(0);
+
+    });
+</script>

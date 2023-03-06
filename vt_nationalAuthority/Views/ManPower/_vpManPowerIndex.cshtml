@@ -1,0 +1,176 @@
+﻿@{
+    var list = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+    int i = 1;
+}
+ 
+<div class="mt-4 dr-rtl mx-3 mb-3">
+    <div class="text-right px-4 pb-2">
+        <h3 class="color_main102">القوى العاملة </h3>
+    </div>
+<div class="row justify-content-center">
+    @* table *@
+    <div class="text-center scroll-max grid_box_shadow">
+        <table class="table">
+            <thead>
+                <tr style="text-align:center;">
+                    <th scope="col" class="color_main102">#</th>
+                    <th scope="col" class="color_main102">اسم العامل</th>
+                    <th scope="col" class="color_main102">الرقم التامينى</th>
+                    <th scope="col" class="color_main102">الرقم القومى</th>
+                    <th scope="col" class="color_main102">المهنة الحالية </th>
+                    <th scope="col" class="color_main102">درجة المهاره الحالية </th>
+                    <th scope="col" class="color_main102"><i class="fas fa-cog"></i></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in list)
+                {
+                    <tr style="text-align:center;">
+                        <th scope="row" class="color_main102">@i</th>
+                        <td class="color_main103">محمد محمود عبد القادر صلاح</td>
+                        <td class="color_main103">25897589</td>
+                        <td class="color_main103">19907894561234</td>
+                        <td class="color_main103">نجار</td>
+                        <td class="color_main103 ">ماهر</td>
+                        <td class="color_main103">
+                            <div class="color_main103 d-sm-show101 ">
+                                <div class="dropdown-j  color_main102">
+                                    <i class="fas fa-ellipsis-v "></i>
+                                    <div class="dropdown-content-j" style="min-width: 116px;">
+                                        <div class="row text-left">
+                                            <div class="col-12">
+                                                <button type="button" class="btn btn-sm btn-outline-primary font-weight-bold" data-toggle="modal" data-target="#attachmentPreviewModal"><i class="fa fa-paperclip"></i> المرفقات</button>
+                                                <button type="button" class="btn btn-sm btn-outline-info font-weight-bold btnsStyle" data-toggle="modal" data-target="#LastLevels"><i class="fas fa-clipboard-list"></i> المهارات السابقة</button>
+                                                <button type="button" class="btn btn-sm btn-outline-warning font-weight-bold btnsStyle" onclick="SendToInsuranceClick(true);" data-toggle="modal" data-target="#SendToInsurance"><i class="far fa-edit"></i>  تعديل </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    i = i + 1;
+                }
+            </tbody>
+        </table>
+
+        @* pagination *@
+        <div>
+            <nav class="pagination-outer font102">
+                <ul class="pagination">
+                    @* « First *@
+                    <li class="page-item">
+                        <a href="#" class="page-link hvr-bob">
+                            <span aria-hidden="true">«</span>
+                        </a>
+                    </li>
+                    @* < Previous *@
+                    <li class="page-item">
+                        <a href="#" class="page-link hvr-bob">
+                            <span aria-hidden="true"><</span>
+                        </a>
+                    </li>
+                    <li class="page-item active"><a class="page-link hvr-bob" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link hvr-bob hTable" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link hvr-bob hTable" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link hvr-bob hTable" href="#">4</a></li>
+                    <li class="page-item"><a class="page-link hvr-bob hTable" href="#">5</a></li>
+                    @* Next > *@
+                    <li class="page-item">
+                        <a href="#" class="page-link hvr-bob" aria-label="Next">
+                            <span aria-hidden="true">></span>
+                        </a>
+                    </li>
+                    @* Last » *@
+                    <li class="page-item">
+                        <a href="#" class="page-link hvr-bob" aria-label="Last">
+                            <span aria-hidden="true">»</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+        </div>
+    </div>
+    </div>
+
+    @* بحث /  ارسال الى التأمينات *@
+    <div class="text-right fixed_btn bg-white w-100">
+        <button type="button" class="btn btn-outline-info font-weight-bold" onclick="SendToInsuranceClick(false);" data-toggle="modal" data-target="#SendToInsurance"><i class="fas fa-plus"></i> ارسال الى التأمينات</button>
+        <button type="button" class="btn btn-outline-primary  font-weight-bold" data-toggle="modal" data-target="#SearchManPower"><i class="fas fa-search"></i> بحث</button>
+    </div>
+    @* أرسال  / تعديل الى التأمينات*@
+    <div class="modal" id="SendToInsurance">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header header">
+                    <h5 class="modal-title color_main102" id="titleSendToInsuranceModal">ارسال الى التأمينات</h5>
+                    <button class="close color_main102" data-dismiss="modal" style="position: absolute;left: 0;">&times;</button>
+                </div>
+                <div class="modal-body" id="SendToInsuranceModelBody">
+                    @{ Html.RenderAction("_vpManPowerSendToInsurance", "ManPower");}
+                </div>
+            </div>
+        </div>
+    </div>
+    @*بحث على القوى العاملة*@
+    <div class="modal" id="SearchManPower">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header header">
+                    <h5 class="modal-title color_main102" id="titleSearchManPowerModal">بحث القوى العاملة</h5>
+                    <button class="close color_main102" data-dismiss="modal" style="position: absolute;left: 0;">&times;</button>
+                </div>
+                <div class="modal-body" id="SearchManPowerModelBody">
+                    @{ Html.RenderAction("_vpManPowerSearch", "ManPower");}
+                </div>
+            </div>
+        </div>
+    </div>
+    @* model المهارات السابقه *@
+    <div class="modal" id="LastLevels">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header header">
+                    <h5 class="modal-title color_main102" id="titleLastLevelsModal">المهارات السابقه</h5>
+                    <button class="close color_main102" data-dismiss="modal" style="position: absolute;left: 0;">&times;</button>
+                </div>
+                <div class="modal-body" id="LastLevelsModelBody">
+                    @{ Html.RenderAction("_vpManPowerLastLevels", "ManPower");}
+                </div>
+            </div>
+        </div>
+    </div>
+    @* اضافه / بحث مرفقات  *@
+    <div class="modal" id="attachmentPreviewModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header header">
+                    <h5 class="modal-title color_main102" id="titleAttachmentPreviewModal">بحث - اضافه مرفق</h5>
+                    <button class="close color_main102" data-dismiss="modal" style="position: absolute;left: 0;">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <button type="button" class="btn btn-outline-primary font-weight-bold" onclick="displayDivs('#divDisplaySearchAttachment',this)"><i class="fas fa-search"></i>  بحث عن مرفق</button>
+                            <button type="button" class="btn btn-outline-info font-weight-bold" onclick="displayDivs('#divDisplayAddAttachment',this)"><i class="fas fa-plus"></i> اضافة مرفق</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="divDisplaySearchAddAttchment" class="row">
+                    @* بحث عن مرفق *@
+                    <div id="divDisplaySearchAttachment" style="display:none;" class="col-12">
+                        @*@{Html.RenderAction("_vpAttachmentSearch", "Attachments");}*@
+                    </div>
+
+                    @* اضافة مرفق *@
+                    <div id="divDisplayAddAttachment" style="display:none;" class="col-12 ">
+                        @*@{Html.RenderAction("_vpAttachmentAdd", "Attachments");}*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/ManPower/ManPower.js"></script>

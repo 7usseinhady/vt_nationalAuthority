@@ -1,0 +1,78 @@
+﻿/* start pagination*/
+.pagination-outer {
+    text-align: center;
+}
+
+/*.pagination {
+    display: inline-flex;
+}*/
+
+    .pagination li a.page-link,
+    .pagination li:first-child a.page-link,
+    .pagination li:last-child a.page-link {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 10px;
+        color: #1ea4bb;
+        position: relative;
+            background: #f0f8ff00;
+        box-shadow: 0px 2px 3px 1px #e9ecef;
+    }
+
+    .pagination li:last-child a.page-link {
+        margin-right: 0;
+    }
+
+    .pagination li.active a.page-link {
+        background: #28231c00;
+        border-color: #d5d5d5;
+        /*box-shadow: 0px 2px 3px 1px #e9ecef;*/
+        box-shadow: 0px 2px 6px 0px #85bad4;
+        color: #1ea4bb;
+        -webkit-animation-name: hvr-bob-float, hvr-bob;
+        animation-name: hvr-bob-float, hvr-bob;
+        -webkit-animation-duration: .3s, 1.5s;
+        animation-duration: .3s, 1.5s;
+        -webkit-animation-delay: 0s, .3s;
+        animation-delay: 0s, .3s;
+        -webkit-animation-timing-function: ease-out, ease-in-out;
+        animation-timing-function: ease-out, ease-in-out;
+        -webkit-animation-iteration-count: 1, infinite;
+        animation-iteration-count: 1, infinite;
+        -webkit-animation-fill-mode: forwards;
+        animation-fill-mode: forwards;
+        -webkit-animation-direction: normal, alternate;
+        animation-direction: normal, alternate;
+    }
+
+#divPagination {
+    margin: 20px 0 20px 0;
+}
+
+/* end pagination */
+
+
+/* start modal*/
+.modal .pagination li a.page-link, .pagination li:first-child a.page-link, .pagination li:last-child a.page-link {
+    box-shadow: 0px 2px 3px 1px #2086b67d;
+}
+
+.modal .pagination li.active a.page-link {
+    background: #ffffff;
+}
+/* end modal */
+
+/*for mobile*/
+@media (max-width: 768px) {
+    .hTable {
+        display: none;
+    }
+}
+
+/*@media only screen and (max-width: 359px) {
+    .pagination {
+        display: block;
+    }
+}*/
+/*end of mobile  */

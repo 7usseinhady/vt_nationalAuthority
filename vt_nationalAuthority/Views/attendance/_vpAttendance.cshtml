@@ -1,0 +1,94 @@
+﻿<style>
+    .bootstrap-select.form-control {
+        background-color: #f0f0f0 !important;
+    }
+</style>
+
+@*   تجضير يدوى *@@*   رفع شيت *@
+<div class="col-lg-12 col-md-12 col-sm-12 mt-3 align-self-end">
+    @if (Session["procStopActive"] == null) // عمليه موقوفه - منتهيه
+    {
+        <button type="button" name="submitType" value="Save" class="btn btn-outline-info font-weight-bold" data-toggle="modal" data-target="#sharedModal"
+                onclick="openModel('#titleSharedModal', 'آلية حضور العامل', '#btnAddWorkerAttend', ' تحضير', 'fas fa-plus font-weight-bold', 'btn btn-outline-info font-weight-bold', 'WorkerAttend', '?pCode='+@Session["processCode"].ToString(), '#sharedModalBody')">
+            <i class="fas fa-file-signature"></i> آلية حضور العامل
+        </button>
+
+        @*<button type="button" class="btn btn-outline-info font-weight-bold" data-toggle="modal" data-target="#SearchManPower"><i class="fa fa-file-excel-o" aria-hidden="true"></i> رفع شيت</button>*@
+    }
+</div>
+
+@*</div>*@
+<div class="modal-body" id="attendanceMonthModelBody" style="background-color: #f0f0f0 !important;">
+    <div id="divAttendanceMonth">
+        <div class="displayDivs row" id="calenderContent" data-screen="attendance">
+
+            @* year / years ( 2020 / 2020-230 ) *@
+            <div class="row" style="text-align:center;display:block;width:100%;margin-bottom: 24px;">
+                <div style="display:inline-flex;"><button type="button" class="btn yearAfter" style="border:none;color: #2193b0;background-color:unset;" onclick="changeYear(-1)">❮❮</button></div>
+                <div style="display:inline-flex;"><button type="button" class="btn color_main102" id="btnYears" onclick="changeYear(10)" style="border: none;font-size: 32px;font-weight: 600;font-family: cursive;background-color:unset;">@DateTime.Now.Year</button></div>
+                <div style="display:inline-flex;"><button type="button" class="btn yearBefore" style="border:none;color: #2193b0;background-color:unset;" onclick="changeYear(1)">❯❯</button></div>
+            </div>
+
+            @* months *@
+            <div id="divTwelveMonth" style="text-align: center;display:block;width:100%;">
+            </div>
+
+            @* days *@
+            <div id="divDaysMonth" class="justify-content-center mb-2" style="text-align: center;display: flex;width: 100%;">
+            </div>
+        </div>
+    </div>
+
+    <div class="justify-content-center row">
+        <div class="col-lg-4 col-md-4 col-sm-12 mx-3 mt-2 text-right">
+            <span class="color_main102 font-weight-bold ml-2">اسم العامل</span>
+            <div>
+                @Html.TextBox("WorkerName", "", new { id = "WorkerName", @class = "form-control borderText", data_toggle = "tooltip", title = "حروف عربية فقط", data_placement = "bottom" })
+            </div>
+        </div>
+        <div class="text-left w-100 align-self-end mt-4 col-lg-1 col-md-1 col-sm-12">
+            <button type="button" id="btnAttendanceSearch" onclick="OpenTable()" class="btn btnsStyle btn-outline-primary searchBtnWork font-weight-bold">بحث <i class="fas fa-search"></i></button>
+        </div>
+
+    </div>
+</div>
+
+@Html.Raw(TempData["msg"] == null ? null : TempData["msg"].ToString())
+
+<div id="divWorks" style="display:none;position: relative;">
+    @* divWorks *@
+    <div class="col-12 mt-4" style="overflow-x: scroll;" id="displayWorkers">
+        @*زودت id بس*@
+        @{
+            Html.RenderAction("_vpWorkerAttendance", "Workers");
+        }
+    </div>
+</div>
+
+<style>
+    .currentDay, .currentMonth {
+        border: 2px solid #2193b0;
+        color: #2193b0;
+    }
+
+    .day > .active:hover, .divMonthYear > .active:hover {
+        color: white;
+    }
+</style>
+
+<link href="~/Content/animate.css" rel="stylesheet" />
+<script src="~/Scripts/jquery/jquery-3.3.1.js"></script>
+<link href="~/Content/attendance/attendance.css" rel="stylesheet" />
+<script src="~/Scripts/attendance/attendance.js"></script>
+<script src="~/Scripts/bootstrap-4.3.1-dist/bootstrap-select.min.js"></script>
+<script>
+    function OpenTable() {
+        var name = $("#WorkerName").val();
+        $('#divWorks').css('display', 'block')
+        $('#divWorks').fadeIn("slow");
+        name = name.replaceAll(' ', '%20');
+        $('#displayWorkers').load("../Workers/_vpWorkerAttendance?WorkerName=" + name,
+            function () {
+            });
+    }
+</script>

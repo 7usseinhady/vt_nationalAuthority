@@ -1,0 +1,169 @@
+﻿@model List<DataAccessLayer.Models.processModel>
+@{
+    var screen = "";
+    string[] path = HttpContext.Current.Request.Url.AbsolutePath.Split('/');
+    screen = path[2];
+}
+<div class="mt-3 dr-rtl grid_box_shadow mx-3 mb-3 ">
+    <div class="row text-right">
+        @if (Model != null && Model.Count > 0)
+        {
+            foreach (var item in Model)
+            {
+                @* مكتب *@
+                <div class="col-lg-6 col-md-12 col-sm-12 col-12 my-1">
+                    <span class="color_main102 font-weight-bold">مكتب : <span class="color_main103"> @item.sOfficeId  @item.sOfficeName </span></span>
+                </div>
+                @* منطقة *@
+                <div class="col-lg-6 col-md-12 col-sm-12 col-12 my-1">
+                    <span class="color_main102 font-weight-bold">منطقة : <span class="color_main103">@item.sAreaId  @item.sAreaName </span></span>
+                </div>
+
+                if (screen != "vProcessRequest" && screen != "vInsuranceEmployeeIndex")
+                {
+                    @* رقم العملية *@
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+                        <span class="color_main102 font-weight-bold">رقم العملية :</span>
+                        <span class="d-inline-flex">  <span class="color_main103 form-control" style="width: fit-content!important">@item.sProNum4 </span><span class="color_main103 form-control mr-1" style="width: fit-content!important">@item.sProNum3</span></span>
+                        @if (Convert.ToInt32(item.sContractorCount) > 1)
+                        {
+                            <span class="font-weight-bold">(مبندة)</span>
+                        }
+                        else
+                        {
+                            <span class="font-weight-bold">(غير مبنده)</span>
+                        }
+                    </div>
+                    //رقم الوارد
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+                        <span class="color_main102 font-weight-bold">رقم الوارد :</span>
+                        <span class="d-inline-flex">
+                            <span class="form-control" style="width: fit-content!important">@item.sIncommingNumber</span>
+                        </span>
+                    </div>
+                }
+
+                @* اسم العملية *@
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12 my-1">
+                    <span class="color_main102 font-weight-bold">اسم العملية : <span class="color_main103">@item.sProcessName</span> </span>
+                </div>
+
+                @* نوع العملية *@
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12 my-1">
+                    <span class="color_main102 font-weight-bold">نوع العملية : <span class="color_main103">@item.sProcessTypeName</span></span>
+                </div>
+
+                @* المقاول الرئيسى *@
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12 my-1">
+                    <span class="color_main102 font-weight-bold">المقاول الرئيسى : <span class="color_main103">@item.sContractorName</span></span>
+                </div>
+
+                @* الرقم التأمينى *@
+                <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+                    <span class="color_main102 font-weight-bold">الرقم التأمينى : <span class="color_main103">@item.sContractorInsuranceNumber</span></span>
+                </div>
+
+                //الكيان القانونى للمقاول الرئيسي
+                <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+                    <span class="color_main102 font-weight-bold">الكيان القانونى للمقاول الرئيسي : <span class="color_main103">@item.sContractorLegalName</span></span>
+                </div>
+
+        if (screen == "vProcessRequest" || screen == "vProcessDetailsInsurEmp")
+        {
+                    @* تليفون المقاول الرئيسي *@
+                    <div class="col-lg-7 col-md-6 col-sm-12 col-12 my-1">
+                        <span class="color_main102 font-weight-bold">تليفون المقاول الرئيسي: <span class="color_main103">@(String.IsNullOrEmpty(item.sContractorPhone) ? "-----" : item.sContractorPhone)</span></span>
+                    </div>
+                    @*  رقم فاكس المقاول الرئيسي *@
+                    <div class="col-lg-5 col-md-6 col-sm-12 col-12 my-1">
+                        <span class="color_main102 font-weight-bold">رقم فاكس المقاول الرئيسي : <span class="color_main103">@(String.IsNullOrEmpty(item.sContractorFax) ? "-----" : item.sContractorFax)</span></span>
+                    </div>
+                    @* ايميل المقاول الرئيسي *@
+                    <div class="col-lg-7 col-md-6 col-sm-12 col-12 my-1">
+                        <span class="color_main102 font-weight-bold">ايميل المقاول الرئيسي: <span class="color_main103">@(String.IsNullOrEmpty(item.sContractorEmail) ? "-----" : item.sContractorEmail)</span></span>
+                    </div>
+                }
+
+                @* جهة الإسناد *@
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12 my-1">
+                    <span class="color_main102 font-weight-bold">جهة الإسناد : <span class="color_main103">@item.sReferneceSideName</span></span>
+                </div>
+                @* الرقم التأمينى *@
+                <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+                    <span class="color_main102 font-weight-bold">الرقم التأمينى : <span class="color_main103">@item.sRefernceInsuranceNumber</span></span>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+                    <span class="color_main102 font-weight-bold">الكيان القانونى لجهة الإسناد : <span class="color_main103">@item.sReferenceLegalName</span></span>
+                </div>
+
+                //نوع المستند
+                <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+                    <span class="color_main102 font-weight-bold"> نوع المستند : <span class="color_main103">@item.sDocumentName</span></span>
+                </div>
+
+                // تاريخ نوع المستند
+                <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+                    <span class="color_main102 font-weight-bold">تاريخ نوع المستند : <span class="color_main103">@item.sDateDocument</span></span>
+                </div>
+
+                @* تاريخ بداية العملية *@
+                <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+                    <span class="color_main102 font-weight-bold">تاريخ بداية العملية : <span class="color_main103">@item.sDateStartProcess</span></span>
+                </div>
+                if (screen != "vProcessRequest" && screen != "vProcessDetailsInsurEmp")
+                {
+                    @* تاريخ نهاية العملية *@
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+                        @if (item.sDateEndProcess == null)
+                        {
+                            <span class="color_main102 font-weight-bold">تاريخ النهاية : <span class="color_main103">لم تنتهى بعد</span> </span>
+                        }
+                        else
+                        {
+                            <span class="color_main102 font-weight-bold">تاريخ النهاية : <span class="color_main103">@item.sDateEndProcess</span> </span>
+                        }
+                    </div>
+                    @* المبلغ المبدئى *@
+                    <div class="col-lg-6 col-md-12 col-sm-12 col-12 my-1">
+                        <span class="color_main102 font-weight-bold"> القيمه الكليه للعملية : <span class="color_main103">@item.decFullBudget جنية</span></span>
+                    </div>
+                    @* المبلغ الفعلى *@
+                    <div class="col-lg-6 col-md-12 col-sm-12 col-12 my-1">
+                        <span class="color_main102 font-weight-bold">المبلغ الفعلى : <span class="color_main103">@item.sRealFullBudget جنية</span></span>
+                    </div>
+                    @* الحد الأدنى *@
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-12 my-1">
+                        <span class="color_main102 font-weight-bold">الحد الأدنى : <span class="color_main103">@item.iMinNumber عامل</span></span>
+                    </div>
+                    @* الحد الأقصى *@
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-12 my-1">
+                        <span class="color_main102 font-weight-bold">الحد الأقصى : <span class="color_main103">@item.iMaxNumber عامل</span></span>
+                    </div>
+                    @* العدد الفعلى *@
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-12 my-1">
+                        <span class="color_main102 font-weight-bold">العدد الفعلى : <span class="color_main103">@item.sWorkerAlreadyNumber عامل</span></span>
+                    </div>
+                }
+                else if (screen == "vProcessRequest" || screen == "vProcessDetailsInsurEmp")
+                {
+                    @* مبلغ العمليه *@
+                    <div class="col-lg-6 col-md-12 col-sm-12 col-12 my-1">
+                        <span class="color_main102 font-weight-bold">مبلغ العمليه : <span class="color_main103">@item.decFullBudget جنية</span></span>
+                    </div>
+                }
+
+                @* الموقع *@
+                <div class="col-lg-12 col-md-6 col-sm-12 col-12  my-1">
+                    <span class="color_main102 font-weight-bold">الموقع : <span class="color_main103">@item.sProcessSite</span> </span>
+                </div>
+                @*if (screen != "vProcessRequest" && screen != "vProcessDetailsInsurEmp")
+                    {
+                       //دائن
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-12 my-1">
+                            <span class="color_main102 font-weight-bold">دائن : <span class="color_main103">5,000 جنية</span></span>
+                        </div>
+                    }*@
+            }
+        }
+    </div>
+</div>

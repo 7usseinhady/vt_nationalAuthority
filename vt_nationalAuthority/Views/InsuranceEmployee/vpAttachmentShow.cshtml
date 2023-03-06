@@ -1,0 +1,6 @@
+﻿@{
+    Layout = "~/Views/Shared/ProcessLayout.cshtml";
+}
+<div>
+    @{Html.RenderAction("_vpAttachmentIndex", "Attachments",new {cd4=Request.QueryString["cd4"]});}
+</div>

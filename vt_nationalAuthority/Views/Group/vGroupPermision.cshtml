@@ -1,0 +1,236 @@
+﻿@model List<DataAccessLayer.Models.functionModel>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 1;
+    <title>مستخدمين المجموعه</title>
+}
+@* header *@
+<div class="mt-3">
+    <div>
+        @* Back btn  *@
+        <div class="col-lg-12 col-md-12 col-sm-12 mb-3" style="text-align: right;">
+            <div class="dr-rtl grid_box_shadow mt-2 font-weight-bold">
+                <div style="direction: rtl;">
+                    <span style="margin-right:5px;" class="bTable">صلاحيـات مجموعه  &nbsp;:&nbsp;  @TempData["group_name"].ToString()</span>
+                    &nbsp;
+                    <a href="@Url.Action("vGroupIndex", "Group")" class="iconColor">
+                        <span class="fas fa-backward" data-placement="bottom" data-toggle="tooltip" title="عوده"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+   <div class="grid_box_shadow m-2 font-weight-bold">
+        <div>
+            <div class="row w-100" style="direction: rtl;">
+                <div class="col-lg-9 col-md-12 col-sm-12 d-flex px-0">
+                    <button id="btn_no_control" type="button" class="btn border-right" onclick="cancel_check();"><span class="far fas fa-times text-danger" aria-hidden="true"></span>  توقيف جميع الصلاحيات  </button>
+                    <button id="btn_full_control" type="button" class="btn border-right mr-2" onclick="all_check();"><span class="fas fa-check" aria-hidden="true" style="color: rgb(0, 179, 60);"></span>  جميع الصلاحيات  </button>
+                    <button type="button" id="lb_edit" onclick="GetAreaOnly()" class="btn mr-2"><span class="far fa-edit" data-toggle="tooltip" style="color: rgb(263, 115, 0)"></span>  تعديل   </button>
+                </div>
+                <div class="col-lg-3 col-md-12 col-sm-12 mt-2 text-center" style="font-size: smaller">
+                    <label class="bTable head-div">صلاحيات  (هذا الرمز يعنى &lt;<span class="fas fa-check-circle" style="font-size: large;color: #3dabc7;"></span>&gt; وجود صلاحيه )</label>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="grid_box_shadow m-2 ">
+        <div>
+            <div class="row col-md-12 col-sm-12" style="direction:rtl">
+                <div style="overflow-y: scroll; overflow-x: hidden;">
+                    <div class="treeview">
+                        @if (Model != null && Model.Count() > 0)
+                        {
+                            <ul id="ul_parent" style="list-style: none;text-align: right">
+                                @Treeview.GetTreeView(Model, (int)Model.FirstOrDefault().iParentFunctionCode)
+                              </ul>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@Html.Raw(TempData["msg"])
+<script>
+        function ckBoxClicked(chBox)
+        {
+            $(chBox).nextAll('ul').find('.chk').prop('checked', $(chBox).prop('checked'));
+            if ($(chBox).prop('checked'))
+            { // checked
+                $(chBox).parentsUntil("#ul_parent").prevAll('.chk').prop('checked', $(chBox).prop('checked'));
+            }
+            else
+            { // unchecked
+                var li_ = $(chBox).parentsUntil("div.treeview").prevAll('ul');//.find('ul');//.nextAll('ul');
+                console.log('par: ', li_.prevObject);
+                $(li_.prevObject).each(function ()
+                {
+                    var idAttr = $(this).attr('id');
+                    if (idAttr == undefined) { // li
+                        console.log($(this).nextAll('ul > .chk'));//.find('.chk').prop('checked'));
+                        if ($(this).nextAll('ul').find('[type="checkbox"]').prop('checked'))
+                        {
+                            console.log($(this).nextAll('ul').find('.chk').prop('checked'));
+                        }
+                    }
+
+                });
+            }
+        }
+</script>
+@* Here We need some Jquery code for make this treeview collapsible *@
+<script>
+        var values = "";
+        function loopLi(ul) {
+            ul.children('li').each(function () {
+                if ($(this).has('ul'))
+                    loopLi($(this).children('ul'));
+
+                $(this).children('input').each(function () {
+                    if ($(this).prop('checked')) {
+                        values += $(this).val() + ',';
+                    }
+                });
+            });
+        }
+        function GetAreaOnly() {
+
+            loaderOpen();
+            var ul = $('#ul_parent');
+            var val = "";
+            ul.each(function () {
+                loopLi($(this));
+            });
+            const urlParams = new URLSearchParams(window.location.search);
+            const groupCode = urlParams.get('GroupCode');
+            $.get("/Group/EditGroupPermision", { permissionValue: values, groupCode: groupCode }, function (data) {
+                loaderClose();
+
+                if (data == "True")
+                    sAlert('تم تعديل الصلاحيات.', 0);
+                else
+                    sAlert('عفوا , هناك خطأ فى الصلاحيات.', 2);
+            });
+            values = "";
+        }
+</script>
+<script>
+        $(document).ready(function () {
+            $(".treeview  li > ul").toggleClass("hidden show"); // Hide all 2-level ul
+            //$(".treeview  li > ul").css('display', 'block'); // Hide all 2-level ul
+            $(".treeview  li > ul").css('list-style', 'inherit');
+            $(".collapsible").click(function (e)
+            {
+                e.preventDefault();
+                $(this).toggleClass("collapseTree expandTree");
+                $(this).closest('li').children(' ul').slideToggle();                         
+                if ($(this).closest('li').children('span').hasClass('expandTree'))
+                {
+                    $(this).closest('li').children('span').removeClass('fa fa-minus-circle ');
+                    $(this).closest('li').children('span').addClass("fa fa-plus-circle");                   
+                }
+                else
+                {
+                    $(this).closest('li').children('span').removeClass('fa fa-plus-circle');
+                    $(this).closest('li').children('span').addClass("fa fa-minus-circle ");
+                }
+            });
+        });
+        function all_check() {
+            $('.chk').prop('checked', true);
+        }
+        function cancel_check() {
+            $('.chk').prop('checked', false);
+        }
+</script>
+<script>
+        //if node checked its children also checked
+        function chkFun(evt) {
+            var src = window.event != window.undefined ? window.event.srcElement : evt.target;
+            var isChkBoxClick = (src.tagName.toLowerCase() == "input" && src.type == "checkbox");
+            var t = GetParentByTagName("table", src);
+            if (isChkBoxClick) {
+                var parentTable = GetParentByTagName("table", src);
+                var nxtSibling = parentTable.nextSibling;
+                if (nxtSibling && nxtSibling.nodeType == 1) {
+                    if (nxtSibling.tagName.toLowerCase() == "div") {
+                        CheckUncheckChildren(parentTable.nextSibling, src.checked);
+                    }
+                }
+                CheckUncheckParents(src, src.checked);
+            }
+        }
+        function CheckUncheckChildren(childContainer, check) {
+            var childChkBoxes = childContainer.getElementsByTagName("input");
+            var childChkBoxCount = childChkBoxes.length;
+            for (var i = 0; i < childChkBoxCount; i++) {
+                childChkBoxes[i].checked = check;
+            }
+        }
+        function CheckUncheckParents(srcChild, check) {
+            var parentDiv = GetParentByTagName("div", srcChild);
+            var parentNodeTable = parentDiv.previousSibling;
+
+            if (parentNodeTable) {
+                var checkUncheckSwitch;
+                var isAllSiblingsChecked = AreAllSiblingsChecked(srcChild);
+                if (isAllSiblingsChecked) {
+                    checkUncheckSwitch = true;
+                }
+                else {
+                    checkUncheckSwitch = false;
+                }
+                var inpElemsInParentTable = parentNodeTable.getElementsByTagName("input");
+                if (inpElemsInParentTable.length > 0) {
+                    var parentNodeChkBox = inpElemsInParentTable[0];
+                    parentNodeChkBox.checked = checkUncheckSwitch;
+
+                    CheckUncheckParents(parentNodeChkBox, checkUncheckSwitch);
+                }
+            }
+        }
+        function AreAllSiblingsChecked(chkBox) {
+            var parentDiv = GetParentByTagName("div", chkBox);
+            var childCount = parentDiv.childNodes.length;
+            var k = 0;
+            for (var i = 0; i < childCount; i++) {
+                if (parentDiv.childNodes[i].nodeType == 1) {
+                    if (parentDiv.childNodes[i].tagName.toLowerCase() == "table") {
+                        var prevChkBox = parentDiv.childNodes[i].getElementsByTagName("input")[0];
+                        //if any of sibling nodes are not checked, return false
+                        if (prevChkBox.checked) {
+                            //add each selected node one value
+                            k = k + 1;
+                        }
+                    }
+                }
+            }
+            //Finally check any one of child node is select if selected yes then return ture parent node check
+            if (k > 0) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        function GetParentByTagName(parentTagName, childElementObj) {
+            var parent = childElementObj.parentNode;
+            while (parent.tagName.toLowerCase() != parentTagName.toLowerCase()) {
+                parent = parent.parentNode;
+            }
+            return parent;
+        }
+</script>
+<style>
+    .btn{
+        border:none !important;
+    }
+    .hidden {
+  display: none;
+}
+</style>

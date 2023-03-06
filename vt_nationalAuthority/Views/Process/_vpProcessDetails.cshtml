@@ -1,0 +1,107 @@
+﻿@model List<DataAccessLayer.Models.processModel>
+@using System.Globalization;
+@{
+    var screen = "";
+    string[] path = HttpContext.Current.Request.Url.AbsolutePath.Split('/');
+    screen = path[2];
+}
+
+<div class="dr-rtl mx-3">
+    <div class="row text-right">
+        @if (Model != null && Model.Count > 0)
+        {
+            var color = Session["procStopActive"] != null ? "color-red" : "color_main103";
+            foreach (var item in Model)
+            {
+                <div class="col-12 flex-column-reverse flex-lg-row flex-md-column-reverse flex-sm-column-reverse m-0 p-0 row">
+                    <div class="row col-lg-8 col-md-12 col-sm-12 p-0 m-0">
+                        <div class="col-lg-6 col-md-12 col-sm-12 col-12 my-1">
+                            <span class="color_main102 font-weight-bold">المنطقه : <span class="@color">@item.sAreaId  @item.sAreaName </span></span>
+                        </div>
+                        <div class="col-lg-6 col-md-12 col-sm-12 col-12 my-1">
+                            <span class="color_main102 font-weight-bold">المكتب : <span class="@color">@item.sOfficeId  @item.sOfficeName </span></span>
+                        </div>
+
+                    </div>
+
+                    @if (Session["procStopActive"] != null)
+                    {
+                    <div class="col-12 col-lg-4 col-md-12 col-sm-12 txt mt-2 text-center">
+                        <span class="font-weight-bold procStopActive color-red">@Session["procStopActive"].ToString()</span>
+                    </div>
+                    }
+
+                </div>
+
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12 my-1">
+                    <span class="color_main102 font-weight-bold">اسم العملية : <span class="@color">@item.sProcessName</span> </span>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+                    <span class="color_main102 font-weight-bold">رقم العملية :</span>
+                    <span class="d-inline-flex">
+                        <span class="@color form-control" style="width: fit-content!important">@item.sProNum4</span>
+                        <span class="@color form-control mr-1" style="width: fit-content!important">@item.sProNum3</span>
+                        <span class="@color form-control mr-1" style="width: fit-content!important"> @item.sProNum2</span>
+                        <span class="@color form-control mr-1" style="width: fit-content!important">@item.sProNum1</span>
+                    </span>
+                    @if (Convert.ToInt32(item.sContractorCount) > 1)
+                    {
+                        <span class="font-weight-bold @color">(مبندة)</span>
+                    }
+                    else
+                    {
+                        <span class="font-weight-bold @color">(غير مبنده)</span>
+                    }
+                    @*<span class="color_main102 font-weight-bold">رقم العملية : <span class="@color"> 01 11111 2000 11 01 </span></span>*@
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+                    <span class="color_main102 font-weight-bold">رقم الوارد :</span>
+                    <span class="d-inline-flex">
+                        <span class="form-control" style="width: fit-content!important">@item.sIncommingNumber</span>
+                    </span>
+                </div>
+                <div class="col-lg-6 col-md-12 col-sm-12 col-12 my-1">
+                    <span class="color_main102 font-weight-bold">المقاول الرئيسى : <span class="@color">@item.sContractorName</span></span>
+                </div>
+                <div class="col-lg-6 col-md-12 col-sm-12 col-12 my-1">
+                    <span class="color_main102 font-weight-bold">الكيان القانونى للمقاول الرئيسي : <span class="@color">@item.sContractorLegalName</span></span>
+                </div>
+                    <div class="col-lg-6 col-md-12 col-sm-12 col-12 my-1">
+                        <span class="color_main102 font-weight-bold">جهة الإسناد : <span class="@color">@item.sReferneceSideName</span></span>
+                    </div>
+                    <div class="col-lg-6 col-md-12 col-sm-12 col-12 my-1">
+                        <span class="color_main102 font-weight-bold">الكيان القانونى لجهة الإسناد : <span class="@color">@item.sReferenceLegalName</span></span>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-12 col-12  my-1">
+                        <span class="color_main102 font-weight-bold">عدد العمال الفعلى : <span class="@color"> @item.sWorkerAlreadyNumber عامل</span> </span>
+                    </div>
+                    <div class="col-lg-2 col-md-6 col-sm-12 col-12  my-1">
+                        <span class="color_main102 font-weight-bold">تاريخ البداية : <span class="@color"> @item.sDateStartProcess</span> </span>
+                    </div>
+                    <div class="col-lg-2 col-md-6 col-sm-12 col-12  my-1">
+                        @if (item.sDateEndProcess == null)
+                    {
+                        <span class="color_main102 font-weight-bold">تاريخ النهاية : <span class="@color">لم تنتهى بعد</span> </span>
+                        }
+                        else
+                        {
+                        <span class="color_main102 font-weight-bold">تاريخ النهاية : <span class="@color">@item.sDateEndProcess</span> </span>
+                        }
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-12 col-12  my-1">
+                        <span class="color_main102 font-weight-bold"> اجمالى العملية : <span class="@color">@item.decFullBudget</span> </span>
+                    </div>
+                    <div class="col-lg-2 col-md-6 col-sm-12 col-12  my-1">
+                        <button type="button" name="submitType" value="@item.iProcessCode"
+                                class="btn btn-outline-secondary font-weight-bold"
+                                onclick="openModel('#titleSharedModal', 'تفاصيل العملية', '#bb', ' تفاصيل العملية', '', '', '../Process/_vpProcessDetailsModel', '', '#sharedModalBody')"
+                                data-toggle="modal" data-target="#sharedModal">
+                            <i class="far fa-list-alt"></i>  تفاصيل العملية
+                        </button>
+                    </div>
+            }
+        }
+    </div>
+</div>
+<script src="~/Scripts/light.js"></script>

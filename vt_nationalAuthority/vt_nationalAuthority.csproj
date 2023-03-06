@@ -1,0 +1,902 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3072ACBB-CC10-4E81-8846-3835F6EC005D}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>vt_nationalAuthority</RootNamespace>
+    <AssemblyName>vt_nationalAuthority</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.AI.Agent.Intercept, Version=1.2.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.1.2.1\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.DependencyCollector, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.0.0\lib\net45\Microsoft.AI.DependencyCollector.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.PerfCounterCollector, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.0.0\lib\net45\Microsoft.AI.PerfCounterCollector.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.ServerTelemetryChannel, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.0.0\lib\net45\Microsoft.AI.ServerTelemetryChannel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.Web, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Web.2.0.0\lib\net45\Microsoft.AI.Web.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.WindowsServer, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.2.0.0\lib\net45\Microsoft.AI.WindowsServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationInsights, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.2.0.0\lib\net45\Microsoft.ApplicationInsights.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.2.4.0\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.SystemWeb.2.4.0\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.ReportViewer.Common, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Report.Viewer.11.0.0.0\lib\net\Microsoft.ReportViewer.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.ProcessingObjectModel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Report.Viewer.11.0.0.0\lib\net\Microsoft.ReportViewer.ProcessingObjectModel.DLL</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Report.Viewer.11.0.0.0\lib\net\Microsoft.ReportViewer.WebForms.DLL</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PagedList.Mvc, Version=4.5.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ReportViewerForMvc, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ReportViewerForMvc4.1.1.2\lib\net40\ReportViewerForMvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http">
+      <HintPath>..\packages\System.Net.Http.2.0.20126.16343\lib\net40\System.Net.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Extensions, Version=2.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Net.Http.Formatting.Extension.5.2.3.0\lib\System.Net.Http.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Net.Http.Formatting.Extension.5.2.3.0\lib\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Primitives, Version=4.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Net.Http.Formatting.Extension.5.2.3.0\lib\System.Net.Http.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+      <HintPath>..\packages\System.Net.Http.2.0.20126.16343\lib\net40\System.Net.Http.WebRequest.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\apiWSDLs\bin\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin">
+      <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.3.0.1\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security">
+      <HintPath>..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Facebook">
+      <HintPath>..\packages\Microsoft.Owin.Security.Facebook.3.0.1\lib\net45\Microsoft.Owin.Security.Facebook.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.3.0.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Google">
+      <HintPath>..\packages\Microsoft.Owin.Security.Google.3.0.1\lib\net45\Microsoft.Owin.Security.Google.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Twitter">
+      <HintPath>..\packages\Microsoft.Owin.Security.Twitter.3.0.1\lib\net45\Microsoft.Owin.Security.Twitter.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.MicrosoftAccount">
+      <HintPath>..\packages\Microsoft.Owin.Security.MicrosoftAccount.3.0.1\lib\net45\Microsoft.Owin.Security.MicrosoftAccount.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Code\NotificationHub.cs" />
+    <Compile Include="App_Code\att_wsdl_cls.cs" />
+    <Compile Include="App_Code\cover_wsdl.cs" />
+    <Compile Include="App_Code\nat_wsdl.cs" />
+    <Compile Include="App_Code\run_tables.asmx.cs">
+      <DependentUpon>run_tables.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\IdentityConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="ConnectionApi.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\Attachments\AttachmentsController.cs" />
+    <Compile Include="Controllers\Attendance\attendanceController.cs" />
+    <Compile Include="Controllers\Attendance\previousPeriodController.cs" />
+    <Compile Include="Controllers\codes\attachmentTypeController.cs" />
+    <Compile Include="Controllers\codes\refSideContController.cs" />
+    <Compile Include="Controllers\Contractors\ContractorController.cs" />
+    <Compile Include="Controllers\Dashboard\DashboardController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\Insurance Employee\CardsRequestsController.cs" />
+    <Compile Include="Controllers\Insurance Employee\CompanyController.cs" />
+    <Compile Include="Controllers\Insurance Employee\InsuranceEmployeeController.cs" />
+    <Compile Include="Controllers\jsonFunctionsController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\Man Power\ManPowerController.cs" />
+    <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\Medical Insurance\MedicalInsuranceController.cs" />
+    <Compile Include="Controllers\NotificationController.cs" />
+    <Compile Include="Controllers\Opposition\OppositionController.cs" />
+    <Compile Include="Controllers\Process\ExpireProcessController.cs" />
+    <Compile Include="Controllers\Process\ExtractsController.cs" />
+    <Compile Include="Controllers\Process\ProcessController.cs" />
+    <Compile Include="Controllers\Process\processStopController.cs" />
+    <Compile Include="Controllers\Process\ProcessUsersController.cs" />
+    <Compile Include="Controllers\reports\ReportsController.cs" />
+    <Compile Include="Controllers\Users\AreaOfficeController.cs" />
+    <Compile Include="Controllers\Users\GroupController.cs" />
+    <Compile Include="Controllers\Users\UsersController.cs" />
+    <Compile Include="Controllers\welcomeHomeController.cs" />
+    <Compile Include="Controllers\Workers\InjuriesController.cs" />
+    <Compile Include="Controllers\Workers\WorkersController.cs" />
+    <Compile Include="Filters\CustomActionFilter.cs" />
+    <Compile Include="generalVariables.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>generalVariables.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\CheckSession.cs" />
+    <Compile Include="Models\FilesPDF.cs" />
+    <Compile Include="Models\generalModel.cs" />
+    <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\att_wsdl\Reference.cs">
+      <SubType>code</SubType>
+    </Compile>
+    <Compile Include="Service References\att_wsdl\Reference1.cs" />
+    <Compile Include="Service References\att_wsdl\Reference2.cs">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Service References\COVER_WSDL\Reference.cs">
+      <SubType>code</SubType>
+    </Compile>
+    <Compile Include="Service References\COVER_WSDL\Reference1.cs">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Service References\NAT_WSDL\Reference.cs">
+      <SubType>code</SubType>
+    </Compile>
+    <Compile Include="Service References\NAT_WSDL\Reference1.cs">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Service References\SMS\Reference.cs" />
+    <Compile Include="Service References\SMS\Reference1.cs">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="signalr\hubs\ChatHub.cs" />
+    <Compile Include="Startup.cs" />
+    <Compile Include="userProvider.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Code\run_tables.asmx" />
+    <Content Include="bin\Antlr3.Runtime.dll" />
+    <Content Include="bin\Antlr3.Runtime.pdb" />
+    <Content Include="bin\ApiNationalAuthority.dll" />
+    <Content Include="bin\ApiNationalAuthority.pdb" />
+    <Content Include="bin\apiWSDLs.dll" />
+    <Content Include="bin\apiWSDLs.pdb" />
+    <Content Include="bin\DataAccessLayer.dll" />
+    <Content Include="bin\DataAccessLayer.pdb" />
+    <Content Include="bin\EntityFramework.dll" />
+    <Content Include="bin\EntityFramework.SqlServer.dll" />
+    <Content Include="bin\EntityFramework.SqlServer.xml" />
+    <Content Include="bin\EntityFramework.xml" />
+    <Content Include="bin\Microsoft.AI.Agent.Intercept.dll" />
+    <Content Include="bin\Microsoft.AI.DependencyCollector.dll" />
+    <Content Include="bin\Microsoft.AI.DependencyCollector.xml" />
+    <Content Include="bin\Microsoft.AI.PerfCounterCollector.dll" />
+    <Content Include="bin\Microsoft.AI.ServerTelemetryChannel.dll" />
+    <Content Include="bin\Microsoft.AI.ServerTelemetryChannel.xml" />
+    <Content Include="bin\Microsoft.AI.Web.dll" />
+    <Content Include="bin\Microsoft.AI.Web.xml" />
+    <Content Include="bin\Microsoft.AI.WindowsServer.dll" />
+    <Content Include="bin\Microsoft.AI.WindowsServer.xml" />
+    <Content Include="bin\Microsoft.ApplicationInsights.dll" />
+    <Content Include="bin\Microsoft.ApplicationInsights.xml" />
+    <Content Include="bin\Microsoft.AspNet.Identity.Core.dll" />
+    <Content Include="bin\Microsoft.AspNet.Identity.Core.xml" />
+    <Content Include="bin\Microsoft.AspNet.Identity.EntityFramework.dll" />
+    <Content Include="bin\Microsoft.AspNet.Identity.EntityFramework.xml" />
+    <Content Include="bin\Microsoft.AspNet.Identity.Owin.dll" />
+    <Content Include="bin\Microsoft.AspNet.Identity.Owin.xml" />
+    <Content Include="bin\Microsoft.AspNet.SignalR.Core.dll" />
+    <Content Include="bin\Microsoft.AspNet.SignalR.Core.pdb" />
+    <Content Include="bin\Microsoft.AspNet.SignalR.Core.xml" />
+    <Content Include="bin\Microsoft.AspNet.SignalR.SystemWeb.dll" />
+    <Content Include="bin\Microsoft.AspNet.SignalR.SystemWeb.pdb" />
+    <Content Include="bin\Microsoft.AspNet.SignalR.SystemWeb.xml" />
+    <Content Include="bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll" />
+    <Content Include="bin\Microsoft.Owin.dll" />
+    <Content Include="bin\Microsoft.Owin.Host.SystemWeb.dll" />
+    <Content Include="bin\Microsoft.Owin.Host.SystemWeb.xml" />
+    <Content Include="bin\Microsoft.Owin.Security.Cookies.dll" />
+    <Content Include="bin\Microsoft.Owin.Security.Cookies.xml" />
+    <Content Include="bin\Microsoft.Owin.Security.dll" />
+    <Content Include="bin\Microsoft.Owin.Security.Facebook.dll" />
+    <Content Include="bin\Microsoft.Owin.Security.Facebook.xml" />
+    <Content Include="bin\Microsoft.Owin.Security.Google.dll" />
+    <Content Include="bin\Microsoft.Owin.Security.Google.xml" />
+    <Content Include="bin\Microsoft.Owin.Security.MicrosoftAccount.dll" />
+    <Content Include="bin\Microsoft.Owin.Security.MicrosoftAccount.xml" />
+    <Content Include="bin\Microsoft.Owin.Security.OAuth.dll" />
+    <Content Include="bin\Microsoft.Owin.Security.OAuth.xml" />
+    <Content Include="bin\Microsoft.Owin.Security.Twitter.dll" />
+    <Content Include="bin\Microsoft.Owin.Security.Twitter.xml" />
+    <Content Include="bin\Microsoft.Owin.Security.xml" />
+    <Content Include="bin\Microsoft.Owin.xml" />
+    <Content Include="bin\Microsoft.ReportViewer.Common.dll" />
+    <Content Include="bin\Microsoft.ReportViewer.ProcessingObjectModel.DLL" />
+    <Content Include="bin\Microsoft.ReportViewer.WebForms.DLL" />
+    <Content Include="bin\Microsoft.Web.Infrastructure.dll" />
+    <Content Include="bin\Newtonsoft.Json.dll" />
+    <Content Include="bin\Newtonsoft.Json.xml" />
+    <Content Include="bin\Owin.dll" />
+    <Content Include="bin\PagedList.dll" />
+    <Content Include="bin\PagedList.Mvc.dll" />
+    <Content Include="bin\PagedList.Mvc.xml" />
+    <Content Include="bin\PagedList.xml" />
+    <Content Include="bin\ReportViewerForMvc.dll" />
+    <Content Include="bin\roslyn\csc.exe" />
+    <Content Include="bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll" />
+    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll" />
+    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.dll" />
+    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll" />
+    <Content Include="bin\roslyn\System.Collections.Immutable.dll" />
+    <Content Include="bin\roslyn\System.Reflection.Metadata.dll" />
+    <Content Include="bin\roslyn\vbc.exe" />
+    <Content Include="bin\roslyn\VBCSCompiler.exe" />
+    <Content Include="bin\System.Net.Http.dll" />
+    <Content Include="bin\System.Net.Http.Extensions.dll" />
+    <Content Include="bin\System.Net.Http.Formatting.dll" />
+    <Content Include="bin\System.Net.Http.Primitives.dll" />
+    <Content Include="bin\System.Net.Http.WebRequest.dll" />
+    <Content Include="bin\System.Net.Http.WebRequest.xml" />
+    <Content Include="bin\System.Net.Http.xml" />
+    <Content Include="bin\System.Web.Helpers.dll" />
+    <Content Include="bin\System.Web.Helpers.xml" />
+    <Content Include="bin\System.Web.Http.dll" />
+    <Content Include="bin\System.Web.Http.Owin.dll" />
+    <Content Include="bin\System.Web.Http.Owin.xml" />
+    <Content Include="bin\System.Web.Http.WebHost.dll" />
+    <Content Include="bin\System.Web.Http.xml" />
+    <Content Include="bin\System.Web.Mvc.dll" />
+    <Content Include="bin\System.Web.Mvc.xml" />
+    <Content Include="bin\System.Web.Optimization.dll" />
+    <Content Include="bin\System.Web.Optimization.xml" />
+    <Content Include="bin\System.Web.Razor.dll" />
+    <Content Include="bin\System.Web.Razor.xml" />
+    <Content Include="bin\System.Web.WebPages.Deployment.dll" />
+    <Content Include="bin\System.Web.WebPages.Deployment.xml" />
+    <Content Include="bin\System.Web.WebPages.dll" />
+    <Content Include="bin\System.Web.WebPages.Razor.dll" />
+    <Content Include="bin\System.Web.WebPages.Razor.xml" />
+    <Content Include="bin\System.Web.WebPages.xml" />
+    <Content Include="bin\vt_nationalAuthority.dll" />
+    <Content Include="bin\vt_nationalAuthority.pdb" />
+    <Content Include="bin\WebGrease.dll" />
+    <Content Include="Content\animate.css" />
+    <Content Include="Content\attendance\attendance.css" />
+    <Content Include="Content\attendance\js-year-calendar.min.css" />
+    <Content Include="Content\bootstrap-3.3.1-dist\bootstrap.css" />
+    <Content Include="Content\bootstrap-3.3.1-dist\bootstrap.min.css" />
+    <Content Include="Content\bootstrap-3.3.7\bootstrap.min.css" />
+    <Content Include="Content\bootstrap-4.1.3\bootstrap.min.css" />
+    <Content Include="Content\bootstrap-4.3.1-dist\bootstrap-select.css" />
+    <Content Include="Content\bootstrap-4.3.1-dist\bootstrap-select.min.css" />
+    <Content Include="Content\bootstrap-datepicker3\bootstrap-datepicker3.css" />
+    <Content Include="Content\bootstrap-datepicker3\bootstrap-datepicker3.min.css" />
+    <Content Include="Content\bootstrap-sweetalert1.0.1\animate.css" />
+    <Content Include="Content\bootstrap-sweetalert1.0.1\sweetalert.css" />
+    <Content Include="Content\bootstrap-sweetalert1.0.1\sweetalert.min.css" />
+    <Content Include="Content\bootstrap-tour\css\bootstrap-tour-standalone.css" />
+    <Content Include="Content\bootstrap-tour\css\bootstrap-tour-standalone.min.css" />
+    <Content Include="Content\bootstrap-tour\css\bootstrap-tour.css" />
+    <Content Include="Content\bootstrap-tour\css\bootstrap-tour.min.css" />
+    <Content Include="Content\bootstrap-tour\js\bootstrap-tour-standalone.js" />
+    <Content Include="Content\bootstrap-tour\js\bootstrap-tour-standalone.min.js" />
+    <Content Include="Content\bootstrap-tour\js\bootstrap-tour.js" />
+    <Content Include="Content\bootstrap-tour\js\bootstrap-tour.min.js" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\calender.css" />
+    <Content Include="Content\chat.css" />
+    <Content Include="Content\checkbox.css" />
+    <Content Include="Content\color101.css" />
+    <Content Include="Content\color102.css" />
+    <Content Include="Content\contactusCss.css" />
+    <Content Include="Content\css\all.css" />
+    <Content Include="Content\css\theme.css" />
+    <Content Include="Content\dropzone\basic.css" />
+    <Content Include="Content\dropzone\basic.min.css" />
+    <Content Include="Content\dropzone\dropzone.css" />
+    <Content Include="Content\dropzone\dropzone.min.css" />
+    <Content Include="Content\font-family\Cairo-Changa-ElMessiri-Tajawal\display-swap\Cairo-Changa-ElMessiri-Tajawal.css" />
+    <Content Include="Content\font-family\Kaushan\Kaushan.css" />
+    <Content Include="Content\hover.css" />
+    <Content Include="Content\loader101.css" />
+    <Content Include="Content\loaderStyle.css" />
+    <Content Include="Content\main101.css" />
+    <Content Include="Content\NewLoginCss.css" />
+    <Content Include="Content\open.css" />
+    <Content Include="Content\PagedList.css" />
+    <Content Include="Content\pagination.css" />
+    <Content Include="Content\Salert\animate.css" />
+    <Content Include="Content\Salert\sweetalert.css" />
+    <Content Include="Content\Salert\sweetalert.min.css" />
+    <Content Include="Content\tour101.css" />
+    <Content Include="Content\TreeViewStyle.css" />
+    <Content Include="Content\ui-icons_454545_256x240.png" />
+    <Content Include="Content\wave101.css" />
+    <Content Include="favicon.ico" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\Site.css" />
+    <Content Include="img\img_flags\ar.png" />
+    <Content Include="img\img_flags\en.png" />
+    <Content Include="img\logo.png" />
+    <Content Include="img\mss.png" />
+    <Content Include="img\mute.gif" />
+    <Content Include="ReportViewerWebForm.aspx" />
+    <Content Include="Scripts\ai.0.22.9-build00167.js" />
+    <Content Include="Scripts\ai.0.22.9-build00167.min.js" />
+    <Content Include="Scripts\ajax\libs\popper.js\1.14.3\umd\popper.min.js" />
+    <Content Include="Scripts\Attachments\calender.js" />
+    <Content Include="Scripts\Attachments\uplaodFiles.js" />
+    <Content Include="Scripts\attendance\attendance.js" />
+    <Content Include="Scripts\bootstrap-3.3.1-dist\bootstrap.js" />
+    <Content Include="Scripts\bootstrap-3.3.1-dist\bootstrap.min.js" />
+    <Content Include="Scripts\bootstrap-4.1.3\bootstrap.min.js" />
+    <Content Include="Scripts\bootstrap-4.3.1-dist\bootstrap-select.js" />
+    <Content Include="Scripts\bootstrap-4.3.1-dist\bootstrap-select.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\bootstrap-datepicker.js" />
+    <Content Include="Scripts\bootstrap-datepicker\bootstrap-datepicker.min.js" />
+    <Content Include="Scripts\bootstrap-sweetalert1.0.1\sweetalert.js" />
+    <Content Include="Scripts\bootstrap-sweetalert1.0.1\sweetalert.min.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="ApplicationInsights.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\bootstrap-4.3.1-dist\bootstrap-select.css.map" />
+    <Content Include="Scripts\bootstrap-4.3.1-dist\bootstrap-select.js.map" />
+    <Content Include="img\anyThing.pdf" />
+    <Content Include="App_Start\Treeview.cshtml" />
+    <Content Include="App_Code\AreaTree.cshtml" />
+    <Content Include="App_Code\Treeview.cshtml" />
+    <Content Include="Content\webfonts\fa-regular-400.woff2" />
+    <Content Include="Content\webfonts\fa-solid-900.woff" />
+    <Content Include="Content\webfonts\fa-solid-900.woff2" />
+    <Content Include="Content\webfonts\Iura6YBj_oCad4k1nzGBCw.woff2" />
+    <Content Include="Content\webfonts\Iura6YBj_oCad4k1nzSBC45I.woff2" />
+    <Content Include="App_Code\OfficeContractor.cshtml" />
+    <Content Include="bin\ApplicationInsights.config" />
+    <Content Include="bin\roslyn\Microsoft.CSharp.Core.targets" />
+    <Content Include="bin\roslyn\Microsoft.VisualBasic.Core.targets" />
+    <Content Include="bin\roslyn\VBCSCompiler.exe.config" />
+    <Content Include="bin\vt_nationalAuthority.dll.config" />
+    <None Include="Properties\PublishProfiles\VT.pubxml" />
+    <Content Include="Scripts\jquery\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.signalR-2.4.0.js" />
+    <Content Include="Scripts\jquery.signalR-2.4.0.min.js" />
+    <Content Include="Scripts\signalR\NotificationProcess.js" />
+    <Content Include="Scripts\signalR\NotificationProcessStop.js" />
+    <Content Include="Scripts\signalR\Notifications.js" />
+    <Content Include="Service References\att_wsdl\vt_nationalAuthority.att_wsdl.CNTV06OperationResponse.datasource" />
+    <Content Include="Service References\att_wsdl\vt_nationalAuthority.att_wsdl.DFHCOMMAREA.datasource" />
+    <Content Include="Service References\COVER_WSDL\vt_nationalAuthority.COVER_WSDL.CNTV05OperationResponse.datasource" />
+    <Content Include="Service References\COVER_WSDL\vt_nationalAuthority.COVER_WSDL.Commarea_buffer__01.datasource" />
+    <Content Include="Service References\NAT_WSDL\vt_nationalAuthority.NAT_WSDL.CNTV02OperationResponse.datasource" />
+    <Content Include="Service References\NAT_WSDL\vt_nationalAuthority.NAT_WSDL.COMMAREA2.datasource" />
+    <Content Include="soundNotification\sound.mp3" />
+    <Content Include="UserImage\12.png" />
+    <Content Include="UserImage\18.jpg" />
+    <Content Include="UserImage\19.jpg" />
+    <Content Include="UserImage\19.png" />
+    <Content Include="UserImage\2039.jpg" />
+    <Content Include="UserImage\2048.PNG" />
+    <Content Include="UserImage\2050.PNG" />
+    <Content Include="UserImage\2066.png" />
+    <Content Include="UserImage\2073.jpg" />
+    <Content Include="UserImage\2077.PNG" />
+    <Content Include="UserImage\2079.jpg" />
+    <Content Include="UserImage\2081.jpg" />
+    <Content Include="UserImage\2083.png" />
+    <Content Include="UserImage\2084.png" />
+    <Content Include="UserImage\7.jpg" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\Charts\Chart.bundle.min.js" />
+    <Content Include="Scripts\Charts\chartmain.js" />
+    <Content Include="Scripts\dropzone\dropzone-amd-module.js" />
+    <Content Include="Scripts\dropzone\dropzone-amd-module.min.js" />
+    <Content Include="Scripts\dropzone\dropzone.js" />
+    <Content Include="Scripts\dropzone\dropzone.min.js" />
+    <Content Include="Scripts\jquery-3.1.1.slim.min.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery\jquery-3.3.1.js" />
+    <Content Include="Scripts\jquery\jquery-3.4.1.min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\light.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\respond.js" />
+    <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\Salert\delete\sweetalert2%408.js" />
+    <Content Include="Scripts\Salert\sweetalert.js" />
+    <Content Include="Scripts\Salert\sweetalert.min.js" />
+    <Content Include="Scripts\_references.js" />
+    <Content Include="UserImage\generic-user.jpg" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
+    <Content Include="Views\Account\ConfirmEmail.cshtml" />
+    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
+    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
+    <Content Include="Views\Account\ForgotPassword.cshtml" />
+    <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Account\ResetPassword.cshtml" />
+    <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
+    <Content Include="Views\Account\SendCode.cshtml" />
+    <Content Include="Views\Account\VerifyCode.cshtml" />
+    <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
+    <Content Include="Views\Manage\ChangePassword.cshtml" />
+    <Content Include="Views\Manage\Index.cshtml" />
+    <Content Include="Views\Manage\ManageLogins.cshtml" />
+    <Content Include="Views\Manage\SetPassword.cshtml" />
+    <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
+    <Content Include="Views\Shared\Lockout.cshtml" />
+    <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Process\vProcessIndex.cshtml" />
+    <Content Include="Views\Process\_vpProcessDetails.cshtml" />
+    <Content Include="Views\Process\_vpProcessDetail.cshtml" />
+    <Content Include="Views\Shared\ProcessLayout.cshtml" />
+    <Content Include="Views\Extracts\_vpExtractsSearch.cshtml" />
+    <Content Include="Views\Extracts\_vpExtractsAddOrEdit.cshtml" />
+    <Content Include="Views\CardsRequests\vCardsRequestsIndex.cshtml" />
+    <Content Include="Views\CardsRequests\_vpCardsRequestsSearch.cshtml" />
+    <Content Include="Views\Contractor\vContractorIndex.cshtml" />
+    <Content Include="Views\Contractor\vContractorsIndex.cshtml" />
+    <Content Include="Views\Contractor\_vpContractorData.cshtml" />
+    <Content Include="Views\Contractor\_vpContractors.cshtml" />
+    <Content Include="Views\Workers\vWorkersIndex.cshtml" />
+    <Content Include="Views\Workers\_vpWorkersData.cshtml" />
+    <Content Include="Views\Workers\_vpWorkersIndex.cshtml" />
+    <Content Include="Views\Opposition\_vpOppositionIndex.cshtml" />
+    <Content Include="Views\Process\_vpProcessTable.cshtml" />
+    <Content Include="Views\Process\_vpAddProcessIndex.cshtml" />
+    <Content Include="Views\Process\_vpNotesInsurance.cshtml" />
+    <Content Include="Views\Process\_vpSearchProcess.cshtml" />
+    <Content Include="Views\Opposition\_vpReplayInsurance.cshtml" />
+    <Content Include="Views\InsuranceEmployee\vInsuranceEmployeeIndex.cshtml" />
+    <Content Include="Views\Shared\InsuranceEmployeeLayout.cshtml" />
+    <Content Include="Views\Process\_vpProcessIndexShow.cshtml" />
+    <Content Include="Views\Process\vProcessShowIndex.cshtml" />
+    <Content Include="Views\Process\vProcessRequest.cshtml" />
+    <Content Include="Views\InsuranceEmployee\vWorkerAddSearch.cshtml" />
+    <Content Include="Views\Workers\_vpWorkerProcess.cshtml" />
+    <Content Include="Views\CardsRequests\vCardsRequestsDeActivationIndex.cshtml" />
+    <Content Include="Views\CardsRequests\_vpCardsRequestsAddOrEdit.cshtml" />
+    <Content Include="Views\CardsRequests\_vpCardsRequestsDeActivation.cshtml" />
+    <Content Include="Views\CardsRequests\_vpCardsRequestsDeActivationAddOrEdit.cshtml" />
+    <Content Include="Views\CardsRequests\_vpCardsRequestsDeActivationSearch.cshtml" />
+    <Content Include="Views\InsuranceEmployee\vProcessDetailsInsurEmp.cshtml" />
+    <Content Include="Views\InsuranceEmployee\_vpWorkerSearch.cshtml" />
+    <Content Include="Views\Extracts\_vpExtractsIndex.cshtml" />
+    <Content Include="Views\ManPower\vManPowerIndex.cshtml" />
+    <Content Include="Views\ManPower\_vpManPowerIndex.cshtml" />
+    <Content Include="Views\ManPower\_vpManPowerLastLevels.cshtml" />
+    <Content Include="Views\ManPower\_vpManPowerSearch.cshtml" />
+    <Content Include="Views\ManPower\_vpManPowerSendToInsurance.cshtml" />
+    <Content Include="Views\MedicalInsurance\vMedicalInsuranceIndex.cshtml" />
+    <Content Include="Views\MedicalInsurance\_vpMedicalInsuranceIndex.cshtml" />
+    <Content Include="Views\MedicalInsurance\_vpMedicalInsuranceLastLevels.cshtml" />
+    <Content Include="Views\MedicalInsurance\_vpMedicalInsuranceSearch.cshtml" />
+    <Content Include="Views\MedicalInsurance\_vpMedicalInsuranceSendToInsurance.cshtml" />
+    <Content Include="Scripts\jquery\jquery-3.4.1.js" />
+    <Content Include="Views\attendance\AttendanceManual.cshtml" />
+    <Content Include="Views\attendance\_vpAttendance.cshtml" />
+    <Content Include="Views\previousPeriod\_vpPeriodMonth.cshtml" />
+    <Content Include="Views\previousPeriod\_vpPreviousPeriod.cshtml" />
+    <Content Include="Views\previousPeriod\_vpWorkerDays.cshtml" />
+    <Content Include="Views\Shared\_LayoutPagehome.cshtml" />
+    <Content Include="Views\welcomeHome\welcomeHomeIndex.cshtml" />
+    <Content Include="Views\InsuranceEmployee\vpWorkers.cshtml" />
+    <Content Include="Views\InsuranceEmployee\_vpAddWorkers.cshtml" />
+    <Content Include="Views\Workers\_vpWorkerAttendance.cshtml" />
+    <Content Include="Views\attendance\vAttendanceIndex.cshtml" />
+    <Content Include="Views\InsuranceEmployee\vpContractorsShow.cshtml" />
+    <Content Include="Views\InsuranceEmployee\vpWorkersShow.cshtml" />
+    <Content Include="Views\InsuranceEmployee\vpExtractsShow.cshtml" />
+    <Content Include="Views\InsuranceEmployee\vpAttachmentShow.cshtml" />
+    <Content Include="Views\Users\vUsersIndex.cshtml" />
+    <Content Include="Views\Users\_vpUsersAdd.cshtml" />
+    <Content Include="Views\Shared\UserLayout.cshtml" />
+    <Content Include="Views\Users\vUsersGroupIndex.cshtml" />
+    <Content Include="Views\Group\vGroupIndex.cshtml" />
+    <Content Include="Views\Contractor\vContractorShow.cshtml" />
+    <Content Include="Views\Extracts\vExtractsShow.cshtml" />
+    <Content Include="Views\Shared\_contractorLayout.cshtml" />
+    <Content Include="Views\Workers\vWorkersShow.cshtml" />
+    <Content Include="Views\Group\vGroupUsers.cshtml" />
+    <Content Include="Views\Group\vGroupPermision.cshtml" />
+    <Content Include="Views\Workers\_vpWorkerPhones.cshtml" />
+    <Content Include="Views\Contractor\_vpMissionContractor.cshtml" />
+    <Content Include="Views\InsuranceEmployee\_vpOfficeAreaa.cshtml" />
+    <Content Include="Views\dashboard\Index.cshtml" />
+    <Content Include="Views\Shared\_codesLayout.cshtml" />
+    <Content Include="Views\AreaOffice\vAreaOfficeIndex.cshtml" />
+    <Content Include="Views\AreaOffice\vAreaOfficeSetting.cshtml" />
+    <Content Include="Views\Shared\InsuranceEmpProcessDetailsLayout.cshtml" />
+    <Content Include="Views\Injuries\vInjuriesIndex.cshtml" />
+    <Content Include="Views\Injuries\_vpAddOrEditInjuries.cshtml" />
+    <Content Include="Views\Injuries\_vpInjuriesIndex.cshtml" />
+    <Content Include="Views\Injuries\_vpSearchInjuries.cshtml" />
+    <Content Include="Views\ExpireProcess\vExpireProcess.cshtml" />
+    <Content Include="Views\ExpireProcess\_vpEditPeriodProcess.cshtml" />
+    <Content Include="Views\ExpireProcess\_vpSearchProcess.cshtml" />
+    <Content Include="Views\Contractor\vIndex.cshtml" />
+    <Content Include="Views\Process\_vpSubContractorByUser.cshtml" />
+    <Content Include="Views\attachmentType\vAttachmentType.cshtml" />
+    <Content Include="Views\attachmentType\_vpAttachmentTypeSearch.cshtml" />
+    <Content Include="Views\attachmentType\_vpAttachmentTypeAddOrEdit.cshtml" />
+    <Content Include="Views\processStop\vProcessStop.cshtml" />
+    <Content Include="Views\processStop\_vpProcessStop.cshtml" />
+    <Content Include="Views\processStop\_vpProcessStopAddOrEdit.cshtml" />
+    <Content Include="Views\processStop\_vpProcessStopSearch.cshtml" />
+    <Content Include="Views\Contractor\_vpSearchContractor.cshtml" />
+    <Content Include="Views\Group\_vpSaveEditGroup.cshtml" />
+    <Content Include="Views\Group\_vpSearchGroup.cshtml" />
+    <Content Include="Views\Users\_vpUserSearch.cshtml" />
+    <Content Include="Views\Process\_vpMinMax.cshtml" />
+    <Content Include="Views\Process\_vpProcessDetailsModel.cshtml" />
+    <Content Include="Views\Attachments\vAttachmentsIndex.cshtml" />
+    <Content Include="Views\Attachments\vAttachmentsShow.cshtml" />
+    <Content Include="Views\Attachments\_vpAttachmentAdd.cshtml" />
+    <Content Include="Views\Attachments\_vpAttachmentIndex.cshtml" />
+    <Content Include="Views\Attachments\_vpAttachmentSearch.cshtml" />
+    <Content Include="Views\Attachments\_vpAttachmentSearchOrEdit.cshtml" />
+    <Content Include="Views\Login\vLoginIndex.cshtml" />
+    <Content Include="Views\Attachments\_vpAttachmentSearchFiles.cshtml" />
+    <Content Include="Views\CardsRequests\_vpCardsRequests.cshtml" />
+    <Content Include="Views\ProcessUsers\vProcessUser.cshtml" />
+    <Content Include="Views\Company\CompanyIndex.cshtml" />
+    <Content Include="Views\Company\EditRequestStatus.cshtml" />
+    <Content Include="Views\InsuranceEmployee\vProcessRequest.cshtml" />
+    <Content Include="Views\InsuranceEmployee\vProcessShowIndex.cshtml" />
+    <Content Include="Views\Shared\CompanyLayout.cshtml" />
+    <Content Include="Views\Shared\ReportsLayout.cshtml" />
+    <Content Include="Views\Reports\callReport.cshtml" />
+    <Content Include="Views\Reports\repActiveProesses.cshtml" />
+    <Content Include="Views\Reports\repExtracts.cshtml" />
+    <Content Include="Views\Reports\repRequestsProesses.cshtml" />
+    <Content Include="Views\Reports\repTransactios.cshtml" />
+    <Content Include="Views\Reports\vpReportCardRequests.cshtml" />
+    <Content Include="Views\Reports\vReportsIndex.cshtml" />
+    <Content Include="Views\Process\_vpAcceptProcess.cshtml" />
+    <Content Include="Views\Home\Error.cshtml" />
+    <Content Include="Views\InsuranceEmployee\_vpWorkerCards.cshtml" />
+    <Content Include="Views\Shared\_partialLayout.cshtml" />
+    <Content Include="Views\Notification\MoreNotication.cshtml" />
+    <Content Include="Views\AreaOffice\vAreaOfficeContractorIndex.cshtml" />
+    <Content Include="Views\Home\_ChangePassword.cshtml" />
+    <Content Include="Views\Attachments\_vpAttachmentScreens.cshtml" />
+    <Content Include="Views\Users\_vpRefSideContAdd.cshtml" />
+    <Content Include="Views\Reports\repRegMonthProesses.cshtml" />
+    <Content Include="Views\jsonFunctions\vWorkerAttendance.cshtml" />
+    <Content Include="Views\Reports\repWorkerAttendance.cshtml" />
+    <Content Include="Views\Reports\repWorkerAttendanceMonthly.cshtml" />
+    <Content Include="Views\Reports\repWorkerWithoutInsuNum.cshtml" />
+    <Content Include="Views\Reports\repWorkerOpenGov.cshtml" />
+    <Content Include="Views\refSideCont\vRefSideCont.cshtml" />
+    <Content Include="Views\refSideCont\_vpRefSideContSearch.cshtml" />
+    <Content Include="Views\refSideCont\_vpRefSideContAddOrEdit.cshtml" />
+    <Content Include="Views\Reports\repGetUsers.cshtml" />
+    <Content Include="Views\Reports\repWorkerContractor.cshtml" />
+    <Content Include="Views\Reports\repWorkerContractorCover.cshtml" />
+    <Content Include="Views\Process\_vpSearchRefSideCont.cshtml" />
+    <Content Include="Views\Reports\repTotalWorkersProcesses.cshtml" />
+    <None Include="Service References\att_wsdl\CNTV06.wsdl" />
+    <None Include="Service References\att_wsdl\configuration.svcinfo" />
+    <None Include="Service References\att_wsdl\configuration91.svcinfo" />
+    <None Include="Service References\att_wsdl\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference2.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\COVER_WSDL\CNTV05.wsdl" />
+    <None Include="Service References\COVER_WSDL\configuration.svcinfo" />
+    <None Include="Service References\COVER_WSDL\configuration91.svcinfo" />
+    <None Include="Service References\COVER_WSDL\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference1.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\NAT_WSDL\CNTV02.wsdl" />
+    <None Include="Service References\NAT_WSDL\configuration.svcinfo" />
+    <None Include="Service References\NAT_WSDL\configuration91.svcinfo" />
+    <None Include="Service References\NAT_WSDL\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference1.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\SMS\configuration.svcinfo" />
+    <None Include="Service References\SMS\configuration91.svcinfo" />
+    <None Include="Service References\SMS\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference1.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\SMS\service.disco" />
+    <None Include="Service References\SMS\service.wsdl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="bin\reports\210112.154122.1960.pex\dg\" />
+    <Folder Include="bin\reports\210112.154122.1960.pex\fix\out\" />
+    <Folder Include="bin\reports\210112.154122.1960.pex\tests\" />
+    <Folder Include="Content\font-family\Modak-Pacifico-Permanent-Marker-Righteous\display-swap\" />
+    <Folder Include="Content\Salert\display-swap\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="packages.config" />
+    <None Include="Project_Readme.html" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="generalVariables.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>generalVariables.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ApiNationalAuthority\ApiNationalAuthority.csproj">
+      <Project>{47d5e022-cf7a-4fcd-8c04-af5ffbbd61d3}</Project>
+      <Name>ApiNationalAuthority</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj">
+      <Project>{82533f9d-11cb-46c2-8c8b-fefd98ab40f7}</Project>
+      <Name>DataAccessLayer</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

@@ -1,0 +1,139 @@
+﻿@model Tuple<DataAccessLayer.Models.workerContactModel, List<DataAccessLayer.Models.workerContactModel>>
+@*<script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>*@
+@{
+    int iCount = 1;
+    var screen = "";
+    var cont = "";
+    string[] path = HttpContext.Current.Request.Url.AbsolutePath.Split('/');
+    screen = path[2];
+    cont = path[1];
+    Layout = null;
+    Layout = "~/Views/Shared/_partialLayout.cshtml";
+}
+@if (TempData["screen"] != null)
+{
+    if (TempData["screen"].ToString() == "InsuranceEmployee")
+    {
+        using (Html.BeginForm("_vpWorkerPhones", "Workers", FormMethod.Post))
+        {
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="mt-3 dr-rtl grid_box_shadow mx-3 mb-2 row">
+                <div class="col-lg-6 col-md-6 col-sm-12 text-right">
+                    <span class="color_main102 font-weight-bold ml-2">رقم الهاتف</span>
+                    <div id="divWorkerPhone">
+                        @Html.EditorFor(model => model.Item1.sPhone, new { htmlAttributes = new { @class = "form-control borderText reset", id = "workerPhone", required = "required" ,onchange="check()"} })
+                        @Html.ValidationMessageFor(model => model.Item1.sPhone, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="mt-4">
+                    @* align-self-end *@
+                    <button type="submit" id="btnSavePhone" onclick="loaderOpen();" class="btn btnsStyle btn-outline-info  font-weight-bold"><i class=""></i></button>
+                </div>
+            </div>
+        }
+    }
+
+}
+
+<div class="row justify-content-center">
+    <div class="text-center grid_box_shadow scroll-max mt-3">
+        @if (Model == null)
+        {
+            <h1 id="tblSearchNotFound">
+                <strong>@generalVariables.WorkersPhoneNotFound</strong>
+            </h1>
+        }
+        else if (Model.Item2.Count == 0)
+        {
+            <h1 id="tblSearchNotFound">
+                <strong>@generalVariables.WorkersPhoneNotFound</strong>
+            </h1>
+        }
+        else if (Model.Item2.Count > 0 && Model != null)
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col" class="color_main102">#</th>
+                        <td class="color_main103">رقم الهاتف</td>
+                        @if (screen == "_vpWorkerPhones")
+                        {
+                            <th scope="col" class="color_main102"><i class="fas fa-cog"></i></th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @{iCount = 1; }
+                    @foreach (var item in Model.Item2)
+                    {
+                        <tr>
+                            <th scope="row" class="color_main102">@iCount</th>
+                            <td class="color_main103">@item.sPhone</td>
+                            @if (screen == "_vpWorkerPhones")
+                            {
+                                <td class="color_main103">
+                                    <div class="color_main103 d-sm-show101 ">
+                                        <div class="dropdown-j  color_main102">
+                                            <i class="fas fa-ellipsis-v "></i>
+                                            <div class="dropdown-content-j" style="min-width: 116px;">
+                                                <div class="row text-left">
+                                                    <div class="col-12">
+                                                        <a href="#" data-toggle="tooltip" data-placement="bottom" class="btn btn-sm btn-outline-danger font-weight-bold"
+                                                           onclick="return sAlertDel(this,'هل تريد حذف هذا الرقم ؟', 'حذف  الرقم', 'إلغاء الحذف','Workers','_vpWorkerPhones','IDDelete=@(item.iWorkerContactCode)');"><i class="fas fa-trash-alt"></i> حذف</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            }
+                        </tr>
+                        iCount++;
+                    }
+                </tbody>
+            </table>
+         }
+    </div>
+</div>
+
+<script>
+    $(function ()
+    {
+        $('#btnSavePhone').click(function (event)
+        {
+            //event.preventDefault();
+            //console.log('lenth: ', $('#workerPhone').val().length);
+            if ($('#workerPhone').val().length >= 8 && $('#workerPhone').val().length <= 11)
+            {
+                $('#workerPhone').css('border-color', '');
+            }
+            else
+            {
+                sAlert('رقم الهاتف لا يقل عن 8 ارقام ولا يزيد عن 11 رقم', 2);
+                $('#workerPhone').css('border-color', '#dc3545');
+            }
+            loaderClose();
+        });
+    });
+    function check()
+    {
+        if ($('#workerPhone').val().length == 11)
+        {
+            $.getJSON("../Workers/checkSave",
+                function (data) {
+                    if (data == "1") {
+                        $('#workerPhone').val('');
+                        sAlert(" عفوا لا يمكن تسجيل رقم الهاتف لوجود رقم هاتف اخر للعامل ", 2);
+
+                    }
+                });
+        }
+        else
+        {
+            $('#workerPhone').val('');
+            sAlert('رقم الهاتف لا يقل عن 8 ارقام ولا يزيد عن 11 رقم', 2);
+            $('#workerPhone').css('border-color', '#dc3545');
+        }
+    }
+</script>

@@ -1,0 +1,70 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var screen = "";
+    string[] path = HttpContext.Current.Request.Url.AbsolutePath.Split('/');
+    screen = path[2];
+
+    List<DataAccessLayer.CheckModuleUserPermisiom_Result> x = TempData["CheckModuleLevel3"] as List<DataAccessLayer.CheckModuleUserPermisiom_Result>;
+    if (x != null)
+    {
+        if (x.Count() > 0)
+        {
+            Session["CheckModuleLevel3"] = x.ToList();
+        }
+        else if (Session["CheckModuleLevel3"] != null)
+        {
+            x = Session["CheckModuleLevel3"] as List<DataAccessLayer.CheckModuleUserPermisiom_Result>;
+        }
+    }
+    else if (Session["CheckModuleLevel3"] != null)
+    {
+        x = Session["CheckModuleLevel3"] as List<DataAccessLayer.CheckModuleUserPermisiom_Result>;
+    }
+}
+<script src="~/Scripts/signalR/NotificationProcess.js"></script>
+@* تفاصيل العمليه*@
+<div class="mt-4 dr-rtl grid_box_shadow mx-3 mb-3 ">
+    @{ Html.RenderAction("_vpProcessDetails", "Process", new { ProcessID = Request.QueryString["ProcessId"] == null ? Convert.ToInt32(Session["processCode"].ToString()) : (Convert.ToInt32(Request.QueryString["ProcessId"].ToString())) });}
+    @*@{ Html.RenderAction("_vpProcessDetails", "Process", new { ProcessID = Request.QueryString["ProcessId"] });}*@
+</div>
+@if (screen != "vProcessIndex" && screen != "vCardsRequestsDeActivationIndex")
+{
+    if (x.Count > 0)
+    {
+        @* البحث عند موظف التأمينات *@
+        //البحث عن المقاولين
+        <div class="mt-4 dr-rtl grid_box_shadow mx-3 mb-4 ">
+            @{
+                Html.RenderAction("_vpWorkerSearch", "InsuranceEmployee", new { ProcessId = Request.QueryString["ProcessId"] == null ? Convert.ToInt32(Session["processCode"].ToString()) : (Convert.ToInt32(Request.QueryString["ProcessId"].ToString())) });
+                //Html.RenderAction("_vpWorkerSearch", "InsuranceEmployee",new { ProcessId =Request.QueryString["ProcessId"]==null?null:Request.QueryString["ProcessId"] });
+            }
+        </div>
+
+        <div class="mt-4">
+            <ul role="tablist" id="navBar" class="nav justify-content-start m-lg-1 dr-rtl mt-4">
+                @foreach (var code in x)
+                {
+                    if (code.functionCode == 17)
+                    {
+                        <li id="1" class="nav-item tabs_box_shadow mx-1"><a class="nav-link color_main102 font-weight-bold" data_toggle="tab" href=@Url.Action("vpContractorsShow", "InsuranceEmployee",new { ProcessId = Request.QueryString["ProcessId"] == null ? Convert.ToInt32(Session["processCode"].ToString()) : (Convert.ToInt32(Request.QueryString["ProcessId"].ToString())), Cont = Request.QueryString["Cont"] == null ? null : Request.QueryString["Cont"],cd4=code.functionCode })>المقاولين</a></li>
+                    }
+                    if (code.functionCode == 18)
+                    {
+                        <li id="2" class="nav-item tabs_box_shadow mx-1"><a class="nav-link color_main102 font-weight-bold" data_toggle="tab" href=@Url.Action("vpWorkersShow", "InsuranceEmployee",new { ProcessId = Request.QueryString["ProcessId"] == null ? Convert.ToInt32(Session["processCode"].ToString()) : (Convert.ToInt32(Request.QueryString["ProcessId"].ToString())), Cont = Request.QueryString["Cont"]==null?null:Request.QueryString["Cont"], cd4 = code.functionCode})>العمال</a></li>
+                    }
+                    if (code.functionCode == 19)
+                    {
+                        <li id="3" class="nav-item tabs_box_shadow mx-1"><a class="nav-link color_main102 font-weight-bold" data_toggle="tab" href=@Url.Action("vExtractsShow", "Extracts", new { cp=true, cd4 = code.functionCode})>المستخلصات</a></li>
+                    }
+                    if (code.functionCode == 20)
+                    {
+                        <li id="4" class="nav-item tabs_box_shadow mx-1"><a class="nav-link color_main102 font-weight-bold" data_toggle="tab" href=@Url.Action("vpAttachmentShow", "InsuranceEmployee",new { cd4 = code.functionCode})>المرفقات</a></li>
+                    }
+                }
+            </ul>
+        </div>
+                    }
+                }
+<div class="dr-rtl mx-3 mb-3">
+    @RenderBody()
+</div>

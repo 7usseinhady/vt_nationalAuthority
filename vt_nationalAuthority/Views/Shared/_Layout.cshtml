@@ -1,0 +1,446 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="~/img/logo.png">
+
+    <!-- Bootstrap CSS -->
+    <script src="~/Scripts/jquery/jquery-3.3.1.js"></script>
+
+    <link href="~/Content/css/all.css" rel="stylesheet" />
+    <link href="~/Content/font-family/Kaushan/Kaushan.css" rel="stylesheet" />
+    <link href="~/Content/font-family/Modak-Pacifico-Permanent-Marker-Righteous/display-swap/Modak-Pacifico-Permanent-Marker-Righteous.css" rel="stylesheet" />
+    <link href="~/Content/font-family/Cairo-Changa-ElMessiri-Tajawal/display-swap/Cairo-Changa-ElMessiri-Tajawal.css" rel="stylesheet" />
+
+    <link href="~/Content/checkbox.css" rel="stylesheet" />
+
+    @Styles.Render("~/Content/css")
+    <link href="~/Content/loaderStyle.css" rel="stylesheet" />
+    @Styles.Render("~/bundles/select.css")
+    @{
+        var screen = ".." + @HttpContext.Current.Request.Url.AbsolutePath;
+    }
+
+</head>
+<body>
+
+    <div class="s_b text-center" id="loader" style="display: none;">
+        <div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    </div>
+    <div class="loader101 text-center align-content-center" id="loader101">
+        <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+    </div>
+    <div class="loader102 text-center align-content-center" id="loader102">
+        <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+    </div>
+
+    @* language اللغه *@@* setting *@@* chat *@@* notificatio *@@* user *@
+    <nav class="navbar navbar-expand-lg navbar-light dr-rtl p-0 box_nav101">
+        @*الهيئة القومية للتأمين الإجتماعى*@
+        <div class="logo_border_r bg_g101 w-lg text-right d-flex">
+            <div class="row">
+                <a class="nav-link list_lg_a  hvr-growt" href="@Url.Action("CheckUserPermission", "Login",new {UserCode = Convert.ToInt32(Session["uc"].ToString())})">
+                    <img src="~/img/logo.png" class="img_logo101" style="width:90px;height:90px" />
+                    الهيئة القومية للتأمين الإجتماعى
+                </a>
+            </div>
+            <div class="align-self-center d-lg-block d-none d-sm-none d-xl-block list_lg p-2 ">
+                <ul class="navbar-nav ">
+                    <li class="nav-item active">
+                        <a class="nav-link list_lg_a  hvr-growt" href="@Url.Action("CheckUserPermission", "Login", new { UserCode = Convert.ToInt32(Session["uc"].ToString()) })"> الرئيسية </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <button class="navbar-toggler ml-3" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        @* language اللغه *@@* setting *@@* chat *@@* notificatio *@@* user *@
+        <div class="d-flex mr-auto icon-nav101 text-center p-3">
+
+            @* chat *@
+            @if (Session["contractor"] != null)
+            {
+                @* notificatio *@
+                <div class="col">
+                    <a class="text-white101 font102 d-inline-flex" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="position:relative;color:#4cb8d6 !important">
+                        <span class="unread_msg_num notify" style="display:none" id="notificationNumber"></span>
+                        <i class="fas fa-bell unmuted" style="display:@( Request.Cookies["isMuted"].Value != "1" ? "block" : "none")"></i>
+                        <i class="fas fa-bell-slash muted" style="display:@( Request.Cookies["isMuted"].Value != "1" ?  "none" : "block")"></i>
+                    </a>
+
+                    <div class="dropdown-menu dropdown-menu-right-chat" aria-labelledby="navbarDropdown" style="background-color:rgb(255, 255, 255);width:270px;">
+                        <div class="col-12 row text-center">
+                            <a class="col-8 showSweetAlert dropdown-item font102 text-center text_color102 muted isMuted" style="font-weight: bold;background-color:unset;display:@(Request.Cookies["isMuted"].Value == "1" ? "block" : "none");color: #47b4cf;" href="#">تفعيل الجرس <i class="fas fa-bell"></i></a>
+                            <a class="col-8 showSweetAlert dropdown-item font102 text-center text_color102 unmuted isMuted" style="font-weight: bold;background-color:unset;display:@( Request.Cookies["isMuted"].Value != "1" ? "block" : "none" );color: #47b4cf;" href="#">ايقاف الجرس <i class="fas fa-bell-slash"></i></a>
+                            <a class="col-4 showSweetAlert dropdown-item font102 text-center text_color102" style="font-weight: bold;color: #47b4cf;background-color:unset;border-right:1px solid #47b4cf" href="/Notification/MoreNotication">المزيد ...</a>
+                        </div>
+                        <div class="dropdown-divider bg-text101 bg-text101"></div>
+                        <div id="notification_div1">
+                        </div>
+                    </div>
+                </div>
+            }
+            else if (Session["employee"] != null)
+            {
+                @* notificatio *@
+                <div class="col">
+
+                    <a class="text-white101 font102 d-inline-flex" id="navbarDropdownEmp" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="position:relative;color:#4cb8d6 !important">
+                        <span class="unread_msg_num notify" style="display:none" id="notificationNumberEmployee"></span>
+                        <i class="fas fa-bell unmuted" style="display:@( Request.Cookies["isMuted"].Value != "1" ? "block" : "none")"></i>
+                        <i class="fas fa-bell-slash muted" style="display:@( Request.Cookies["isMuted"].Value != "1" ?  "none" : "block")"></i>
+                    </a>
+
+                    <div class="dropdown-menu dropdown-menu-right-chat" aria-labelledby="navbarDropdown" style="background-color:rgb(255, 255, 255);width:270px;">
+                        <div class="col-12 row text-center">
+                            <a class="col-8 showSweetAlert dropdown-item font102 text-center text_color102 muted isMuted" style="font-weight: bold;background-color:unset;display:@(Request.Cookies["isMuted"].Value == "1" ? "block" : "none");color: #47b4cf;" href="#">تفعيل الجرس <i class="fas fa-bell"></i></a>
+                            <a class="col-8 showSweetAlert dropdown-item font102 text-center text_color102 unmuted isMuted" style="font-weight: bold;background-color:unset;display:@( Request.Cookies["isMuted"].Value != "1" ? "block" : "none" );color: #47b4cf;" href="#">ايقاف الجرس <i class="fas fa-bell-slash"></i></a>
+                            <a class="col-4 showSweetAlert dropdown-item font102 text-center text_color102" style="font-weight: bold;color: #47b4cf;background-color:unset;border-right:1px solid #47b4cf" href="/Notification/MoreNotication">المزيد ...</a>
+                        </div>
+                        <div class="dropdown-divider bg-text101 bg-text101"></div>
+                        <div id="notification_divEmployee">
+                        </div>
+                    </div>
+                </div>
+            }
+            @* user *@
+            <div class="col">
+                <a class="text-white101 font102" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="position:relative;color:#4cb8d6 !important">
+                    <i class="fas fa-user"></i>
+                </a>
+                <div class="dropdown-menu " aria-labelledby="navbarDropdown" style="background-color:#f0f0f0!important;width:min-content;">
+
+                    <a href="#" data-toggle="tooltip" data-placement="bottom" title="go to my profile">
+                        <div class="row text-center">
+                            <div class="mt-2 mr-5">
+                                <p class="text-center">
+                                    @if (Session["uImage"] != null)
+                                    {
+                                        <img src=@Session["uImage"].ToString().Replace("~","") id="blah" width="90" height="90" style="border-radius: 50%;" />
+                                    }
+                                    else
+                                    {
+                                        <img src="~/UserImage/generic-user.jpg" class="m-auto" width="90" height="90" id="blah" style="border-radius: 50%;" />
+                                    }
+                                </p>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                @if (Session["UserName"] != null)
+                                {
+                                    <strong class="font102  text_color102" style="color:#198ca9!important">@Session["UserName"].ToString()</strong>
+                                }
+                            </div>
+                        </div>
+                    </a>
+
+                    @* تغيير كلمه المرور *@
+                    <div class="mt-2 mx-2">
+                        <button type="button" name="submitType" style="background-color:white;"
+                                class="btn btn-sm btn-outline-warning font-weight-bold btnsStyle change-passwod "
+                                onclick="openModel___ss('#titleSharedModal', 'تغيير كلمه المرور ', '#btnChangePassword', ' تغيير كلمه المرور', 'far fa-edit', 'btn btn-outline-warning font-weight-bold btnsStyle', '../Home/_ChangePassword', '?screen=@screen', '#sharedModalBody')"
+                                data-toggle="modal" data-target="#sharedModal">
+                            <i class="far fa-edit"></i> تغيير كلمه المرور
+                        </button>
+                    </div>
+
+                    <div class="form-group mt-2 mx-2">
+                        <a href=@Url.Action("Autherize_logout", "Home") class="btn btn-block" style="background-color: #2291b0; color:white">تسجيل الخروج</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+    @* ModelContactUs تواصل معانا *@
+    <div id="mySidenav" class="sidenav">
+        <a href="#" id="about" class="align-items-center d-flex btn-info" data-toggle="modal" data-target="#ModalContactUs">
+            تواصل معانا
+            <i class="animated fa-1x fa-2x fa-phone faa-tada fas ml-4"></i>
+        </a>
+    </div>
+    @*  شركه فيجن تك لتكنولوجيا المعلومات *@@*مدير المشروعات*@@*الدعم الفني*@@*ا / طارق محمد*@@*ا / عادل ربيع*@@*التليفون الارضى*@@*البريد الالكتروني*@@* Videos*@
+    <div class="modal fade" id="ModalContactUs" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width: 591px;">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body text-right">
+                    <div class="p-4 row">
+                        @*  شركه فيجن تك لتكنولوجيا المعلومات *@
+                        <div class="col-12 text-center" style="box-shadow :0 2px 7px #ccc; border-right: 6px solid #2193b0;">
+                            <div class="col-12 color_main102 my-3">
+                                <span class="h3" style="font-weight :bolder;">
+                                    شركه فيجن تك لتكنولوجيا المعلومات
+                                </span>
+                            </div>
+                        </div>
+
+                        @if (!String.IsNullOrEmpty(Session["ac"].ToString()))
+                        {
+                            //مدير المشروعات
+                            <div class="col-12 my-3" style="box-shadow :0 2px 7px #ccc;border-right: 6px solid #2193b0;">
+                                <div class="col-12 color_main102 h4 my-3">
+                                    <span class="" style="font-weight :bolder;">
+                                        مدير المشروعات         <i class="fa-phone  fas ml-3"></i>
+                                    </span>
+                                </div>
+                                <div class="pb-3" style="margin-right: 61px; ">
+                                    <span class="h5">
+                                        <span>01008585195</span> : <span class="color_main102 h5">م / احمد علي عبدالله</span>
+                                    </span>
+                                </div>
+                            </div>
+                            @*الدعم الفني*@@*ا / طارق محمد*@@*ا / عادل ربيع*@@*التليفون الارضى*@
+                            <div class="col-12 py-3" style="box-shadow :0 2px 7px #ccc;border-right: 6px solid #2193b0;">
+                                @*الدعم الفني*@
+                                <div class="col-12 color_main102 h4 my-3">
+                                    <span class="" style="font-weight: bolder;">
+
+                                        الدعم الفني<i class="fa-phone  fas ml-3"></i>
+                                    </span>
+                                </div>
+                                @*ا / طارق محمد*@
+                                <div class="my-2" style="margin-right :54px;">
+                                    <span class="h5">
+                                        <span>01029611858</span> : <span class="color_main102 h5">ا / طارق محمد</span>
+                                    </span>
+                                </div>
+                                @*ا / عادل ربيع*@
+                                <div class="" style="margin-right :54px;">
+                                    <span class="h5">
+                                        <span class="">01003581143</span> : <span class="color_main102 h5">ا / عادل ربيع</span>
+                                    </span>
+                                </div>
+                                @*التليفون الارضى*@
+                                <div class="mt-2" style="margin-right :54px;">
+                                    <span class="h5">
+                                        <span class="">0233474131</span> : <span class="color_main102 h5">التليفون الارضى</span>
+                                    </span>
+                                </div>
+                            </div>
+                        }
+                        @*البريد الالكتروني*@
+                        <div class="col-12 mt-3 py-3" style="box-shadow :0 2px 7px #ccc;border-right: 6px solid #2193b0;">
+                            <div class="col-12 color_main102 h4 my-3">
+                                <span class="" style="font-weight: bolder;">
+
+                                    البريد الالكتروني<i class="far fa-envelope  ml-3"></i>
+                                </span>
+                            </div>
+                            <div class="my-2" style="margin-right: 53px;">
+                                <span class="h5">
+                                    <span>info@vtecheg.com</span>
+                                </span>
+                            </div>
+                        </div>
+
+                        @if (Session["contractor"] != null)
+                        {
+                            @* Videos*@
+                            <div class="col-12 mt-3 py-3" style="box-shadow :0 2px 7px #ccc;border-right: 6px solid #2193b0;">
+                                <div class="col-12 color_main102 h4 my-3">
+                                    <span class="" style="font-weight: bolder;">
+
+                                        شرح تفصيلى للمنظومة <i class="fas fa-video  ml-3"></i>
+
+                                    </span>
+                                </div>
+                                <div class="my-2 text-center">
+                                    <div class="embed-responsive embed-responsive-21by9">
+                                        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/aik6GDCZPDA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><iframe width="560" height="315" src="https://www.youtube.com/embed/aik6GDCZPDA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                    </div>
+
+                                    <a class="color_main102 mr-auto my-2 h4" target="_blank" href="https://youtube.com/playlist?list=PLvj8t6q1qHRI4Nn3ax4ZeXGkyxqZuaAdD"> ...المزيد</a>
+                                </div>
+                            </div>
+
+                        }
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    @* end *@
+
+
+    @* المنطقة *@@* المكتب *@
+    @if (!String.IsNullOrEmpty(Session["ac"].ToString()))
+    {
+        <div class="mt-3 mx-2">
+            <div class="grid_box_shadow">
+                <div class="row text-right mt-3 dr-rtl mx-3 mb-2">
+
+                    @* المنطقة *@
+                    <div class="col-lg-5 col-md-5 col-sm-12 color_main102 font-weight-bold">
+                        اسم المنطقة :
+                        <span class="ml-2" style="color:black;"> @Session["ac"].ToString()</span>
+                    </div>
+
+                    @* المكتب *@
+                    <div class="col-lg-5 col-md-5 col-sm-12 color_main102 font-weight-bold ">
+                        اسم المكتب :
+                        <span class="ml-2" style="color:black;"> @Session["oc"].ToString()</span>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    }
+
+    @*جهه الاسناد*@@*مقاول*@
+    @if (Session["contractor"] != null)
+    {
+        <div class="mt-3 mx-2">
+            <div class="grid_box_shadow">
+                <div class="row col-12 text-right mt-3 dr-rtl mx-3 mb-2">
+
+                    @if (Session["contractor"].ToString().Contains("جهه الاسناد : "))
+                    {
+                        @* جهه اسناد *@
+                        <div class="col-lg-12 col-md-12 col-sm-12 color_main102 font-weight-bold">
+                            جهه اسناد :
+                            <span class="ml-2" style="color:black;"> @Session["contractor"].ToString().Substring(14)</span>
+                        </div>
+                    }
+
+                    @if (Session["contractor"].ToString().Contains("مقاول : "))
+                    {
+                        @* مقاول *@
+                        <div class="col-lg-12 col-md-12 col-sm-12 color_main102 font-weight-bold ">
+                            المقاول :
+                            <span class="ml-2" style="color:black;"> @Session["contractor"].ToString().Substring(8)</span>
+                        </div>
+                    }
+
+
+                </div>
+            </div>
+        </div>
+    }
+
+    @Scripts.Render("~/bundles/jquery")
+    <script src="~/Scripts/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="~/Scripts/bootstrap-4.1.3/bootstrap.min.js"></script>
+
+    @* Drop Down List *@
+    @Scripts.Render("~/bundles/select.js")
+    <script src="~/Scripts/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script src="~/Scripts/light.js"></script>
+    <div class="Mb-5">
+        @RenderBody()
+    </div>
+
+    <script src="~/Scripts/jquery.signalR-2.4.0.js"></script>
+    <script src="~/signalr/hubs"></script>
+
+    @* Shared Modal *@
+    <div class="modal" id="sharedModal">
+        <div class="modal-dialog modal-lg dr-rtl">
+            <div class="modal-content">
+                <div class="modal-header header">
+                    <h5 class="modal-title color_main102" id="titleSharedModal"></h5>
+                    <button class="close color_main102" data-dismiss="modal" style="position: absolute;left: 0;">&times;</button>
+                </div>
+                <div class="modal-body" id="sharedModalBody">
+                </div>
+            </div>
+        </div>
+    </div>
+    @* Sub Shared Modal *@
+    <div class="modal" id="subSharedModal">
+        <div class="modal-dialog modal-lg dr-rtl">
+            <div class="modal-content" style="background-color: transparent!important">
+                <div class="modal-header header">
+                    <h5 class="modal-title color_main102" id="titleSubSharedModal"></h5>
+                    <button class="close color_main102" data-dismiss="modal" style="position: absolute;left: 0;">&times;</button>
+                </div>
+                <div class="col-12 mx-0 px-0" id="subSharedModalBody">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*Share Seprated Mode*@
+    <div class="modal" id="sharedSepratedModal">
+        <div class="modal-dialog modal-lg dr-rtl">
+            <div class="modal-content" style="background-color: transparent!important">
+                <div class="modal-header header">
+                    <h5 class="modal-title color_main102" id="titleSharedSepratedModal"></h5>
+                    <button class="close color_main102" data-dismiss="modal" style="position: absolute;left: 0;">&times;</button>
+                </div>
+                <div class="col-12 mx-0 px-0" id="sharedSepratedModalBody">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Shared Attachment Search - Add *@
+    <div class="modal dr-rtl" id="shareAttachmentSearchAddModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="background-color: transparent!important;">
+                <div class="modal-header header">
+                    <h5 class="modal-title color_main102" id="titleSharedAttachmentSearchAddModal">بحث - اضافه مرفق</h5>
+                    <button class="close color_main102" data-dismiss="modal" style="position: absolute;left: 0;">&times;</button>
+                </div>
+                <div class="modal-body bg-white p-3">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <button type="button" id="btnSharedAttachmentSearch" class="btn btn-outline-primary font-weight-bold" onclick="displayDivs('#divDisplaySearchAttachment',this)"><i class="fas fa-search"></i>  بحث عن مرفق</button>
+                            <button type="button" id="btnSharedAttachmentAdd" class="btn btn-outline-info font-weight-bold" onclick="displayDivs('#divDisplayAddAttachment',this)"><i class="fas fa-plus"></i> اضافة مرفق</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="divDisplaySharedSearchAddAttchment" class="col-12 px-0 mx-0">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Shared Attachment Search *@
+    <div class="modal dr-rtl" id="shareAttachmentSearchModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="background-color: transparent!important;">
+                <div class="modal-header header">
+                    <h5 class="modal-title color_main102" id="titleSharedAttachmentSearchModal"></h5>
+                    <button class="close color_main102" data-dismiss="modal" style="position: absolute;left: 0;">&times;</button>
+                </div>
+                <div class="modal-body bg-white p-3">
+                </div>
+                <div id="divDisplaySharedSearchAttchment" class="col-12 px-0 mx-0">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .guidColor {
+            position: fixed;
+            bottom: 0;
+            left: -21px;
+            padding-left: 2%;
+            padding-bottom: 10px;
+        }
+    </style>
+
+    <script>
+        $(window).on('load', function () {
+            $('#loader102').fadeOut();
+        });
+    </script>
+
+    <link href="~/Content/contactusCss.css" rel="stylesheet" />
+</body>
+</html>

@@ -1,0 +1,26 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var screen = "";
+    string[] path = HttpContext.Current.Request.Url.AbsolutePath.Split('/');
+    screen = path[2];
+}
+<script src="~/Scripts/signalR/Notifications.js"></script>
+
+@* تفاصيل العمليه*@
+<div class="mt-4 dr-rtl grid_box_shadow mx-3 mb-3 ">
+    @{Html.RenderAction("_vpProcessDetails", "Process", new { ProcessID = Session["processCode"].ToString() });}
+</div>
+
+<div class="mt-4">
+    <ul role="tablist" id="navBar" class="nav justify-content-start m-lg-1 dr-rtl mt-4 ">
+        <li id="1" class="nav-item tabs_box_shadow mx-1"><a class="nav-link color_main102 font-weight-bold" href=@Url.Action("vContractorShow", "Contractor",new { ProcessId = Request.QueryString["ProcessId"]==null? Convert.ToInt32( Session["processCode"].ToString()): (Convert.ToInt32( Request.QueryString["ProcessId"].ToString()) ), inPage=Request.QueryString["inPage"] ,Cont=Request.QueryString["Cont"]==null?null:Request.QueryString["Cont"]})>المقاولين من باطن</a></li>
+        <li id="1" class="nav-item tabs_box_shadow mx-1"><a class="nav-link color_main102 font-weight-bold" href=@Url.Action("vWorkersShow", "Workers", new { ProcessId = Request.QueryString["ProcessId"] == null ? Convert.ToInt32(Session["processCode"].ToString()) : (Convert.ToInt32(Request.QueryString["ProcessId"].ToString())), inPage=1 })>العمال</a></li>
+        <li id="3" class="nav-item tabs_box_shadow mx-1"><a class="nav-link color_main102 font-weight-bold" href=@Url.Action("vAttendanceIndex", "attendance")>آليه حضور العامل</a></li>
+        <li id="4" class="nav-item tabs_box_shadow mx-1"><a class="nav-link color_main102 font-weight-bold" href=@Url.Action("vExtractsShow", "Extracts", new { cp = true})>المستخلصات</a></li>
+        <li id="5" class="nav-item tabs_box_shadow mx-1"><a class="nav-link color_main102 font-weight-bold" href=@Url.Action("vAttachmentsIndex", "Attachments", new { cp = true})>المرفقات</a></li>
+    </ul>
+</div>
+
+<div class="dr-rtl mx-3 mb-3">
+    @RenderBody()
+</div>

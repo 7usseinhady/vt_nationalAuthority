@@ -1,0 +1,152 @@
+﻿@using System.Data;
+@{
+    DataTable files = TempData["dt"] as DataTable;
+    var nFolder = TempData["nFolder"].ToString();
+}
+
+@Html.Hidden("nFolder", nFolder)
+@Html.Hidden("controllerName", TempData["controllerName"])
+
+<div class="modal-body" id="attAttachmentSearchModelBody" style="background-color:#f0f0f0 !important">
+    <div id="divAttachments" style="background-color:#f0f0f0 !important">
+
+        @* اسم المرفقات *@ @*بحث*@
+        <div class="row mb-2 grid_box_shadow" style="margin-bottom: 15px !important;">
+            @* اسم المرفقات *@
+            <div class="col-lg-9 col-md-12 col-sm-12 col-12 my-1 text-right ">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">
+                    اسم المرفقات
+                </span>
+                <div>
+                    @Html.TextBox("attachmentName", "", new { @class = "form-control borderText arabic", id = "attachmentNameSearch", data_toggle = "tooltip", title = "حروف عربية فقط", data_placement = "bottom" })
+                </div>
+            </div>
+        </div>
+
+        @* table *@@* pagination *@
+        <div class="row justify-content-center grid_box_shadow">
+            <div class="text-center scroll-max ">
+                <table class="table" id="tblSearch">
+                    <thead>
+                        <tr>
+                            <th class="color_main102">اسم المرفق</th>
+                            <th class="color_main102">نوع المرفق</th>
+                            <th class="color_main102">تاريخ الرفع</th>
+                            @if (!nFolder.Contains("Worker") && !nFolder.Contains("CardsRequest") && !nFolder.Contains("Injuries"))
+                            {
+                                <th class="color_main102">المقاول / جهه الاسناد</th>
+                            }
+                            <th class="color_main102"><i class="fas fa-cog"></i></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (files.Rows.Count > 0)
+                        {
+                            foreach (DataRow row in files.Rows)
+                            {
+                                // Folders
+                                if (!row[4].ToString().Contains("$$"))
+                                {
+                                    <tr role="button" data-toggle="collapse" href="#collapse-@row["rootFolder"]" aria-expanded="false" aria-controls="collapse-@row["rootFolder"]" class="col-12 grid_box_shadow">
+                                        <td onclick="toggleTr('#collapse-@row["rootFolder"]')">
+                                            <span class="badge badge-danger text-center">@row["count"]</span> &nbsp; @row["docuName"]
+                                        </td>
+                                        <td class="color_main103" onclick="toggleTr('#collapse-@row["rootFolder"]')">@row["attachmentTypeName"]</td>
+                                        <td class="color_main103" onclick="toggleTr('#collapse-@row["rootFolder"]')">@row["doc_create_time"]</td>
+
+                                        @if (!nFolder.Contains("Worker") && !nFolder.Contains("CardsRequest") && !nFolder.Contains("Injuries"))
+                                        {
+                                            <td class="color_main103" onclick="toggleTr('#collapse-@row["rootFolder"]')">@row["contractorBy"]</td>
+                                        }
+
+                                        <td class="color_main103">
+                                            @if (Session["uc"].ToString() == row["uc"].ToString() && Session["procStopActive"] == null)
+                                            {
+                                                <div class="color_main103">
+                                                    <div class="dropdown-j color_main102" onclick="attach(this)">
+                                                        <i class="fas fa-ellipsis-v"></i>
+                                                        <div class="dropdown-content-j attach mt-lg-n2" style="min-width: 79px;background: white !important;background-color:#f0f0f0 !important">
+                                                            <div class="row text-left">
+                                                                <div class="col-12">
+                                                                    @* حذف *@
+                                                                    <button type="button" class="btn btn-sm btn-outline-danger font-weight-bold" id="attachmentDelete" onclick="return sAlertDelFolder(this, 'هل تريد حذف هذا الملف بما يحتويه من مرفقات ؟', 'حذف الملف', 'إلغاء الحذف', 'Attachments', 'vDeleteFolder', '@TempData["nFolder"]','@row["docuFullName"]','.collapse-@row["rootFolder"]');"><i class="far fa-trash-alt"></i> حذف </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+
+                                // Files
+                                if (row[4].ToString().Contains("$$"))
+                                {
+                                    <tr id="collapse-@row["rootFolder"]" class="collapse collapse-@row["rootFolder"]" onclick="openFile('../Attachments/@TempData["nFolder"]/@row["count"]/@row["docuFullName"]')">
+                                        @if (!nFolder.Contains("Worker") && !nFolder.Contains("CardsRequest"))
+                                        {
+                                            <td class="color_main103" colspan="4">@row["docuName"]</td>
+                                        }
+                                        else
+                                        {
+                                            <td class="color_main103" colspan="3">@row["docuName"]</td>
+                                        }
+
+                                        <td class="color_main103">
+                                            @if (Session["uc"].ToString() == row["uc"].ToString() & Session["procStopActive"] == null)
+                                            {
+                                                <div class="color_main103">
+                                                    <div class="dropdown-j color_main102" onclick="attach(this)">
+                                                        <i class="fas fa-ellipsis-v"></i>
+                                                        <div class="dropdown-content-j attach mt-lg-n2" style="min-width: 79px;background: white !important;background-color:#f0f0f0 !important">
+                                                            <div class="row text-left">
+                                                                <div class="col-12">
+                                                                    @* حذف *@
+                                                                    <button type="button" class="btn btn-sm btn-outline-danger font-weight-bold" id="attachmentDelete" onclick="return sAlertDelFolder(this, 'هل تريد حذف هذا المرفق ؟', 'حذف المرفق', 'إلغاء الحذف', 'Attachments', 'vDeleteFile', '@TempData["nFolder"]/@row["count"]','/@row["docuFullName"]','');"><i class="far fa-trash-alt"></i> حذف </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="divSeperate" class="mb-3"></div>
+
+<div id="divIFrame" class="modal-body" style="display:none; border-radius: 26px; background-color:#f0f0f0 ">
+    <div class="row" style="z-index: 1;position: inherit;">
+        <button id="closeFooter" class="close color_main102" onclick="closeDiv('#divIFrame')" style="position: absolute;left: 20px;">X</button>
+    </div>
+    @* iFrame *@
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="embed-responsive embed-responsive-16by9">
+            <iframe id="attachmentFrame" class="embed-responsive-item" src="" style="height: 500px;overflow-x:scroll; "></iframe>
+        </div>
+    </div>
+</div>
+
+<style>
+    .table td, .table th {
+        border: none !important;
+    }
+</style>
+
+<script>
+    $("#attachmentNameSearch").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#tblSearch tbody tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
+</script>

@@ -1,0 +1,15 @@
+﻿@{
+    Layout = "~/Views/Shared/ProcessLayout.cshtml";
+    var screen = "";
+    string[] path = HttpContext.Current.Request.Url.AbsolutePath.Split('/');
+    screen = path[2];
+    <title> تفاصيل العملية</title>
+}
+<style>
+    @@media (min-width: 992px) {
+        .mrgPagging {
+            margin-right: 37% !important;
+        }
+    }
+</style>
+

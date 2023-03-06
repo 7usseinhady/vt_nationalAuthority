@@ -1,0 +1,150 @@
+﻿@model  DataAccessLayer.Requests.processRequest
+@{
+    Layout = "~/Views/Shared/_partialLayout.cshtml";
+}
+@using (Html.BeginForm("_vpAcceptProcess", "Process", FormMethod.Post))
+{
+
+    @Html.Hidden("areas", TempData["areas"])
+    @Html.Hidden("Offices", TempData["Offices"])
+    @Html.HiddenFor(model => model.OModel.iProcessCode)
+
+
+    <div class="mt-2 dr-rtl grid_box_shadow mx-3 text-right row">
+
+        @* المنطقة *@
+        <div class="col-lg-6 col-md-6 col-sm-12">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                المنطقة
+                @Html.ValidationMessage("", "", new { @class = "text-danger" })
+            </span>
+            <div>
+                @Html.DropDownListFor(model => model.OModel.iAreaCode, ViewBag.areas as SelectList, " -- اختر -- ", new { @class = "form-control borderDDL selectpicker", id = "areaAccept", onchange = "officesByArea();", @data_live_search = "true", required = "required" })
+            </div>
+            <div>
+                @Html.ValidationMessageFor(model => model.OModel.iAreaCode, "", new { @class = "d-flex justify-content-center" })
+            </div>
+        </div>
+
+        @* المكتب *@
+        <div class="col-lg-6 col-md-6 col-sm-12">
+            <span class="color_main102 font-weight-bold ml-2 mx-3">
+                المكتب
+                @Html.ValidationMessage("", "", new { @class = "text-danger" })
+            </span>
+            <div>
+                @Html.DropDownListFor(model => model.OModel.iOfficeCode, ViewBag.Offices as SelectList, " -- اختر -- ", new { @class = "form-control borderDDL selectpicker", id = "officeAccept", @data_live_search = "true", required = "required" })
+            </div>
+            <div>
+                @Html.ValidationMessageFor(model => model.OModel.iOfficeCode, "", new { @class = "d-flex justify-content-center" })
+            </div>
+        </div>
+
+        @* سنه العملية *@@* رقم العملية *@@* قبول العمليه *@
+        <div class="row">
+            @* سنه العملية *@
+            <div class="col-lg-3 col-md-3 col-sm-12 mt-2">
+                <span class="color_main102 font-weight-bold ml-2 mx-3 " id="SpInsurNumber">سنه العملية</span>
+                <div>
+                    @Html.TextBoxFor(model => model.OModel.inProcessYear, new { @class = "form-control boorderText number", id = "procYear", required = "required", Value = DateTime.Now.Year.ToString(), onkeypress = "ckLenthNumber();" })
+                </div>
+            </div>
+            @* رقم العملية *@
+            <div class="col-lg-3 col-md-3 col-sm-12 mt-2">
+                <span class="color_main102 font-weight-bold ml-2 mx-3 " id="SpInsurNumber">رقم العملية</span>
+                <div id="procNum">
+                    @Html.TextBoxFor(model => model.OModel.sProcessNumber, "", new { @class = "form-control boorderText number", id = "procNumber", required = "required" })
+                </div>
+            </div>
+            @* رقم الوارد *@
+            <div class="col-lg-3 col-md-3 col-sm-12 mt-2">
+                <span class="color_main102 font-weight-bold ml-2 mx-3">رقم الوارد</span>
+                <div id="procNum">
+                    @Html.TextBoxFor(model => model.OModel.sIncommingNumber, "", new { @class = "form-control boorderText number", @Value = Model.OModel.sIncommingNumber == "--------" ? "" : Model.OModel.sIncommingNumber, id = "incommingNumber", required = "required" })
+                </div>
+            </div>
+            @* قبول العمليه *@
+            <div class="col-sm-12 my-1 text-left mt-3 col-lg-2 col-md-2 col-sm-12 align-self-end text-right">
+                <button type="submit" id="btnAcceptprocess" onclick="loaderOpen();" class=""> <i class=""> </i> </button>
+            </div>
+        </div>
+        <div class="row col-12">
+            <div class="col-lg-3 col-md-5 col-sm-12">
+                <div>
+                    @Html.ValidationMessageFor(model => model.OModel.inProcessYear, "", new { @class = "d-flex justify-content-center" })
+                </div>
+            </div>
+            <div class="col-md-5 col-sm-12">
+                <div>
+                    @Html.ValidationMessageFor(model => model.OModel.sProcessNumber, "", new { @class = "d-flex justify-content-center" })
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script src="~/Scripts/light.js"></script>
+
+<script type="text/javascript">
+
+    function ckLenthNumber(event) {
+        if ($('#procYear').val() != '' && $('#procYear').val().length != 4) {
+            event.preventDefault();
+            sAlert('الرجاء ادخال سنه العمليه 4 ارقام', 2);
+        }
+    }
+
+    function officesByArea() {
+
+        var areaAccept = $('#areaAccept').val();
+        var offices = $("#officeAccept");
+
+        $(offices).empty();
+
+        $(offices).append($('<option />', {
+            value: "",
+            text: "-- اختر --"
+        }));
+
+        $(offices).selectpicker('refresh');
+
+        if (areaAccept != '') {
+            $.getJSON("../Process/getOfficesByArea", { areaCode: areaAccept },
+                   function (data) {
+                       if (data.length > 0) {
+
+                           $.each(data, function (index, data) {
+
+                               $(offices).append($('<option />', {
+                                   value: data.officeInsuranceCode,
+                                   text: data.officeInsuranceIDName
+                               }));
+                           });
+
+                           $(offices).selectpicker('refresh');
+                       }
+                   });
+        }
+
+    }
+
+    $('#btnAcceptprocess').click(function (event) {
+        loaderClose();
+
+        if ($('#procYear').val() == '' || $('#procYear').val().length != 4 || Number($('#procYear').val()) < 1950 || Number($('#procYear').val()) > (Number(new Date().getFullYear() + 5))) {
+            event.preventDefault();
+            sAlert('الرجاء ادخال سنه العمليه 4 ارقام بين عام 1950 - ' + (Number(new Date().getFullYear() + 5)), 1);
+        }
+        else if ($('#procNumber').val().length != 5) {
+            event.preventDefault();
+            sAlert('الرجاء ادخال رقم العملية صحيحا (مكون من 5 رقم)', 2);
+            $('#procNumber').css({ "display": "inline-flex", "border-color": "#dc3545" });
+        }
+        else if ($('#incommingNumber').val().length > 8 || Number($('#incommingNumber').val()) == 0) {
+            event.preventDefault();
+            console.log('incommingNumber');
+            sAlert('الرجاء ادخال رقم الوارد صحيحا (مكون من 8 رقم)', 2);
+            $('#incommingNumber').css({ "display": "inline-flex", "border-color": "#dc3545" });
+        }
+
+    });
+</script>

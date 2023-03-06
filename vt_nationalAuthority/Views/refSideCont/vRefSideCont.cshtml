@@ -1,0 +1,125 @@
+﻿@using PagedList.Mvc;
+@model PagedList.PagedList<DataAccessLayer.Models.referenceSideContractorModel>
+@{
+    // Admin
+    if ((Session["areaOfficePermission"] != null && Session["areaOfficePermission"].ToString() == "1"))
+    {
+       Layout = "~/Views/Shared/_codesLayout.cshtml";
+    }
+    else { // Regular Employee
+        Layout = "~/Views/Shared/InsuranceEmployeeLayout.cshtml";
+    }
+
+    <title>جهات الاسناد - المقاولين</title>
+    var iCount = 1;
+}
+
+@* table *@
+<div class="dr-rtl mb-3 row justify-content-center mt-3">
+    <div class="text-center scroll-max grid_box_shadow">
+        @if (Model == null)
+        {
+            <h1 id="tblSearchNotFound">
+                <strong>@generalVariables.RefSideContNotFound</strong>
+            </h1>
+        }
+        else if (Model.Count == 0)
+        {
+            <h1 id="tblSearchNotFound">
+                <strong>@generalVariables.RefSideContNotFound</strong>
+            </h1>
+        }
+        else if (Model.Count > 0)
+        {
+            <table class="table minTable">
+                @* thead *@
+                <thead>
+                    <tr>
+                        <th scope="col" class="color_main102">#</th>
+                        <th scope="col" class="color_main102">الرقم التأمينى</th>
+                        <th scope="col" class="color_main102">جهه الاسناد - المقاول</th>
+                        <th scope="col" class="color_main102">الكيان القانونى</th>
+                        <th scope="col" class="color_main102">التفعيل</th>
+                        <th scope="col" class="color_main102"><i class="fas fa-cog"></i></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{iCount = 1; }
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <th scope="row" class="color_main102">@((Convert.ToInt32(Model.PageNumber) * Convert.ToInt32(generalVariables.PageSize)) - (Convert.ToInt32(generalVariables.PageSize) - iCount) )</th>
+                            @* الاسم *@
+                            <td class="color_main103">@item.sReferanceSideContractorNum</td>
+                            <td class="color_main103">@item.sReferenceSideContractorName</td>
+                            <td class="color_main103">@item.sLegalEntityName</td>
+                            <td class="color_main103">@item.sIsActive</td>
+
+                            <td class="color_main103">
+                               
+                                @if (Convert.ToInt32(Session["uc"]) == item.inUserInsertCode || (Session["areaOfficePermission"] != null && Session["areaOfficePermission"].ToString() == "1"))
+                                {
+                                    <div class="color_main103">
+                                        <div class="dropdown-j color_main102">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                            <div class="dropdown-content-j" style="min-width: 116px;">
+                                                <div class="row text-left">
+                                                    <div class="col-12">
+
+                                                        @* تعديل *@
+                                                        <button type="button" name="submitType" value="@item.iReferenceSideContractorCode"
+                                                                class="btn btn-sm btn-outline-warning font-weight-bold"
+                                                                onclick="openModel('#titleSharedModal', `تعديل : @item.sReferenceSideContractorName`, '#btnAddOrEditRefSideCont', ' تعديل جهه الاسناد - المقاول', 'fas fa-edit font-weight-bold', 'btn btn-outline-warning font-weight-bold', '_vpRefSideContAddOrEdit', 'ID=@item.iReferenceSideContractorCode,inPage=@Request.QueryString["inPage"]', '#sharedModalBody')"
+                                                                data-toggle="modal" data-target="#sharedModal">
+                                                            <i class="fas fa-edit"></i>  تعديل
+                                                        </button>
+
+                                                        @* حذف *@
+                                                        <a href="#" data-toggle="tooltip" data-placement="bottom" class="btn btn-sm btn-outline-danger font-weight-bold"
+                                                           onclick="return sAlertDel(this,'هل تريد حذف ؟', 'حذف', 'إلغاء الحذف','refSideCont','vRefSideCont','IDDelete=@(item.iReferenceSideContractorCode)');"><i class="fas fa-trash-alt"></i> حذف </a>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </td>
+                        </tr>
+                        iCount++;
+                    }
+                </tbody>
+            </table>
+
+            <div id="divPagination">
+                @*pagination*@
+                <h5 style="text-align:center;color:#306fc2"> صفحة <strong style="color:#CA2553"> @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)</strong> من <strong>@Model.PageCount </strong> </h5>
+                <div style="text-align:center">
+                    <div class="justify-content-lg-center pagination">
+                        @Html.PagedListPager(Model, inPage => Url.Action("vRefSideCont", new { inPage }))
+                    </div>
+                </div>
+            </div>
+                        }
+    </div>
+
+    @* اضافة جهه اسناد - مقاول / بحث *@@*الغاء البحث*@
+    <div class="text-right fixed_btn bg-white w-100">
+        @* بحث *@
+        <button type="button" name="submitType" value="Search" class="btn btn-outline-primary font-weight-bold" data-toggle="modal" data-target="#sharedModal"
+                onclick="openModel('#titleSharedModal', 'بحث عن جهه اسناد - مقاول', '#btnSearchRefSideCont', ' بحث', 'fas fa-search font-weight-bold', 'btn btn-outline-primary font-weight-bold', '_vpRefSideContSearch', '', '#sharedModalBody')">
+            <i class="fas fa-search"></i> بحث
+        </button>
+        @*الغاء البحث*@
+        <a class="btn btn-default font-weight-bold " href="@Url.Action("_vpSearchCancel", "refSideCont", new { })">الغاء البحث <span class="glyphicon"></span></a>
+
+        @* اضافة جهه اسناد - مقاول *@
+        <button type="button" name="submitType" value="Save" class="btn btn-outline-info font-weight-bold" data-toggle="modal" data-target="#sharedModal"
+                onclick="openModel('#titleSharedModal', 'اضافه نوع مرفق', '#btnAddOrEditRefSideCont', ' اضافة جهه اسناد - مقاول', 'fas fa-plus font-weight-bold', 'btn btn-outline-info font-weight-bold', '_vpRefSideContAddOrEdit', '', '#sharedModalBody')">
+            <i class="fas fa-plus"></i> اضافة جهه اسناد - مقاول
+        </button>
+    </div>
+</div>
+
+@Html.Raw(TempData["msg"])
+<script src="~/Scripts/signalR/NotificationProcess.js"></script>

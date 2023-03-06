@@ -1,0 +1,137 @@
+﻿@{
+    var screen = "";
+    string[] path = HttpContext.Current.Request.Url.AbsolutePath.Split('/');
+    screen = path[2];
+    var fullPath = "";
+}
+<div class="dr-rtl mx-3 mb-3">
+    @if (screen == "vProcessRequest") // طلبات العمليات
+    {
+        fullPath = "../Process/vProcessRequest";
+        @Html.Hidden("screenName", "../Process/vProcessRequest")
+    }
+    else if (screen == "vExpireProcess") // العمليات الموشكه على الانتهاء
+    {
+        fullPath = "../ExpireProcess/vExpireProcess";
+        @Html.Hidden("screenName", "../ExpireProcess/vExpireProcess")
+    }
+    else if (screen == "vContractorIndex") // عمليات المقاولين
+    {
+        fullPath = "../Contractor/vContractorIndex";
+        @Html.Hidden("screenName", "../Contractor/vContractorIndex")
+    }
+    else if (screen == "vProcessShowIndex") // عمليات موظف التأمينات
+    {
+        fullPath = "../Process/vProcessShowIndex";
+        @Html.Hidden("screenName", "../Process/vProcessShowIndex")
+    }
+
+    @* table *@
+    <div class="text-center ">
+        @if (Request.QueryString["areas"] != null && Request.QueryString["Offices"] != null)
+        {
+            Html.RenderAction("_vpProcessTable", "Process", new { screenName = screen, areas = Request.QueryString["areas"], Offices = Request.QueryString["Offices"], cd = Request.QueryString["cd"] });
+        }
+        else if (Request.QueryString["areas"] != null)
+        {
+            Html.RenderAction("_vpProcessTable", "Process", new { screenName = screen, areas = Request.QueryString["areas"], cd = Request.QueryString["cd"] });
+        }
+        else if (Request.QueryString["Offices"] != null)
+        {
+            Html.RenderAction("_vpProcessTable", "Process", new { screenName = screen, Offices = Request.QueryString["Offices"], cd = Request.QueryString["cd"] });
+        }
+        else
+        {
+            Html.RenderAction("_vpProcessTable", "Process", new { screenName = screen, cd = Request.QueryString["cd"] });
+        }
+    </div>
+
+    @* buttons setting *@
+    <div class="text-right fixed_btn bg-white w-100">
+
+        @* بحث *@
+        <button type="button" name="submitType"
+                class="btn btn-outline-primary font-weight-bold"
+                onclick="openModel___ss('#titleSharedModal', 'بحث عن عمليه ', '#btnSearchProcess', ' بحث', 'fas fa-search', 'btn btn-outline-primary btnsStyle font-weight-bold mt-2 ml-5', '../Process/_vpSearchProcess', '?areas=@Request.QueryString["areas"]&screenName=@fullPath&Offices=@Request.QueryString["Offices"]', '#sharedModalBody')"
+                data-toggle="modal" data-target="#sharedModal">
+            <i class="fas fa-search"></i>  بحث
+        </button>
+
+        @*الغاء البحث*@
+        <a class="btn btn-default font-weight-bold " href="@Url.Action("_vpSearchCancel", "Process", new { screenName = fullPath, areas = Request.QueryString["areas"], Offices = Request.QueryString["Offices"] })">الغاء البحث <span class="glyphicon"></span></a>
+
+        @if (screen == "vProcessRequest") // طلبات العمليات
+        {
+            <button type="button" name="submitType"
+                    class="btn btn-outline-success font-weight-bold"
+                    onclick="openModel('#titleSharedModal', ' استعلام عن رقم تأمينى', '#btnSearchRefSideCont', ' استعلام عن رقم تأمينى', 'fas fa-search', 'btn btnsStyle btn-outline-info ml-3 font-weight-bold', '../Process/_vpSearchRefSideCont', '', '#sharedModalBody')"
+                    data-toggle="modal" data-target="#sharedModal">
+                <i class="fas fa-search"></i>  استعلام عن رقم تأمينى
+            </button>
+        }
+
+        @if (screen.Contains("vContractorIndex"))
+        {
+
+            @* مقاول *@
+        if (Convert.ToBoolean(TempData["userContractor"]))
+        {
+            <button type="button" name="submitType"
+                    class="btn btn-outline-info font-weight-bold"
+                    onclick="openModel('#titleSharedModal', 'اضافه عمليه : @Session["UserName"].ToString()', '#btnAddEditProcess', ' اضافه عمليه', 'fas fa-plus', 'btn btnsStyle btn-outline-info ml-3 font-weight-bold', '../Process/_vpAddProcessIndex', 'inPage=@Request.QueryString["inPage"],referanceSideContractorNum=true,inProcessCode=null', '#sharedModalBody')"
+                    data-toggle="modal" data-target="#sharedModal">
+                <i class="fas fa-plus"></i> اضافة عمليه
+            </button>
+
+            <button type="button" class="btn btn-outline-dark  font-weight-bold"
+                    onclick="openModel('#titleSharedModal', 'اخطار عن مقاول من الباطن : @Session["UserName"].ToString()', '#btnAddSubContractorByUser', ' تسجيل مقاول من الباطن', 'fas fa-plus', 'btn btnsStyle btn-outline-info font-weight-bold', '../Process/_vpSubContractorByUser', '', '#sharedModalBody')"
+                    data-toggle="modal" data-target="#sharedModal">
+                <i class="fas fa-plus"></i> إخطار عن مقاول من الباطن
+            </button>
+
+            //Colors
+            <div class="text-center border-top mt-1">
+                <span class="color_main102 fa fa-circle mx-2 mt-2" style="font-size: small;">  مقــــاول رئيســــــــــي  </span>
+                <span class="fa fa-circle mx-2" style="font-size: small;"> مقاول من الباطن </span>
+            </div>
+        }
+
+        @* جهه اسناد *@
+        if (Convert.ToBoolean(TempData["userReferenceSide"]))
+        {
+            <button type="button" name="submitType"
+                    class="btn btn-outline-success font-weight-bold"
+                    onclick="openModel('#titleSharedModal', 'اضافه عمليه : @Session["UserName"].ToString()', '#btnAddEditProcess', ' اضافه عمليه', 'fas fa-plus', 'btn btnsStyle btn-outline-info ml-3 font-weight-bold', '../Process/_vpAddProcessIndex', 'inPage=@Request.QueryString["inPage"],referanceSideContractorNum=false,inProcessCode=null', '#sharedModalBody')"
+                    data-toggle="modal" data-target="#sharedModal">
+                <i class="fas fa-plus"></i>  إخطار عن جهة اسناد
+            </button>
+            }
+        }
+
+        @* colors *@
+        @if (screen == "vProcessRequest") // طلبات العمليات
+        {
+            <div class="border-top mt-1 text-center">
+                <span class="fa fa-circle mx-2 mt-2" style="color:green;font-size: small;"> اخطار عن طريق جهه الاسنــــاد </span>
+                <span class="fa fa-circle mx-2" style="color:#2193b0;font-size: small;"> اخطار عن طريق المقاول الرئيسى </span>
+                <span style="color: #e80332b3;" class="font-weight-bold">
+                    <span class="fa fa-circle mx-2" style="font-size: small;">  </span>
+                    <span style="font-size: small;"> عمليه ليس لديها مستخدمين </span>
+                </span>
+            </div>
+        }
+        else if (screen == "vProcessShowIndex") // طلبات العمليات
+        {
+            <div class="border-top mt-1 text-center">
+                <span class="fa fa-circle mx-2 mt-2 text-danger" style="font-size: small;"> عمليه موقوفه </span>
+                <span class="fa fa-circle mx-2" style="color:green;font-size: small;"> عمليه ساريه </span>
+                <span class="fa fa-circle mx-2 mt-2" style="font-size: small;"> عمليه منتهيه </span>
+                <span style="color: #e80332b3;" class="font-weight-bold">
+                    <span class="fa fa-circle mx-2" style="font-size: small;">  </span>
+                    <span style="font-size: small;"> عمليه ليس لديها مستخدمين </span>
+                </span>
+            </div>
+        }
+
+    </div>
+</div>
