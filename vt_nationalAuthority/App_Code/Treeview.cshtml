@@ -1,4 +1,4 @@
-﻿@helper GetTreeView(List<DataAccessLayer.Models.functionModel> fun, int? parentID)
+﻿@helper GetTreeView(List<DataAccessLayer.Models.FunctionModel> fun, int? parentID)
 {
     foreach (var i in fun.Where(a => a.iParentFunctionCode.Equals(parentID)))
     {
