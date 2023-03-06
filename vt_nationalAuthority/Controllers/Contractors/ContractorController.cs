@@ -434,7 +434,7 @@ namespace vt_nationalAuthority.Controllers.Contractors
                 if (ID.Length < 9)
                     ID = Convert.ToInt32(ID).ToString("000000000");             
                 var data = conApi.connectionApiGetList<ProcessRequest>("apiProcess", "GetRefSideContByInsurNum", String.IsNullOrEmpty(ID) ? "null" : ID);                
-                return Json(data.oRefSideCont .dataDrob, JsonRequestBehavior.AllowGet);
+                return Json(data.oRefSideCont.dataDrob, JsonRequestBehavior.AllowGet);
             }
             catch
             {

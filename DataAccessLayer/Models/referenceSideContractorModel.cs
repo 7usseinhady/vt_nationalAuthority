@@ -24,7 +24,7 @@ namespace DataAccessLayer.Models
         #endregion
 
         private readonly vt_authorityInsuranceEntities db = new vt_authorityInsuranceEntities();
-        private readonly List<DataDrob> dataDrob = new List<DataDrob>();
+        public readonly List<DataDrob> dataDrob = new List<DataDrob>();
 
         /// <summary>
         ///   Get Object Of 'Reference Side - Contractor'.
