@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd1="http://www.CNTCOVI.com/schemas/CNTCOVIInterface" xmlns:xsd2="http://www.CNTCOVO.com/schemas/CNTCOVOInterface" xmlns:tns="file://target.files" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" name="CNTCOV" targetNamespace="file://target.files" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:cbl="http://www.CNTCOVI.com/schemas/CNTCOVIInterface" attributeFormDefault="qualified" elementFormDefault="unqualified" targetNamespace="http://www.CNTCOVI.com/schemas/CNTCOVIInterface">
+      <xsd:complexType name="DFHCOMMAREA">
+        <xsd:sequence>
+          <xsd:element form="unqualified" name="buffer" type="cbl:dfhcommarea_buffer" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="dfhcommarea_buffer">
+        <xsd:sequence>
+          <xsd:element form="unqualified" name="payer_number">
+            <xsd:annotation>
+              <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                <initialValue kind="SPACE" />
+              </xsd:appinfo>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="9" />
+                <xsd:whiteSpace value="collapse" />
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element form="unqualified" name="date1">
+            <xsd:annotation>
+              <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                <initialValue kind="SPACE" />
+              </xsd:appinfo>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="8" />
+                <xsd:whiteSpace value="collapse" />
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element form="unqualified" name="zone1">
+            <xsd:annotation>
+              <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                <initialValue kind="SPACE" />
+              </xsd:appinfo>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="2" />
+                <xsd:whiteSpace value="collapse" />
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element form="unqualified" name="ofic1">
+            <xsd:annotation>
+              <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                <initialValue kind="SPACE" />
+              </xsd:appinfo>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="2" />
+                <xsd:whiteSpace value="collapse" />
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element form="unqualified" name="mahara1">
+            <xsd:annotation>
+              <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                <initialValue kind="SPACE" />
+              </xsd:appinfo>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="2" />
+                <xsd:whiteSpace value="collapse" />
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element form="unqualified" name="cnt_num">
+            <xsd:annotation>
+              <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                <initialValue kind="SPACE" />
+              </xsd:appinfo>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="15" />
+                <xsd:whiteSpace value="collapse" />
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:element name="DFHCOMMAREA" type="cbl:DFHCOMMAREA">
+        <xsd:annotation>
+          <xsd:documentation source="com.ibm.etools.xmlent.batch">11.3.100.V20191001_0406</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:schema>
+    <xsd:schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:cbl="http://www.CNTCOVO.com/schemas/CNTCOVOInterface" attributeFormDefault="qualified" elementFormDefault="unqualified" targetNamespace="http://www.CNTCOVO.com/schemas/CNTCOVOInterface">
+      <xsd:complexType name="DFHCOMMAREA">
+        <xsd:sequence>
+          <xsd:element form="unqualified" name="buffer" type="cbl:dfhcommarea_buffer" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="dfhcommarea_buffer">
+        <xsd:sequence>
+          <xsd:element form="unqualified" name="payer_number">
+            <xsd:annotation>
+              <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                <initialValue kind="SPACE" />
+              </xsd:appinfo>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="9" />
+                <xsd:whiteSpace value="collapse" />
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element form="unqualified" name="date1">
+            <xsd:annotation>
+              <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                <initialValue kind="SPACE" />
+              </xsd:appinfo>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="8" />
+                <xsd:whiteSpace value="collapse" />
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element form="unqualified" name="zone1">
+            <xsd:annotation>
+              <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                <initialValue kind="SPACE" />
+              </xsd:appinfo>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="2" />
+                <xsd:whiteSpace value="collapse" />
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element form="unqualified" name="ofic1">
+            <xsd:annotation>
+              <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                <initialValue kind="SPACE" />
+              </xsd:appinfo>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="2" />
+                <xsd:whiteSpace value="collapse" />
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element form="unqualified" name="mahara1">
+            <xsd:annotation>
+              <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                <initialValue kind="SPACE" />
+              </xsd:appinfo>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="2" />
+                <xsd:whiteSpace value="collapse" />
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element form="unqualified" name="cnt_num">
+            <xsd:annotation>
+              <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                <initialValue kind="SPACE" />
+              </xsd:appinfo>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="15" />
+                <xsd:whiteSpace value="collapse" />
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element form="unqualified" name="processing_statusdescc">
+            <xsd:annotation>
+              <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                <initialValue kind="SPACE" />
+              </xsd:appinfo>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="1" />
+                <xsd:whiteSpace value="collapse" />
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element form="unqualified" name="processing_statusdesc">
+            <xsd:annotation>
+              <xsd:appinfo source="http://www.wsadie.com/appinfo">
+                <initialValue kind="SPACE" />
+              </xsd:appinfo>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:maxLength value="100" />
+                <xsd:whiteSpace value="collapse" />
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:element name="DFHCOMMAREA" type="cbl:DFHCOMMAREA">
+        <xsd:annotation>
+          <xsd:documentation source="com.ibm.etools.xmlent.batch">11.3.100.V20191001_0406</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="CNTCOVOperationRequest">
+    <wsdl:part name="DFHCOMMAREAPart" element="xsd1:DFHCOMMAREA" />
+  </wsdl:message>
+  <wsdl:message name="CNTCOVOperationResponse">
+    <wsdl:part name="DFHCOMMAREAPart" element="xsd2:DFHCOMMAREA" />
+  </wsdl:message>
+  <wsdl:portType name="CNTCOVPortType">
+    <wsdl:operation name="CNTCOVOperation">
+      <wsdl:input name="CNTCOVOperationRequest" message="tns:CNTCOVOperationRequest" />
+      <wsdl:output name="CNTCOVOperationResponse" message="tns:CNTCOVOperationResponse" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="CNTCOVBinding" type="tns:CNTCOVPortType">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="CNTCOVOperation">
+      <soap:operation soapAction="urn:CNTCOV" style="document" />
+      <wsdl:input name="CNTCOVOperationRequest">
+        <soap:body use="literal" parts="DFHCOMMAREAPart" />
+      </wsdl:input>
+      <wsdl:output name="CNTCOVOperationResponse">
+        <soap:body use="literal" parts="DFHCOMMAREAPart" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="CNTCOVService">
+    <wsdl:port name="CNTCOVPort" binding="tns:CNTCOVBinding">
+      <soap:address location="http://10.240.240.254:33333/rdz/CNTCOV" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
