@@ -1,4 +1,4 @@
-﻿@helper GetTreeView(List<DataAccessLayer.Models.PermissionAreaOfficeModel> fun, int? parentID)
+﻿@helper GetTreeView(List<DataAccessLayer.Models.permissionAreaOfficeModel> fun, int? parentID)
 {
 foreach (var i in fun.Where(a => a.iParentCode.Equals(parentID)))
 {

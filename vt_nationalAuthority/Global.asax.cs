@@ -13,7 +13,7 @@ namespace vt_nationalAuthority
 {
     public class MvcApplication : System.Web.HttpApplication
     {
-        readonly string connString = ConfigurationManager.ConnectionStrings["vt_authorityInsuranceConnection"].ConnectionString;
+        string connString = ConfigurationManager.ConnectionStrings["vt_authorityInsuranceConnection"].ConnectionString;
         /// <summary>
         /// Function Run When Application Start
         /// </summary>
